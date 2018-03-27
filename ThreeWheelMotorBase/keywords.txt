@@ -1,0 +1,30 @@
+##############################################################
+# File created by : Avneesh Mishra
+# File last modified by : Avneesh Mishra
+# File comments : Please don't modify this file
+##############################################################
+
+##############################################################
+# Keywords file for ThreeWheelMotorBase
+##############################################################
+
+##############################################################
+# Main/classes (KEYWORD1)
+##############################################################
+
+# ThreeWheelMotorBase class
+ThreeWheelMotorBase KEYWORD1
+
+##############################################################
+# Member functions (KEYWORD2)
+##############################################################
+
+# Member functions of class ThreeWheelMotorBase
+attachMagDirPins KEYWORD2
+moveAtMagInDir KEYWORD2
+setThreshold KEYWORD2
+moveAtMagInDirWithOmega KEYWORD2
+
+##############################################################
+# Constants (LITERAL1)
+##############################################################
