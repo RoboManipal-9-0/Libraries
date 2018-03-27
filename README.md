@@ -1,18 +1,15 @@
 # Libraries
-The set of personal libraries RoboManipal 9.0 uses
+The set of personal libraries RoboManipal uses
 
-##############################################################
-################### NOTE FOR USERS ###########################
-##############################################################
+###### NOTE FOR USERS #####
 Just download the repository and move the desired file to the include folder of Arduino on your system.
-On Ubuntu, it's ~/Arduino/libraries (Check the $sketchbook location$/libraries folder)
+On Ubuntu, it's ~/Arduino/libraries (Open the arduino app and check the $sketchbook location$/libraries folder)
+Note : The main branch is the stable branch. Any other branches are developer branches, downloading codes from here is not recommended, unless for testing purposes
 
 
-##############################################################
-################# NOTE FOR DEVELOPERS ########################
-##############################################################
+#### NOTE FOR DEVELOPERS ####
 Add all your files in folders having approprite names here
-(Individual people have their own branches, codes are later pulled)
+(Individual people have their own branches, codes are later pushed to github and merged on master branch)
 
 Follow the following procedure (To create a Library named 'Sample')
 - All your class declaration (all the methods and variable declaration) happen in a header file named 'Sample.h'
