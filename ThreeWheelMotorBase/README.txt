@@ -1,10 +1,12 @@
 ################################################################################
   ThreeWheelMotorBase.cpp - Library code for controlling a three wheel bot
   Copyright (c) 2018 RoboManipal. All right reserved
+  Version : 1.0.0
   File created by : Avneesh Mishra
   Last commit done by : Avneesh Mishra
 
-  Testing phase status : PENDING with no deadline decided
+  Testing phase status : Need to test real wheel motion
+  Testing phase version : 1.0.0
 
 ################################################################################
 

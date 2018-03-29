@@ -26,13 +26,13 @@ void ThreeWheelMotorBase::attachMagDirPins(int mags[3], int dirs[3], boolean ccw
   }
 }
 // Set the threshold limit for the magnitude of every wheel
-void ThreeWheelMotorBase::setThreshold(int MaxMags[3]) {
+void ThreeWheelMotorBase::setThreshold(float MaxMags[3]) {
   for (int i = 0; i < 3; i++) {
     this->MAX_PWM_THRESHOLD[i] = MaxMags[i];
   }
 }
-void ThreeWheelMotorBase::setThreshold(int MaxMag) {
-  int mags[3] = {MaxMag, MaxMag, MaxMag};
+void ThreeWheelMotorBase::setThreshold(float MaxMag) {
+  float mags[3] = {MaxMag, MaxMag, MaxMag};
   this->setThreshold(mags);
 }
 

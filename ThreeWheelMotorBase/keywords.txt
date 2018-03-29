@@ -13,17 +13,17 @@
 ##############################################################
 
 # ThreeWheelMotorBase class
-ThreeWheelMotorBase KEYWORD1
+ThreeWheelMotorBase	KEYWORD1
 
 ##############################################################
 # Member functions (KEYWORD2)
 ##############################################################
 
 # Member functions of class ThreeWheelMotorBase
-attachMagDirPins KEYWORD2
-moveAtMagInDir KEYWORD2
-setThreshold KEYWORD2
-moveAtMagInDirWithOmega KEYWORD2
+attachMagDirPins	KEYWORD2
+moveAtMagInDir	KEYWORD2
+moveAtMagInDirWithOmega	KEYWORD2
+setThreshold	KEYWORD2
 
 ##############################################################
 # Constants (LITERAL1)

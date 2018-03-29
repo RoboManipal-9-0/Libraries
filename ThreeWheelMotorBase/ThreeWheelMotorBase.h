@@ -29,16 +29,16 @@ private:
   // Debugger (In pipeline)
 
   // Motion of one wheel : Set the motor[i] to PWM
-  void setMotorPWM(int i, int mag);
+  void setMotorPWM(int i, float mag);
 public:
   // Movement of wheels
   void attachMagDirPins(int Mag_pins[3], int Dir_pins[3], boolean CCWDirs[3]);  // Attach the magnitude and direction pins
   void moveAtMagInDir_AngleRAD(float Magnitude, float Angle);  // Move the bot at a particular magnitude at an angle (in radians)
   void moveAtMagInDir_AngleDEG(float Magnitude, float Angle);  // Move the bot at a particular magnitude at an angle (in degrees)
   void moveAtMagInDir(float Magnitude, float Angle);  // Move the bot at a particular magnitude at an angle (in degrees)
-  void moveAtMagInDirWithOmega(float magnitude, float theta, float omega);
-  void setThreshold(float Magnitudes[3]);
-  void setThreshold(float Magnitude);
+  void moveAtMagInDirWithOmega(float magnitude, float theta, float omega); // Move the bot at a particular magnitude at an angle (in degrees) with a rotation about center
+  void setThreshold(float Magnitudes[3]); // Set the thresholds of the wheels
+  void setThreshold(float Magnitude); // Set the threshold of the wheels (to the same value)
 };
 
 #endif
