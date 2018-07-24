@@ -49,7 +49,7 @@ public:
   // Move bot with PWM at an angle (in radians)
   void MovePWMAngle(int PWM, float angle);
   // Move individual motor
-  void MoveMotor(int motor_index, int PWM, int direction);
+  void MoveMotor(int motor_index, int PWM_vector);
 
 };
 

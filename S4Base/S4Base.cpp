@@ -24,15 +24,15 @@ S4Base::S4Base(int MOTOR_PINs[4], int DIR_PINs[4], bool REV_DIRs[4], int MAX_PWM
 
 // ################### Assignment functions ######################
 // Motor pins configuration
-void AddMotorDriverPins(int PWM_PINs[4], int DIR_PINs[4], bool REVs[4]) {
-  // Motor PWM pins
-  this->MOTOR_PWM_PINs = PWM_PINs
-  // Motor direction pins
-  this->MOTOR_DIRECTION_PINs = DIR_PINs
-  // Reverse directions of the wheel
-  this->REVERSE_DIRECTIONs = REVs
+void S4Base::AddMotorDriverPins(int PWM_PINs[4], int DIR_PINs[4], bool REVs[4]) {
   // Initialize every wheel
   for (int i = 0; i < 4; i ++) {
+    // Motor PWM pins
+    this->MOTOR_PWM_PINs[i] = PWM_PINs[i];
+    // Motor direction pins
+    this->MOTOR_DIRECTION_PINs[i] = DIR_PINs[i];
+    // Reverse directions of the wheel
+    this->REVERSE_DIRECTIONs[i] = REVs[i];
     // PWM is output
     pinMode(MOTOR_PWM_PINs[i], OUTPUT);
     // Direction is digital out
@@ -43,34 +43,36 @@ void AddMotorDriverPins(int PWM_PINs[4], int DIR_PINs[4], bool REVs[4]) {
   }
 }
 // Motor pins configuration
-void AddMotorDriverPins(int PWM_PINs[4], int DIR_PINs[4]) {
+void S4Base::AddMotorDriverPins(int PWM_PINs[4], int DIR_PINs[4]) {
   // By default, it's assumed that you have conected all correctly
   bool REVs[4] = {false, false, false, false};
   // Call the default function for this
   this->AddMotorDriverPins(PWM_PINs, DIR_PINs, REVs);
 }
 // MAG_Limit
-void AddMotorMAGLimit(int MAX_PWMs[4]) {
+void S4Base::AddMotorMAGLimit(int MAX_PWMs[4]) {
   // Magnitude limits on wheels
-  this->MOTOR_MAX_PWMs = MAX_PWMs
+  for (int i = 0; i < 4; i++) {
+    this->MOTOR_MAX_PWMs[i] = MAX_PWMs[i];
+  }
 }
 // MAG_Limit
-void AddMotorMAGLimit(int MAX_PWM) {
-  int MAX_PWMs[4] = {MAX_PWM, MAX_PWM, MAX_PWM, MAX_PWM}
+void S4Base::AddMotorMAGLimit(int MAX_PWM) {
+  int MAX_PWMs[4] = {MAX_PWM, MAX_PWM, MAX_PWM, MAX_PWM};
   // Call the default function for this
   this->AddMotorMAGLimit(MAX_PWMs);
 }
 
 // ##################### Motion functions #######################
 // Move bot with PWM at an angle (in degrees)
-void Move(int PWM, float angle_degrees) {
+void S4Base::Move(int PWM, float angle_degrees) {
   // Convert to radians
   float angle = angle_degrees * PI / 180.0;
   // Main motion
-  this->MovePWM_Angle(PWM, angle)
+  this->MovePWMAngle(PWM, angle);
 }
 // Move bot with PWM at an angle (in radians)
-void MovePWM_Angle(int PWM, float angle) {
+void S4Base::MovePWMAngle(int PWM, float angle) {
   /*
     The motion is :
       Top right wheel : Sine coefficient
@@ -88,15 +90,19 @@ void MovePWM_Angle(int PWM, float angle) {
     PWM * cos(angle)
   };
   for (int i = 0; i < 4; i++) {
-    MoveMotor(i, PWM_vector[i])
+    this->MoveMotor(i, PWM_vector[i]);
   }
 }
 // Move individual motor
-void MoveMotor(int motor_index, int PWM_vector) {
+void S4Base::MoveMotor(int motor_index, int PWM_vector) {
   // Absolute value to write
   int PWM_val = abs(PWM_vector);
   // Set directions
-  if ((PWM_vector > 0 && REVERSE_DIRECTIONs[motor_index] == false) || (PWM_vector < 0 && REVERSE_DIRECTIONs[motor_index] == true)) {
+  if (PWM_vector > 0 && REVERSE_DIRECTIONs[motor_index] == false) {
+    // Move the wheel in +ve direction
+    digitalWrite(MOTOR_DIRECTION_PINs[motor_index], HIGH);
+  } else if (PWM_vector < 0 && REVERSE_DIRECTIONs[motor_index] == true) {
+    // Move the wheel in -ve direction (reversed direction)
     digitalWrite(MOTOR_DIRECTION_PINs[motor_index], HIGH);
   } else {
     digitalWrite(MOTOR_DIRECTION_PINs[motor_index], LOW);

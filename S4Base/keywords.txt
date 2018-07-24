@@ -1,0 +1,25 @@
+##########################################################
+# File created by : Avneesh Mishra
+# File last modified by : Avneesh Mishra
+# File comments : Please don't modify this file
+##############################################################
+
+##############################################################
+# Keywords file for S4Base
+##############################################################
+
+##############################################################
+# Main/classes (KEYWORD1)
+##############################################################
+
+# Main class
+S4Base  KEYWORD1
+
+##############################################################
+# Member functions (KEYWORD2)
+##############################################################
+
+# Member functions of class S4Base
+AddMotorDriverPins  KEYWORD2
+AddMotorMAGLimit  KEYWORD2
+Move  KEYWORD2
