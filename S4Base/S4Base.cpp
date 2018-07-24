@@ -26,15 +26,16 @@ S4Base::S4Base(int MOTOR_PINs[4], int DIR_PINs[4], bool REV_DIRs[4], int MAX_PWM
 // Information about the base
 // Initialize the base module
 // Initializer for name, debugger and Level
-void S4Base::Initialize(String name, HardwareSerial &debugger, int Level) {
+void S4Base::Initialize(String name, HardwareSerial *debugger, int Level) {
   // Assigning the name
   this->name = name;
   // Debugger
   this->debuggerSerial = debugger;
+  this->debuggerSerial->begin(57600);
   // Level
   this->DEBUGGER_LEVEL = Level;
 }
-void S4Base::Initialize(String name, HardwareSerial &debugger) {
+void S4Base::Initialize(String name, HardwareSerial *debugger) {
   // Go for the default
   int DEFAULT_LEVEL = 3;
   this->Initialize(name, debugger, DEFAULT_LEVEL);
@@ -140,23 +141,23 @@ void S4Base::MoveMotor(int motor_index, int PWM_vector) {
 
 // ##################### Debugger functions #######################
 // Put something on serial
-void DebuggerOutput(int Level, String output) {
+void S4Base::DebuggerOutput(int Level, String output) {
   // If DEBUGGER_LEVEL < Level, then this message is not needed on serial monitor
   if (this->DEBUGGER_LEVEL < Level) {
     // No need to get this verbose
     return;
   }
   // Print debugger message ==> $name$ - L$N$ : $output$
-  this->debuggerSerial.print("$ ");
-  this->debuggerSerial.print(name);
-  this->debuggerSerial.print(" - L");
-  this->debuggerSerial.print(Level);
-  this->debuggerSerial.print(" : ");
-  this->debuggerSerial.print(output);
-  this->debuggerSerial.println("");
+  this->debuggerSerial->print("$ ");
+  this->debuggerSerial->print(this->name);
+  this->debuggerSerial->print(" - L");
+  this->debuggerSerial->print(Level);
+  this->debuggerSerial->print(" : ");
+  this->debuggerSerial->print(output);
+  this->debuggerSerial->println("");
 }
 // Print something to serial
-void DebuggerOutput(String output) {
+void S4Base::DebuggerOutput(String output) {
   // Defaul level for debugger
   int DEFAULT_LEVEL = 3;
   this->DebuggerOutput(DEFAULT_LEVEL, output);

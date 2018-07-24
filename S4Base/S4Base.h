@@ -31,8 +31,8 @@ private:
   float ANGLE_degrees;  // in degrees
   // Debugger and additional information for the Bot
   String name;          // name of the Bot
-  HardwareSerial debuggerSerial;  // HardwareSerial
-  int DEBUGGER_LEVEL;
+  HardwareSerial *debuggerSerial;  // HardwareSerial pointer
+  int DEBUGGER_LEVEL;     // Debugger level for serial output
 
 public:
   // ######################  Constructors  #########################
@@ -42,8 +42,8 @@ public:
   S4Base ();
   // ################### Assignment functions ######################
   // Information of base
-  void Initialize(String name, HardwareSerial &debugger, int Level);
-  void Initialize(String name, HardwareSerial &debugger);
+  void Initialize(String name, HardwareSerial *debugger, int Level);
+  void Initialize(String name, HardwareSerial *debugger);
   // Motor pins configuration
   void AddMotorDriverPins(int PWM_PINs[4], int DIR_PINs[4], bool REVs[4]);
   void AddMotorDriverPins(int PWM_PINs[4], int DIR_PINs[4]);

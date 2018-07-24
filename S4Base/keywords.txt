@@ -24,3 +24,4 @@ AddMotorDriverPins  KEYWORD2
 AddMotorMAGLimit  KEYWORD2
 Move  KEYWORD2
 Initialize  KEYWORD2
+DebuggerOutput  KEYWORD2
