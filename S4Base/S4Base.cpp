@@ -23,6 +23,22 @@ S4Base::S4Base(int MOTOR_PINs[4], int DIR_PINs[4], bool REV_DIRs[4], int MAX_PWM
 }
 
 // ################### Assignment functions ######################
+// Information about the base
+// Initialize the base module
+// Initializer for name, debugger and Level
+void S4Base::Initialize(String name, HardwareSerial &debugger, int Level) {
+  // Assigning the name
+  this->name = name;
+  // Debugger
+  this->debuggerSerial = debugger;
+  // Level
+  this->DEBUGGER_LEVEL = Level;
+}
+void S4Base::Initialize(String name, HardwareSerial &debugger) {
+  // Go for the default
+  int DEFAULT_LEVEL = 3;
+  this->Initialize(name, debugger, DEFAULT_LEVEL);
+}
 // Motor pins configuration
 void S4Base::AddMotorDriverPins(int PWM_PINs[4], int DIR_PINs[4], bool REVs[4]) {
   // Initialize every wheel
@@ -70,6 +86,12 @@ void S4Base::Move(int PWM, float angle_degrees) {
   float angle = angle_degrees * PI / 180.0;
   // Main motion
   this->MovePWMAngle(PWM, angle);
+  // Show on serial
+  String description = "Moving at PWM ";
+  description.concat(PWM);
+  description.concat(" angle ");
+  description.concat(angle_degrees);
+  this->DebuggerOutput(2, description);
 }
 // Move bot with PWM at an angle (in radians)
 void S4Base::MovePWMAngle(int PWM, float angle) {
@@ -108,4 +130,34 @@ void S4Base::MoveMotor(int motor_index, int PWM_vector) {
     digitalWrite(MOTOR_DIRECTION_PINs[motor_index], LOW);
   }
   analogWrite(MOTOR_PWM_PINs[motor_index], PWM_val);
+  // Write on serial
+  String debugger = "";
+  debugger.concat(PWM_val);
+  debugger.concat(" written to pin ");
+  debugger.concat(MOTOR_PWM_PINs[motor_index]);
+  this->DebuggerOutput(3, debugger);
+}
+
+// ##################### Debugger functions #######################
+// Put something on serial
+void DebuggerOutput(int Level, String output) {
+  // If DEBUGGER_LEVEL < Level, then this message is not needed on serial monitor
+  if (this->DEBUGGER_LEVEL < Level) {
+    // No need to get this verbose
+    return;
+  }
+  // Print debugger message ==> $name$ - L$N$ : $output$
+  this->debuggerSerial.print("$ ");
+  this->debuggerSerial.print(name);
+  this->debuggerSerial.print(" - L");
+  this->debuggerSerial.print(Level);
+  this->debuggerSerial.print(" : ");
+  this->debuggerSerial.print(output);
+  this->debuggerSerial.println("");
+}
+// Print something to serial
+void DebuggerOutput(String output) {
+  // Defaul level for debugger
+  int DEFAULT_LEVEL = 3;
+  this->DebuggerOutput(DEFAULT_LEVEL, output);
 }

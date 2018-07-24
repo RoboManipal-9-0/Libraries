@@ -29,6 +29,10 @@ private:
   // Angle of motion of bot
   float ANGLE;          // in radians
   float ANGLE_degrees;  // in degrees
+  // Debugger and additional information for the Bot
+  String name;          // name of the Bot
+  HardwareSerial debuggerSerial;  // HardwareSerial
+  int DEBUGGER_LEVEL;
 
 public:
   // ######################  Constructors  #########################
@@ -37,6 +41,9 @@ public:
   // Default constructor
   S4Base ();
   // ################### Assignment functions ######################
+  // Information of base
+  void Initialize(String name, HardwareSerial &debugger, int Level);
+  void Initialize(String name, HardwareSerial &debugger);
   // Motor pins configuration
   void AddMotorDriverPins(int PWM_PINs[4], int DIR_PINs[4], bool REVs[4]);
   void AddMotorDriverPins(int PWM_PINs[4], int DIR_PINs[4]);
@@ -50,6 +57,10 @@ public:
   void MovePWMAngle(int PWM, float angle);
   // Move individual motor
   void MoveMotor(int motor_index, int PWM_vector);
+  // ######################### DEBUGGER ###########################
+  // Debugger output for serial
+  void DebuggerOutput(String output);
+  void DebuggerOutput(int LEVEL, String output);
 
 };
 
