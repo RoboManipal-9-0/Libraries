@@ -42,6 +42,7 @@ public:
   S4Base ();
   // ################### Assignment functions ######################
   // Information of base
+  void Initialize(String name, HardwareSerial *debugger, int baud_rate, int Level);
   void Initialize(String name, HardwareSerial *debugger, int Level);
   void Initialize(String name, HardwareSerial *debugger);
   // Motor pins configuration

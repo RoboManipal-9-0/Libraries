@@ -1,0 +1,19 @@
+####################################################
+##### Contains keywords for the BotBase library ####
+####################################################
+
+####################################################
+################ Main classes ######################
+####################################################
+# Parent class : BotBase
+BotBase     KEYWORD1
+
+
+####################################################
+################# Functions ########################
+####################################################
+# Parent class functions (for all classes)
+Initialize      KEYWORD2
+AddMotorDriverPins      KEYWORD2
+Move    KEYWORD2
+DebuggerOutput      KEYWORD2

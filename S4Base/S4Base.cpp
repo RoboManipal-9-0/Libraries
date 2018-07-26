@@ -26,14 +26,19 @@ S4Base::S4Base(int MOTOR_PINs[4], int DIR_PINs[4], bool REV_DIRs[4], int MAX_PWM
 // Information about the base
 // Initialize the base module
 // Initializer for name, debugger and Level
-void S4Base::Initialize(String name, HardwareSerial *debugger, int Level) {
+void S4Base::Initialize(String name, HardwareSerial *debugger, int baud_rate, int Level) {
   // Assigning the name
   this->name = name;
   // Debugger
   this->debuggerSerial = debugger;
-  this->debuggerSerial->begin(57600);
+  this->debuggerSerial->begin(baud_rate);
   // Level
   this->DEBUGGER_LEVEL = Level;
+}
+void S4Base::Initialize(String name, HardwareSerial *debugger, int Level) {
+  // Default baud rate
+  int DEFAULT_BAUD_RATE = 57600;
+  this->Initialize(name, debugger, DEFAULT_BAUD_RATE, Level);
 }
 void S4Base::Initialize(String name, HardwareSerial *debugger) {
   // Go for the default
