@@ -52,14 +52,35 @@ void BotBase::AddMotorDriverPins(int *PWM_PINs, int *DIR_PINs) {
         message.concat(", ");
         message.concat(DIR_PINs[i]);
         // Ex = Motor 1 attached to (PWM, DIR): 45, 5
-        this->DebuggerOutput(1, message);
+        this->DebuggerOutput(2, message);
     }
 }
 // Move the bot with speed PWM at angle 'angle_degrees'
-void Move(int PWM, float angle_degrees) {
+void BotBase::Move(int PWM, float angle_degrees) {
+    // Convert angle to radians
     float angle_radians = angle_degrees * PI/180.0;
     // Use the default move function
-    this->Move(PWM, angle_radians);
+    this->Move_PWM_Angle(PWM, angle_radians);
+}
+// Move motor i on the bot
+void BotBase::MoveMotor(int i) {
+    // PWM
+    analogWrite(this->PWM_pins[i], this->PWM_values[i]);
+    // Direction
+    digitalWrite(this->DIR_pins[i], this->DIR_values[i]);
+    // Send message on terminal
+    // Motor %i+1% status = [3: 123, 7: HIGH]
+    String message = "Motor ";
+    message.concat(i + 1);
+    message.concat(" status = [");
+    message.concat(this->PWM_pins[i]);
+    message.concat(": ");
+    message.concat(this->PWM_values[i]);
+    message.concat(", ");
+    message.concat(this->DIR_pins[i]);
+    message.concat(": ");
+    message.concat(this->DIR_values[i]);
+    this->DebuggerOutput(1, message);
 }
 // Debugger output function
 void BotBase::DebuggerOutput(int level, String output) {
@@ -76,4 +97,53 @@ void BotBase::DebuggerOutput(int level, String output) {
     this->botDebuggerSerial->print(": ");
     this->botDebuggerSerial->print(output);         // Main message
     this->botDebuggerSerial->println("");
+}
+
+
+// ###################### Derived class : BotBase #######################
+FourSBase::FourSBase() {
+    // 4 wheel bot
+    this->setNumberOfWheelsTo(4);
+}
+// Add motor driver pins
+void FourSBase::AddMotorDriverPins(int *PWM_PINs, int *DIR_PINs, bool *reverseDIRs) {
+    // Call the function of super class and assign PWM, DIR pins
+    this->AddMotorDriverPins(PWM_PINs, DIR_PINs);
+    // Assign reverse directions
+    this->reverseDIRs = reverseDIRs;
+    // Debugger output
+    String message = "Wheel Reverse DIRs : ";
+    for (int i = 0; i < this->NUMBER_OF_WHEELS; i++) {
+        message.concat(this->reverseDIRs[i]);
+        message.concat(" ");
+    }
+    this->DebuggerOutput(2, message);
+}
+// Motion code (angle in radians)
+void FourSBase::Move_PWM_Angle(int PWM, float angle) {
+    // PWM vector created from directions
+    int PWM_vector[4] = {
+        PWM * sin(angle),
+        -1 * PWM * cos(angle),
+        -1 * PWM * sin(angle),
+        PWM * cos(angle)
+    };
+    // Get the DIR_values vector from PWM_vector and get PWM_values
+    for (int i = 0; i < this->NUMBER_OF_WHEELS; i++) {
+        if (PWM_vector[i] >= 0) {
+            // If vector > 0, then direction pin must be HIGH
+            this->DIR_values[i] = HIGH;
+            this->PWM_values[i] = PWM_vector[i];
+        } else {
+            // If vector < 0, then direction pin must be LOW
+            this->DIR_values[i] = LOW;
+            this->PWM_values[i] = -PWM_vector[i];
+        }
+        if (this->reverseDIRs) {
+            // Reverse the direction if motor is wired in reverse
+            this->DIR_values = !(this->reverseDIRs);
+        }
+        // Tell the motor to move
+        this->MoveMotor(i);
+    }
 }

@@ -1,4 +1,4 @@
-/*
+PWM_pins/*
   BotBase.h - Library to deal with all kinds of bot bases RM deals with
   Copyright (c) 2018 RoboManipal. All right reserved
   File created by : Avneesh Mishra
@@ -27,6 +27,9 @@ protected:
     // ##################### Private funcions ####################
     // Set number of wheels
     void setNumberOfWheelsTo(int number);
+    // ############################ Debugger #############################
+    // Debugger output through serial
+    void DebuggerOutput(int Level, String output);
 public:
     // ##################### Initializer functions ####################
     // Constructors
@@ -37,23 +40,22 @@ public:
     // Setting the debugger priority, messages less than this level are not displayed
     void SetDebuggerPriorityToLevel(int minLevel);
     // Configure motor driver pins
-    void AddMotorDriverPins(int *PWM_PINs, int *DIR_PINs);
+    void AddMotorDriverPins(int *PWM_pins, int *DIR_PINs);
     // ######################### Motion funcions #########################
-    // Motion of the bot : Every bot has a Move function
-    virtual void Move(int PWM, int angle) = 0;
+    // Motion of the bot : Every bot has a Move function (angle in radians)
+    virtual void Move_PWM_Angle(int PWM, float angle) = 0;
     void Move(int PWM, float angle_degrees);
-    // ############################ Debugger #############################
-    // Debugger output through serial
-    void DebuggerOutput(int Level, String output);
+    void MoveMotor(int motor_number);
 };
 
 // Four wheels attached in an S configuration
 class FourSBase : public BotBase {
-    bool reverseDIRs[4];
+protected:
+    bool *reverseDIRs;
+    void Move_PWM_Angle(int PWM, float angle_radians);
 public:
     FourSBase();
-    void AddMotorDriverPins(int *PWM_PINs, int *DIR_PINs, bool reverseDIRs);
-    void Move(int PWM, float angle);
+    void AddMotorDriverPins(int *PWM_pins, int *DIR_PINs, bool *reverseDIRs);
 };
 
 #endif
