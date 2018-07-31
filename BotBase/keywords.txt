@@ -7,7 +7,6 @@
 ####################################################
 # Parent class : BotBase
 BotBase	KEYWORD1
-FourSBase	KEYWORD1
 
 
 ####################################################
@@ -17,4 +16,3 @@ FourSBase	KEYWORD1
 Initialize	KEYWORD2
 AddMotorDriverPins	KEYWORD2
 Move	KEYWORD2
-DebuggerOutput	KEYWORD2
