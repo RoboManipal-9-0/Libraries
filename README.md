@@ -1,7 +1,7 @@
 # Libraries
 The set of personal libraries RoboManipal uses
 
-### NOTE FOR USERS 
+### NOTE FOR USERS
 
 Just download the repository and move the desired file to the include folder of Arduino on your system.
 On Ubuntu, it's ~/Arduino/libraries (Open the arduino app and check the $sketchbook location$/libraries folder)
@@ -21,3 +21,5 @@ Follow the following procedure (To create a Library named `Sample`)
 - It is highly suggested that you use a *keywords.txt* and a *README.txt*. Classes are KEYWORD1 and functions are KEYWORD2 type, you can try LITERAL1 if needed
 - Place the files in a folder named `Sample` and move it to ~/Arduino/Libraries (for Ubuntu/Linux users). Alternatively, you could move the entire repository there (not recommended, instead put individual files there if you don't want to include everything).
 - If needed, add an examples folder inside `Sample` folder, add some example codes here.
+
+Additional help [here](https://www.arduino.cc/en/hacking/libraries).

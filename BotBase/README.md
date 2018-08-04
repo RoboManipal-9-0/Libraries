@@ -1,7 +1,20 @@
 # Introduction
 This library is for defining any kind of base for a ground terrain robot.
 
-**Note** : This library is still in developer beta, ask the developer before using
+~~**Note** : This library is still in developer beta, ask the developer before using.~~ <br>
+Beta testing done :tada:
+
+Select guide : [Users Guide](users-guide) or [Developers Guide](developers-guide)
+
+# Users Guide
+
+## Downloading the library
+It is suggested that you download the entire repository and then select this folder, so that you can enjoy the benifits of VCS like git. It makes it simpler to update the contents whenever patch fixes are done. <br>
+**<font color="#AA0000">Not recommended</font>** : You can download just this folder by clicking [here](https://minhaskamal.github.io/DownGit/#/home?url=https://github.com/RoboManipal-9-0/Libraries/tree/Branch-AvneeshMishra/BotBase).
+
+## Using the library with Arduino
+You can check out the README file for this repository for this. Click [here](../README.md) otherwise.
+Simply, move this folder into the arduino libraries folder on your PC.
 
 # Developers Guide
 Here is the developers guide to the library
@@ -55,12 +68,25 @@ Let's inspect in detail what all the members of the class do
 <center>
 $<font color="1FB000">name</font>$:L<font color="1FB000">level</font>: <font color="1FB000">output</font>
 </center>
-Where stuff in <font color="1FB000">green</font> is the *name* of bot, it's *debuggerPriorityLevel* and the *output* message passed to the function.
+Where stuff in <font color="1FB000">green</font> is the *name* of bot, it's *debuggerPriorityLevel* and the *output* message passed to the function respectively.
 
 #### Public members
 ##### Constructors
-Though you'll never create any memory for objects of this class, it's advised that you create a constructor anyways.
+Though you'll never create any memory for objects of this class, it's advised to have a constructor anyways.
 
 **<font color="#5052FF">BotBase</font>()** : Empty constructor
 
-**<font color="#5052FF">BotBase</font>(<font color="#CD00FF">String</font> name, <font color="#FFB300">HardwareSerial</font> \*debugger_serial, <font color="#CD00FF">int</font> Level)** : 
+**<font color="#5052FF">BotBase</font>(<font color="#CD00FF">String</font> name, <font color="#FFB300">HardwareSerial</font> \*debugger_serial, <font color="#CD00FF">int</font> Level)** : Initialization constructor for the class. It calls the *Initialize* function
+
+##### Functions
+**<font color="#CD00FF">void</font> <font color="#5052FF">Initialize</font>(<font color="#CD00FF">String</font> name, <font color="#FFB300">HardwareSerial</font> \*debugger_serial, <font color="#CD00FF">int</font> Level)** : To assign *name*, *debugger_serial* and *Level* to the *name*, *botDebuggerSerial* and *debuggerPriorityLevel* respectively.
+
+**<font color="#CD00FF">void</font> <font color="#5052FF">SetDebuggerPriorityToLevel</font>(<font color="#CD00FF">int</font> minLevel)** : To set the debugger level (*debuggerPriorityLevel*) to *minLevel*.
+
+**<font color="#CD00FF">void</font> <font color="#5052FF">AddMotorDriverPins</font>(<font color="#CD00FF">int</font> \*PWM_pins, <font color="#CD00FF">int</font> \*DIR_pins)** : To attach the pins of the botbase motors connected to the motor drivers.
+
+**<font color="#CD00FF">void</font> <font color="#5052FF">Move_PWM_Angle</font>(<font color="#CD00FF">int</font> PWM, <font color="#CD00FF">float</font> angle)** : An abstract function which you must implement in the derived classes. This function has the code to move your bot at a particular speed (*PWM*) and in a particular direction (*angle* in radians).
+
+**<font color="#CD00FF">void</font> <font color="#5052FF">Move</font>(<font color="#CD00FF">int</font> PWM, <font color="#CD00FF">int</font> angle_degrees)** : This is function that the user will call. It simply calls the *Move_PWM_Angle* function with the angle converted from degrees to radians.
+
+**<font color="#CD00FF">void</font> <font color="#5052FF">MoveMotor</font>(<font color="#CD00FF">int</font> motor_number)** : Moves the motor indexed at *motor_number* with PWM = _PWM_values[motor_number]_ and _DIR = DIR_values[motor_number]_.
