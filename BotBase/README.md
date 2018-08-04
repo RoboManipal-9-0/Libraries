@@ -45,26 +45,26 @@ Let's inspect in detail what all the members of the class do
 #### Protected members
 ##### Variables
 
-**<font color="#CD00FF">int</font> NUMBER_OF_WHEELS** : The number of motor powered wheels on the base of the bot.
+- **<font color="#CD00FF">int</font> NUMBER_OF_WHEELS** : The number of motor powered wheels on the base of the bot.
 
-**<font color="#CD00FF">int</font> \*PWM_pins** : The pin numbers which are connected to the PWM terminal of the motor driver. These tell the motor driver the amount of voltage to be given to the motors.
+- **<font color="#CD00FF">int</font> \*PWM_pins** : The pin numbers which are connected to the PWM terminal of the motor driver. These tell the motor driver the amount of voltage to be given to the motors.
 
-**<font color="#CD00FF">int</font> \*PWM_values** : The 8 bit (0 to 255) values of the PWM pin that specify the voltage on that pin. For example : If you're using a controller that operates on 5V logic level, then 0 signifies 0V, 127 signifies 2.4902V and 255 signifies 5V. In short N here specifies N * V/255 volts in real (where V is the logic level voltage).
+- **<font color="#CD00FF">int</font> \*PWM_values** : The 8 bit (0 to 255) values of the PWM pin that specify the voltage on that pin. For example : If you're using a controller that operates on 5V logic level, then 0 signifies 0V, 127 signifies 2.4902V and 255 signifies 5V. In short N here specifies N * V/255 volts in real (where V is the logic level voltage).
 
-**<font color="#CD00FF">int</font> \*DIR_pins** : The pin numbers which are connected to the DIR terminal of the motor driver. These tell the motor driver which direction to rotate the motor in (clockwise or counter clockwise).
+- **<font color="#CD00FF">int</font> \*DIR_pins** : The pin numbers which are connected to the DIR terminal of the motor driver. These tell the motor driver which direction to rotate the motor in (clockwise or counter clockwise).
 
-**<font color="#CD00FF">int</font> \*DIR_values** : These are either HIGH or LOW. These are the directions of rotation for the motor. It's your wish to choose the directions (as per convenience).
+- **<font color="#CD00FF">int</font> \*DIR_values** : These are either HIGH or LOW. These are the directions of rotation for the motor. It's your wish to choose the directions (as per convenience).
 
-**<font color="#CD00FF">String</font> name** : This is the name of the bot. This is used for debugging purposes and to avoid confusion in case of multiple instances. It's like an identity of the bot. It's suggested that you assign a unique name to every instance of this class.
+- **<font color="#CD00FF">String</font> name** : This is the name of the bot. This is used for debugging purposes and to avoid confusion in case of multiple instances. It's like an identity of the bot. It's suggested that you assign a unique name to every instance of this class.
 
-**<font color="#FFB300">HardwareSerial</font> \*botDebuggerSerial** : This is the serial over which debugger messages are sent. It must be initialized beforehand (using the _Serial.begin_ function). It's also mentioned as _debugger serial_ at places.
+- **<font color="#FFB300">HardwareSerial</font> \*botDebuggerSerial** : This is the serial over which debugger messages are sent. It must be initialized beforehand (using the _Serial.begin_ function). It's also mentioned as _debugger serial_ at places.
 
-**<font color="#CD00FF">int</font> debuggerPriorityLevel** : This variable is to signify the verbocity needed by the user while debugging. Messages having priority lesser that this will not be displayed on the _debugger serial_.
+- **<font color="#CD00FF">int</font> debuggerPriorityLevel** : This variable is to signify the verbocity needed by the user while debugging. Messages having priority lesser that this will not be displayed on the _debugger serial_.
 
 ##### Member functions
-**<font color="#CD00FF">void</font> <font color="#5052FF">setNumberOfWheelsTo</font>(<font color="#FF00FF">int</font> number)** : Sets the *NUMBER_OF_WHEELS* value to the passed *number*. It's a good idea to make a call to this in the constructor of the derived classes.
+- **<font color="#CD00FF">void</font> <font color="#5052FF">setNumberOfWheelsTo</font>(<font color="#FF00FF">int</font> number)** : Sets the *NUMBER_OF_WHEELS* value to the passed *number*. It's a good idea to make a call to this in the constructor of the derived classes.
 
-**<font color="#CD00FF">void</font> <font color="#5052FF">DebuggerOutput</font>(<font color="#FF00FF">int</font> Level, <font color="#FF00FF">String</font> output)** : Used to put a debugger message into the serial. All debugger messages have the following format :
+- **<font color="#CD00FF">void</font> <font color="#5052FF">DebuggerOutput</font>(<font color="#FF00FF">int</font> Level, <font color="#FF00FF">String</font> output)** : Used to put a debugger message into the serial. All debugger messages have the following format :
 <center>
 $<font color="1FB000">name</font>$:L<font color="1FB000">level</font>: <font color="1FB000">output</font>
 </center>
@@ -74,19 +74,19 @@ Where stuff in <font color="1FB000">green</font> is the *name* of bot, it's *deb
 ##### Constructors
 Though you'll never create any memory for objects of this class, it's advised to have a constructor anyways.
 
-**<font color="#5052FF">BotBase</font>()** : Empty constructor
+- **<font color="#5052FF">BotBase</font>()** : Empty constructor
 
-**<font color="#5052FF">BotBase</font>(<font color="#CD00FF">String</font> name, <font color="#FFB300">HardwareSerial</font> \*debugger_serial, <font color="#CD00FF">int</font> Level)** : Initialization constructor for the class. It calls the *Initialize* function
+- **<font color="#5052FF">BotBase</font>(<font color="#CD00FF">String</font> name, <font color="#FFB300">HardwareSerial</font> \*debugger_serial, <font color="#CD00FF">int</font> Level)** : Initialization constructor for the class. It calls the *Initialize* function
 
 ##### Functions
-**<font color="#CD00FF">void</font> <font color="#5052FF">Initialize</font>(<font color="#CD00FF">String</font> name, <font color="#FFB300">HardwareSerial</font> \*debugger_serial, <font color="#CD00FF">int</font> Level)** : To assign *name*, *debugger_serial* and *Level* to the *name*, *botDebuggerSerial* and *debuggerPriorityLevel* respectively.
+- **<font color="#CD00FF">void</font> <font color="#5052FF">Initialize</font>(<font color="#CD00FF">String</font> name, <font color="#FFB300">HardwareSerial</font> \*debugger_serial, <font color="#CD00FF">int</font> Level)** : To assign *name*, *debugger_serial* and *Level* to the *name*, *botDebuggerSerial* and *debuggerPriorityLevel* respectively.
 
-**<font color="#CD00FF">void</font> <font color="#5052FF">SetDebuggerPriorityToLevel</font>(<font color="#CD00FF">int</font> minLevel)** : To set the debugger level (*debuggerPriorityLevel*) to *minLevel*.
+- **<font color="#CD00FF">void</font> <font color="#5052FF">SetDebuggerPriorityToLevel</font>(<font color="#CD00FF">int</font> minLevel)** : To set the debugger level (*debuggerPriorityLevel*) to *minLevel*.
 
-**<font color="#CD00FF">void</font> <font color="#5052FF">AddMotorDriverPins</font>(<font color="#CD00FF">int</font> \*PWM_pins, <font color="#CD00FF">int</font> \*DIR_pins)** : To attach the pins of the botbase motors connected to the motor drivers.
+- **<font color="#CD00FF">void</font> <font color="#5052FF">AddMotorDriverPins</font>(<font color="#CD00FF">int</font> \*PWM_pins, <font color="#CD00FF">int</font> \*DIR_pins)** : To attach the pins of the botbase motors connected to the motor drivers.
 
-**<font color="#CD00FF">void</font> <font color="#5052FF">Move_PWM_Angle</font>(<font color="#CD00FF">int</font> PWM, <font color="#CD00FF">float</font> angle)** : An abstract function which you must implement in the derived classes. This function has the code to move your bot at a particular speed (*PWM*) and in a particular direction (*angle* in radians).
+- **<font color="#CD00FF">void</font> <font color="#5052FF">Move_PWM_Angle</font>(<font color="#CD00FF">int</font> PWM, <font color="#CD00FF">float</font> angle)** : An abstract function which you must implement in the derived classes. This function has the code to move your bot at a particular speed (*PWM*) and in a particular direction (*angle* in radians).
 
-**<font color="#CD00FF">void</font> <font color="#5052FF">Move</font>(<font color="#CD00FF">int</font> PWM, <font color="#CD00FF">int</font> angle_degrees)** : This is function that the user will call. It simply calls the *Move_PWM_Angle* function with the angle converted from degrees to radians.
+- **<font color="#CD00FF">void</font> <font color="#5052FF">Move</font>(<font color="#CD00FF">int</font> PWM, <font color="#CD00FF">int</font> angle_degrees)** : This is function that the user will call. It simply calls the *Move_PWM_Angle* function with the angle converted from degrees to radians.
 
-**<font color="#CD00FF">void</font> <font color="#5052FF">MoveMotor</font>(<font color="#CD00FF">int</font> motor_number)** : Moves the motor indexed at *motor_number* with PWM = _PWM_values[motor_number]_ and _DIR = DIR_values[motor_number]_.
+- **<font color="#CD00FF">void</font> <font color="#5052FF">MoveMotor</font>(<font color="#CD00FF">int</font> motor_number)** : Moves the motor indexed at *motor_number* with PWM = _PWM_values[motor_number]_ and _DIR = DIR_values[motor_number]_.
