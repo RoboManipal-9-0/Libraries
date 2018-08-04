@@ -64,11 +64,9 @@ Let's inspect in detail what all the members of the class do
 ##### Member functions
 - **<font color="#CD00FF">void</font> <font color="#5052FF">setNumberOfWheelsTo</font>(<font color="#FF00FF">int</font> number)** : Sets the *NUMBER_OF_WHEELS* value to the passed *number*. It's a good idea to make a call to this in the constructor of the derived classes.
 
-- **<font color="#CD00FF">void</font> <font color="#5052FF">DebuggerOutput</font>(<font color="#FF00FF">int</font> Level, <font color="#FF00FF">String</font> output)** : Used to put a debugger message into the serial. All debugger messages have the following format :
-<center>
-$<font color="1FB000">name</font>$:L<font color="1FB000">level</font>: <font color="1FB000">output</font>
-</center>
-Where stuff in <font color="1FB000">green</font> is the *name* of bot, it's *debuggerPriorityLevel* and the *output* message passed to the function respectively.
+- **<font color="#CD00FF">void</font> <font color="#5052FF">DebuggerOutput</font>(<font color="#FF00FF">int</font> Level, <font color="#FF00FF">String</font> output)** : Used to put a debugger message into the serial. All debugger messages have the following format :<br>
+<center>$*name*$:L<i>level</i>: *output*</center><br>
+Where stuff in *italics* is the *name* of bot, it's *debuggerPriorityLevel* and the *output* message passed to the function respectively.
 
 #### Public members
 ##### Constructors
