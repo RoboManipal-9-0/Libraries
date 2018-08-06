@@ -1,7 +1,8 @@
 ################################################################################
+  NOTE : Library support discontinued, use the ThreeHBase library instead
   ThreeWheelMotorBase.cpp - Library code for controlling a three wheel bot
   Copyright (c) 2018 RoboManipal. All right reserved
-  Version : 1.0.0
+  Version : 1.4.0
   File created by : Avneesh Mishra
   Last commit done by : Avneesh Mishra
 

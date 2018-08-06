@@ -1,5 +1,6 @@
+**NOTE** : The support for this library has been discontinued, use the FourSBase library instead
 # About the library
-This library deals with bots having four wheel drive connected in an **S** formation.
+This library deals with bots having four wheel drive connected in an **S** formation.<br>
 
 ## Configurations and convections
 ### Bot configuration
