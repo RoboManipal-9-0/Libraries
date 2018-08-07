@@ -9,7 +9,10 @@ Select guide : [Users Guide](users-guide) or [Developers Guide](developers-guide
 # Users Guide
 
 ## Downloading the library
-It is suggested that you download the entire repository and then select this folder, so that you can enjoy the benifits of VCS like git. It makes it simpler to update the contents whenever patch fixes are done. <br>
+It is suggested that you download the entire repository and then select this folder, so that you can enjoy the benifits of VCS like git. It makes it simpler to update the contents whenever patch fixes are done. You can simply open a terminal (or gitbash on windows), go to the folder where you want to save this repository and type the following command.
+```
+git clone https://github.com/RoboManipal-9-0/Libraries.git -b Branch-AvneeshMishra
+```
 **<font color="#AA0000">Not recommended</font>** : You can download just this folder by clicking [here](https://minhaskamal.github.io/DownGit/#/home?url=https://github.com/RoboManipal-9-0/Libraries/tree/Branch-AvneeshMishra/BotBase).
 
 ## Using the library with Arduino
@@ -17,7 +20,8 @@ You can check out the README file for this repository for this. Click [here](../
 Simply, move this folder into the arduino libraries folder on your PC.
 
 # Developers Guide
-Here is the developers guide to the library
+Here is the developers guide to the library. <br>
+This markdown is best viewed in Atom editor.
 
 ## Library Details
 
@@ -36,9 +40,11 @@ This file contains the keywords that we want the Arduino IDE to identify. This p
 #### README.md
 The description file containing details about the library. The file that you are looking at right now
 
-### Class contents
+### Class description
 This library assumes the following :-
 - You have a motor driver that requires only PWM and DIR (PWM and direction) signals to control the speed and direction of a motor.
+
+The purpose of the *BotBase* class is just to act as a parent class, it's abstract and thus you cannot directly create objects for this class. It's job is only to define the necessary properties and methods for a robot base with wheels.
 
 Let's inspect in detail what all the members of the class do
 
@@ -88,3 +94,18 @@ Though you'll never create any memory for objects of this class, it's advised to
 - **<font color="#CD00FF">void</font> <font color="#5052FF">Move</font>(<font color="#CD00FF">int</font> PWM, <font color="#CD00FF">int</font> angle_degrees)** : This is function that the user will call. It simply calls the *Move_PWM_Angle* function with the angle converted from degrees to radians.
 
 - **<font color="#CD00FF">void</font> <font color="#5052FF">MoveMotor</font>(<font color="#CD00FF">int</font> motor_number)** : Moves the motor indexed at *motor_number* with PWM = _PWM_values[motor_number]_ and _DIR = DIR_values[motor_number]_.
+
+## Making you own custom BotBase
+You must extend the properties of the class *BotBase* through inheritance into your own class (for your custom *BotBase*). There is a library made for this demo purpose, it's the **FourSBase** folder in this repository.
+
+### Guide
+After you place this library folder in the libraries folder of the Arduino environment, you can include it in your codes. To know more about making your own library, you can read [this](../README.md) file.<br>
+Perform the following to make use of this library in your BotBase :
+- Include the library in your header file (\*.h file). You can check a sample header file [here](../FourSBase/FourSBase.h).
+- Inherit the class *BotBase* publicly.
+- You can define properties just for your bot. For example, the reverseDIRs array.
+- You must implement the following functions :
+    - **void Move_PWM_Angle(int PWM, float angle_radians)** : Contains code to move your bot at a particular PWM and at a particular angle (in radians). It's suggested that you assign values to the *DIR_pins* (as *DIR_values*) and *PWM_pins* (as *PWM_values*).
+    - It is suggested that you have a function to attach pins, in case you have properties that require Initialization. You may call the function **AddMotorDriverPins** in the BotBase class from it.
+        - (Both the above methods have been implemented in the [FourSBase](../FourSBase/) library).
+- After that, include the library you're working on into the code and create an object for the class.
