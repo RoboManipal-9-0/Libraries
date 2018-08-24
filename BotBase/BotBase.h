@@ -6,8 +6,8 @@
 */
 
 // Check for the flag
-#ifndef BOT_BASE_H
-#define BOT_BASE_H
+#ifndef BOTBASE_H
+#define BOTBASE_H
 
 // Include Arduino main files
 #include "Arduino.h"
