@@ -16,8 +16,7 @@ git clone https://github.com/RoboManipal-9-0/Libraries.git -b Branch-AvneeshMish
 **<font color="#AA0000">Not recommended</font>** : You can download just this folder by clicking [here](https://minhaskamal.github.io/DownGit/#/home?url=https://github.com/RoboManipal-9-0/Libraries/tree/Branch-AvneeshMishra/BotBase).
 
 ## Using the library with Arduino
-You can check out the README file for this repository for this. Click [here](../README.md) otherwise.
-Simply, move this folder into the arduino libraries folder on your PC.
+Move this folder into the arduino libraries folder on your PC. If you don't know where the libraries folder of your arduino is, you can check out the README file of this entire repository for this, click [here](../README.md).<br>
 
 # Developers Guide
 Here is the developers guide to the library. <br>
@@ -109,3 +108,7 @@ Perform the following to make use of this library in your BotBase :
     - It is suggested that you have a function to attach pins, in case you have properties that require Initialization. You may call the function **AddMotorDriverPins** in the BotBase class from it.
         - (Both the above methods have been implemented in the [FourSBase](../FourSBase/) library).
 - After that, include the library you're working on into the code and create an object for the class.
+
+#### Examples
+We have already made some example libraries, just to show how to make your own libraries using the BotBase.
+- **FourSBase** library: This library is for a four wheel omni, you can click [here](../FourSBase) to check it out.
