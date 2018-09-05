@@ -102,13 +102,13 @@ After you place this library folder in the libraries folder of the Arduino envir
 Perform the following to make use of this library in your BotBase :
 - Include the library in your header file (\*.h file). You can check a sample header file [here](../FourSBase/FourSBase.h).
 - Inherit the class *BotBase* publicly.
-- You can define properties just for your bot. For example, the reverseDIRs array.
+- You can define properties just for your bot. For example, the reverseDIRs array in that file.
 - You must implement the following functions :
     - **void Move_PWM_Angle(int PWM, float angle_radians)** : Contains code to move your bot at a particular PWM and at a particular angle (in radians). It's suggested that you assign values to the *DIR_pins* (as *DIR_values*) and *PWM_pins* (as *PWM_values*).
     - It is suggested that you have a function to attach pins, in case you have properties that require Initialization. You may call the function **AddMotorDriverPins** in the BotBase class from it.
         - (Both the above methods have been implemented in the [FourSBase](../FourSBase/) library).
-- After that, include the library you're working on into the code and create an object for the class.
+- After that, include the library you're working on into the code and create an object for the class. Additionally, make sure that you've called the **setNumberOfWheelsTo** function to set the number of wheels (motors), it's suggested that you implement this in the constructors of the class.
 
 #### Examples
-We have already made some example libraries, just to show how to make your own libraries using the BotBase.
-- **FourSBase** library: This library is for a four wheel omni, you can click [here](../FourSBase) to check it out.
+We have already made some example libraries, just to show how to make your own libraries using the BotBase class.
+- **FourSBase** library: This library is for a four wheel base omni, you can click [here](../FourSBase) to check it out.

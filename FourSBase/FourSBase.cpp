@@ -30,8 +30,11 @@ void FourSBase::Move_PWM_Angle(int PWM, float angle) {
     };
     int PWM_abs_vector[4];
     int DIR_vector[4] = {false, false, false, false};
+    String debuggerMessage = "Calculated wheel vectors : [ ";
     // Get the DIR_values vector from PWM_vector and get PWM_values
     for (int i = 0; i < this->NUMBER_OF_WHEELS; i++) {
+        debuggerMessage.concat(PWM_vector[i]);
+        debuggerMessage.concat(" ");
         if (PWM_vector[i] >= 0) {
             DIR_vector[i] = HIGH;
         } else {
@@ -42,17 +45,21 @@ void FourSBase::Move_PWM_Angle(int PWM, float angle) {
         }
         PWM_abs_vector[i] = abs(PWM_vector[i]);
     }
+    debuggerMessage.concat("]");
+    this->DebuggerOutput(1, debuggerMessage);
+    // PWM and direction assignment
     this->PWM_values = PWM_abs_vector;
     this->DIR_values = DIR_vector;
+    // Writing to motors
     for (int i = 0; i < this->NUMBER_OF_WHEELS; i++) {
-        Serial.print(PWM_vector[i]);
-        Serial.print(":");
-        Serial.print(this->PWM_values[i]);
-        Serial.print(":");
-        Serial.print(this->DIR_values[i]);
-        Serial.print(" ");
+        String debuggerMessage = "Wheel ";
+        debuggerMessage.concat(i);
+        debuggerMessage.concat(" PWM: ");
+        debuggerMessage.concat(this->PWM_values[i]);
+        debuggerMessage.concat(" DIR: ");
+        debuggerMessage.concat(this->DIR_values[i]);
+        this->DebuggerOutput(1, debuggerMessage);
     }
-    Serial.println();
     for (int i = 0; i < this->NUMBER_OF_WHEELS; i++) {
         this->MoveMotor(i);
     }

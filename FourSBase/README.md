@@ -10,7 +10,7 @@ The image above is taken from the top view.
 Please refer to the image below for the conventions used in this library
 ![FourSBase conventions](../DATA/Images/FourSBase_WheelConfigurations.png)
 The image above is taken from the top view.
-- The *whees* are numbered in a counter clockwise sence from 1 to 4.
+- The *wheels* are numbered in a counter clockwise sence from 1 to 4.
 - The *axis of rotation* is shown in light blue axis lines.
 - The *sence of rotation* that is considered positive is shown by golden arrows for each wheel. Note that the axis of rotation is decided using the right hand rule.
     - For instance, the first wheel (top right) rotates in such a way that it's top point moves towards left and the bottom point moves towards right as seen from top view. Only then the rotation on the wheel is considered positive, else it's negative.

@@ -32,12 +32,16 @@ class PIDController {
     // ------------------ Debugger ----------------------
     String name;                    // Name of the bot
     HardwareSerial *debuggerSerial; // Hardware Serial
+    bool debuggerAttached;          // If debugger has been attached or not
     int debuggerPriorityLevel;      // Priority level
     // ================ Functions ================
-    double calculateError();        // Main error calculation
-    double calculate_Kp_error();    // Proportional error calculation
-    double calculate_Kd_error();    // Derivative error calculation
-    double calculate_Ki_error();    // Integral error calculation
+    // Debugger
+    void DebuggerOutput(int level, String message);
+    // Error values
+    void calculateError();        // Main error calculation
+    void calculate_Kp_error();    // Proportional error calculation
+    void calculate_Kd_error();    // Derivative error calculation
+    void calculate_Ki_error();    // Integral error calculation
 public:
     // :::::::::::::::::: Public members :::::::::::::::::::::::::::
     // ===================== Constructors ===========================
@@ -47,14 +51,18 @@ public:
     PIDController(String name, double Kp, double Ki, double Kd);
     // ===================== Member functions ========================
     // Assignment and return of control signals
+    void assignParameters(double Kp, double Ki, double Kd);
     void assignSetPoint(double setPointValue);  // Assign a set point to follow
     void assignCurrentValue(double currentValue); // Assign the current signal value
-    void retError(); // Return the error value calculated through the PID algorithm
-    void retError(double currentValue);    // Same as retError()
-    void retError(double setPoint, double currentValue); // Same as retError()
-    void getCorrectedValue();  // Returns the final corrected signal (after controller is applied)
-    void getCorrectedValue(double currentValue); // Same as getCorrectedValue()
-    void getCorrectedValue(double setPoint, double currentValue); // Same as getCorrectedValue()
+    double retError(); // Return the error value calculated through the PID algorithm
+    double retError(double currentValue);    // Same as retError()
+    double retError(double setPoint, double currentValue); // Same as retError()
+    double getCorrectedValue();  // Returns the final corrected signal (after controller is applied)
+    double getCorrectedValue(double currentValue); // Same as getCorrectedValue()
+    double getCorrectedValue(double setPoint, double currentValue); // Same as getCorrectedValue()
+    // Assignment and debugger control
+    void attachName(String name);   // Assign name
+    void InitializeDebugger(HardwareSerial* debuggerSerial, int priorityLevel); // Debugger serial
 };
 
 
