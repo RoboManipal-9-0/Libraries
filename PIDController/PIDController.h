@@ -12,6 +12,11 @@
 // Include basic libraries
 #include "Arduino.h"
 
+// Level definitions
+#define LEVEL_ERROR_REPORTING 1
+#define LEVEL_ASSIGNMENT 2
+#define LEVEL_INIT 3
+
 // Main class
 class PIDController {
     // :::::::::::::::: Private members :::::::::::::::::::
@@ -24,10 +29,10 @@ class PIDController {
     double currentErrorValue;                   // Current error value
     double previousErrorValue;              // Previous error value
     double accumulatedError;                // Total sum value of errors
+    double accFactorPast, accFactorPresent; // Accumulation factors
     double part_Kp, part_Kd, part_Ki;    // Three components of PID
     // Activating the controller (Automatic)
     int activationBuffer;      // Number of samples for which the controller is inactive
-    bool controllerRun;        // Use the controller or deactivate it
     bool controllerEnable;     // Manually enable or disable the controller
     // ------------------ Debugger ----------------------
     String name;                    // Name of the bot
@@ -36,8 +41,8 @@ class PIDController {
     int debuggerPriorityLevel;      // Priority level
     // ================ Functions ================
     // Debugger
-    void DebuggerOutput(int level, String message);
-    // Error values
+    void DebuggerOutput(int level, String message, bool printName = true);
+    // Error values (assigned to the variables)
     void calculateError();        // Main error calculation
     void calculate_Kp_error();    // Proportional error calculation
     void calculate_Kd_error();    // Derivative error calculation
@@ -52,7 +57,9 @@ public:
     // ===================== Member functions ========================
     // Assignment and return of control signals
     void assignParameters(double Kp, double Ki, double Kd);
+    void assignPIDParameters(double Kp, double Ki, double Kd);
     void assignSetPoint(double setPointValue);  // Assign a set point to follow
+    void setAccFactor(double newValuePast, double newValuePresent);        // Assign updation parameters
     void assignCurrentValue(double currentValue); // Assign the current signal value
     double retError(); // Return the error value calculated through the PID algorithm
     double retError(double currentValue);    // Same as retError()
@@ -63,6 +70,7 @@ public:
     // Assignment and debugger control
     void attachName(String name);   // Assign name
     void InitializeDebugger(HardwareSerial* debuggerSerial, int priorityLevel); // Debugger serial
+    void InitializeDebugger(String name, HardwareSerial* debuggerSerial, int priorityLevel); // Debugger serial
 };
 
 
