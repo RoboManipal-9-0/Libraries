@@ -1,5 +1,5 @@
 ####################################################
-##### Contains keywords for the BotBase library ####
+### Contains keywords for the FourSBase library ####
 ####################################################
 
 ####################################################
@@ -12,5 +12,5 @@ FourSBase	KEYWORD1
 ####################################################
 ################# Functions ########################
 ####################################################
-# Child class
-test	KEYWORD2
+# Functions local to this library
+AddPins	KEYWORD2

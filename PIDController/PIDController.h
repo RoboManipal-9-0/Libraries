@@ -47,6 +47,7 @@ class PIDController {
     void calculate_Kp_error();    // Proportional error calculation
     void calculate_Kd_error();    // Derivative error calculation
     void calculate_Ki_error();    // Integral error calculation
+    void assignParameters(double Kp, double Ki, double Kd); // Assign PID parameters
 public:
     // :::::::::::::::::: Public members :::::::::::::::::::::::::::
     // ===================== Constructors ===========================
@@ -56,7 +57,6 @@ public:
     PIDController(String name, double Kp, double Ki, double Kd);
     // ===================== Member functions ========================
     // Assignment and return of control signals
-    void assignParameters(double Kp, double Ki, double Kd);
     void assignPIDParameters(double Kp, double Ki, double Kd);
     void assignSetPoint(double setPointValue);  // Assign a set point to follow
     void setAccFactor(double newValuePast, double newValuePresent);        // Assign updation parameters

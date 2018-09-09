@@ -1,0 +1,19 @@
+#######################################################
+####### Keywords for the PIDController Library ########
+#######################################################
+
+################### Main Classes ######################
+PIDController	KEYWORD1
+
+
+
+################### Functions #########################
+assignPIDParameters	KEYWORD2
+assignSetPoint	KEYWORD2
+setAccFactor	KEYWORD2
+assignCurrentValue	KEYWORD2
+retError	KEYWORD2
+getCorrectedValue	KEYWORD2
+attachName	KEYWORD2
+InitializeDebugger	KEYWORD2
+

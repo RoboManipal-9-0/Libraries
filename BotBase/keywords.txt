@@ -16,3 +16,4 @@ BotBase	KEYWORD1
 Initialize	KEYWORD2
 AddMotorDriverPins	KEYWORD2
 Move	KEYWORD2
+MoveMotor	KEYWORD2
