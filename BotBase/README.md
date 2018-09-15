@@ -13,6 +13,8 @@ It is suggested that you download the entire repository and then select this fol
 ```
 git clone https://github.com/RoboManipal-9-0/Libraries.git -b Branch-AvneeshMishra
 ```
+_You might want to omit the `-b <branch>` tag if you're downloading from the master version_
+
 **<font color="#AA0000">Not recommended</font>** : You can download just this folder by clicking [here](https://minhaskamal.github.io/DownGit/#/home?url=https://github.com/RoboManipal-9-0/Libraries/tree/Branch-AvneeshMishra/BotBase).
 
 ## Using the library with Arduino
@@ -20,7 +22,7 @@ Move this folder into the arduino libraries folder on your PC. If you don't know
 
 # Developers Guide
 Here is the developers guide to the library. <br>
-This markdown is best viewed in Atom editor.
+This markdown is best viewed in [_Atom_](https://atom.io/) editor.
 
 ## Library Details
 
@@ -73,7 +75,7 @@ Let's inspect in detail what all the members of the class do
 <center>$*name*$:L<i>level</i>: *output*</center><br>
 Where stuff in *italics* is the *name* of bot, it's *debuggerPriorityLevel* and the *output* message passed to the function respectively.
 
-#### Public members
+#### Public Members
 ##### Constructors
 Though you'll never create any memory for objects of this class, it's advised to have a constructor anyways.
 
