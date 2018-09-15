@@ -35,7 +35,7 @@ class PIDController {
     int activationBuffer;      // Number of samples for which the controller is inactive
     bool controllerEnable;     // Manually enable or disable the controller
     // ------------------ Debugger ----------------------
-    String name;                    // Name of the bot
+    String name;                    // Name of the node (controller)
     HardwareSerial *debuggerSerial; // Hardware Serial
     bool debuggerAttached;          // If debugger has been attached or not
     int debuggerPriorityLevel;      // Priority level
