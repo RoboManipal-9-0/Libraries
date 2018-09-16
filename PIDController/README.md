@@ -1,6 +1,13 @@
 # Introduction
-This library defines a PID controller ([wikipedia](https://en.wikipedia.org/wiki/PID_controller)).
-
+This library defines a PID controller (more info [here](https://en.wikipedia.org/wiki/PID_controller)).<br>
+Please refer to the following image for additional information
+![Controller characteristics](../DATA/Images/PIDController_Info.png)
+Here are a few descriptions and their relations with the variables, so that you know what the library is doing:
+- Value **S<sub>n</sub>** is to indicate the set point (target) of the controller (variable _setPoint_). Value **V<sub>n</sub>** is to indicate the current value of the controlled signal (variable _currentValue_), **V<sub>n-1</sub>** stands for the previous value (variable _previousValue_). These values are recorded against timestamps denoted by **T<sub>n</sub>**.
+- Value **e<sub>n</sub>** is the current error value (variable _currentErrorValue_). This makes **e<sub>n-1</sub>** the previous error value (variable _previousErrorValue_). The current error is for proportionality part of the controller.
+- Value **de<sub>n</sub>** stands for difference error (or differential error). The code to calculate this is in *calculate\_Kd\_error* function.
+- Value **ae<sub>n</sub>** stands for accumulated error (weighed sum of errors over time) (variable _accumulatedError_). The weights of the past accumulated error and current error to be added are **a<sub>past</sub>** and **a<sub>present</sub>** respectively. They're stored in variables _accFactorPast_ and _accFactorPresent_ respectively.
+- Value **E<sub>n</sub>** is known as the total net error (calculated and returned using the _retError_ function). It's comprised of three sums which are proportionality part (variable *part_Kp*), differential part (variable *part_Kd*) and integral part (variable *part_Ki*). The function _getCorrectedValue_ returns the **Corrected Value<sub>n</sub>** for the controller.
 
 ~~**WARNING**: This library is still in development. Please ask the developers before using it.~~ <br>
 Beta testing done :tada:
@@ -83,7 +90,7 @@ accumulatedError := currentErrorValue * accFactorPresent + accumulatedError * ac
 
 ##### Functions
 - **<font color="#CD00FF">void</font> assignPIDParameters(<font color="#FF00FF">double</font> Kp, <font color="#FF00FF">double</font> Ki, <font color="#FF00FF">double</font> Kd)**: Assigns the PID parameters.
-- **<font color="#CD00FF">void</font> assignSetPoint(<font color="#FF00FF">double</font> setPointValue)**: Assigns the set point value (target value) for the controller to achieve.
+- **<font color="#CD00FF">void</font> assignSetPoint(<font color="#FF00FF">double</font> setPointValue)**: Assigns the _setPoint_ value (target value) for the controller to achieve.
 - **<font color="#CD00FF">void</font> setAccFactor(<font color="#FF00FF">double</font> newValuePast, <font color="#FF00FF">double</font> newValuePresent)**: Sets the value of _accFactorPast_ to _newValuePast_ and _accFactorPresent_ to _newValuePresent_. Adjusts the updation parameters of integral error (accumulatedError) part.
 - **<font color="#CD00FF">void</font> assignCurrentValue(<font color="#FF00FF">double</font> currentValue)**: Assigns the _currentValue_ to the controller.
 - **<font color="#CD00FF">double</font> retError()**: Returns the error value calculated using `part_Kp +part_Kd + part_Ki`.
