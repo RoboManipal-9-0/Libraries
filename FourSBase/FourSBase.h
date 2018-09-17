@@ -20,7 +20,7 @@ protected:
     void Move_PWM_Angle(int PWM, float angle_radians);
 public:
     FourSBase();
-    void AddPins(int *PWM_pins, int *DIR_PINs, bool *reversePINs);
+    void AddPins(int *PWM_pins, int *DIR_PINs, bool *reverseDIRs);
 };
 
 #endif

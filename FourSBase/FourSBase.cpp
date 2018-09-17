@@ -6,15 +6,15 @@ FourSBase::FourSBase() {
     this->setNumberOfWheelsTo(4);
 }
 // Add motor driver pins
-void FourSBase::AddPins(int *PWM_PINs, int *DIR_PINs, bool *reversePINs) {
+void FourSBase::AddPins(int *PWM_PINs, int *DIR_PINs, bool *reverseDIRs) {
     // Call the function of super class and assign PWM, DIR pins
     this->AddMotorDriverPins(PWM_PINs, DIR_PINs);
     // Assign reverse directions
-    this->reverseDIRs = reversePINs;
+    this->reverseDIRs = reverseDIRs;
     // Debugger output
     String message = "Wheel Reverse DIRs : ";
     for (int i = 0; i < this->NUMBER_OF_WHEELS; i++) {
-        message.concat(reversePINs[i]);
+        message.concat(reverseDIRs[i]);
         message.concat(" ");
     }
     this->DebuggerOutput(2, message);
