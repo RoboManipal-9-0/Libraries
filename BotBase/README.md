@@ -52,7 +52,7 @@ Let's inspect in detail what all the members of the class do
 #### Protected members
 ##### Variables
 
-- **<font color="#CD00FF">int</font> NUMBER_OF_WHEELS** : The number of motor powered wheels on the base of the bot.
+- **<font color="#CD00FF">int</font> NUMBER_OF_WHEELS**: The number of motor powered wheels on the base of the bot.
 
 - **<font color="#CD00FF">int</font> \*PWM_pins** : The pin numbers which are connected to the PWM terminal of the motor driver. These tell the motor driver the amount of voltage to be given to the motors.
 
@@ -72,8 +72,10 @@ Let's inspect in detail what all the members of the class do
 - **<font color="#CD00FF">void</font> <font color="#5052FF">setNumberOfWheelsTo</font>(<font color="#FF00FF">int</font> number)** : Sets the *NUMBER_OF_WHEELS* value to the passed *number*. It's a good idea to make a call to this in the constructor of the derived classes.
 
 - **<font color="#CD00FF">void</font> <font color="#5052FF">DebuggerOutput</font>(<font color="#FF00FF">int</font> Level, <font color="#FF00FF">String</font> output)** : Used to put a debugger message into the serial. All debugger messages have the following format :<br>
-<center>$*name*$:L<i>level</i>: *output*</center><br>
-Where stuff in *italics* is the *name* of bot, it's *debuggerPriorityLevel* and the *output* message passed to the function respectively.
+```
+$%Name%$:L%level%: %output%
+```
+Where stuff in % is the *name* of bot, it's *debuggerPriorityLevel* and the *output* message passed to the function respectively.
 
 #### Public Members
 ##### Constructors
