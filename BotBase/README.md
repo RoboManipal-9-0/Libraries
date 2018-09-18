@@ -116,3 +116,6 @@ Perform the following to make use of this library in your BotBase :
 #### Examples
 We have already made some example libraries, just to show how to make your own libraries using the BotBase class.
 - **FourSBase** library: This library is for a four wheel base omni, you can click [here](../FourSBase) to check it out.
+
+###### Developer Info
+Library developed and maintained by @TheProjectsGuy

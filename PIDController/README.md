@@ -102,3 +102,6 @@ accumulatedError := currentErrorValue * accFactorPresent + accumulatedError * ac
 - **<font color="#CD00FF">void</font> attachName(<font color="#FF00FF">String</font> name)**: Assigns a _name_ to the controller.
 - **<font color="#CD00FF">void</font> InitializeDebugger(<font color="#FF00FF">HardwareSerial</font> \* debuggerSerial, <font color="#FF00FF">int</font> priorityLevel)**: Initializes the debugger on _debuggerSerial_ (for now only hardware serials are supported). It also sets the _debuggerPriorityLevel_ to _priorityLevel_.
 - **<font color="#CD00FF">void</font> InitializeDebugger(<font color="#FF00FF">String</font> name, <font color="#FF00FF">HardwareSerial</font> \* debuggerSerial, <font color="#FF00FF">int</font> priorityLevel)**: Assigns _name_, initializes the debugger on _debuggerSerial_ (for now only hardware serials are supported). It also sets the _debuggerPriorityLevel_ to _priorityLevel_.
+
+###### Developer Info
+Library developed and maintained by @TheProjectsGuy
