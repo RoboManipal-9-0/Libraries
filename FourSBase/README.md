@@ -93,6 +93,4 @@ This class is derived directly from the BotBase class (public inheritance).
 ##### Member Functions
 - **<font color="#CD00FF">void</font> <font color="#5052FF">AddPins</font>(<font color="#FF00FF">int</font> \*PWM\_pins, <font color="#FF00FF">int</font> \*DIR\_PINs, <font color="#FF00FF">bool</font> \*reverseDIRs)**: Attaches the *PWM\_pins*, *DIR\_PINs* and *reverseDIRs* to the bot base.
 
-###### Developer Info
-Library developed and maintained by @TheProjectsGuy
-(GitHub [:id:](https://github.com/TheProjectsGuy))
+[![Image](https://img.shields.io/badge/Developer-TheProjectsGuy-blue.svg)](https://github.com/TheProjectsGuy)

@@ -117,6 +117,4 @@ Perform the following to make use of this library in your BotBase :
 We have already made some example libraries, just to show how to make your own libraries using the BotBase class.
 - **FourSBase** library: This library is for a four wheel base omni, you can click [here](../FourSBase) to check it out.
 
-###### Developer Info
-Library developed and maintained by @TheProjectsGuy
-(GitHub [:id:](https://github.com/TheProjectsGuy))
+[![Image](https://img.shields.io/badge/Developer-TheProjectsGuy-blue.svg)](https://github.com/TheProjectsGuy)
