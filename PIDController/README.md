@@ -105,3 +105,4 @@ accumulatedError := currentErrorValue * accFactorPresent + accumulatedError * ac
 
 ###### Developer Info
 Library developed and maintained by @TheProjectsGuy
+(GitHub [:id:](https://github.com/TheProjectsGuy))

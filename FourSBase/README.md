@@ -95,3 +95,4 @@ This class is derived directly from the BotBase class (public inheritance).
 
 ###### Developer Info
 Library developed and maintained by @TheProjectsGuy
+(GitHub [:id:](https://github.com/TheProjectsGuy))

@@ -119,3 +119,4 @@ We have already made some example libraries, just to show how to make your own l
 
 ###### Developer Info
 Library developed and maintained by @TheProjectsGuy
+(GitHub [:id:](https://github.com/TheProjectsGuy))
