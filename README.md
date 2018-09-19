@@ -23,4 +23,21 @@ Follow the following procedure (To create a Library named `Sample`)
 - Place the files in a folder named `Sample` and move it to ~/Arduino/Libraries (for Ubuntu/Linux users). Alternatively, you could move the entire repository there (not recommended, instead put individual folders there if you don't want to include everything).
 - If needed, add an examples folder inside `Sample` folder, add some example codes there.
 
-Additional help [here](https://www.arduino.cc/en/hacking/libraries).
+Additional help on arduino libraries [here](https://www.arduino.cc/en/hacking/libraries).
+### Document your library
+You are also suggested to make useful documentation of all the libraries that you make. All the documentations must have the following standards:
+- All libraries must have a `README.md` file written in GitHub markdown. All documentation about the library goes here
+- A `Users Guide` section and a `Developers Guide` section.
+    - In `Users Guide`, please explain how a user can use the library and about an example (if you have any).
+    - The `Developers Guide` has info about all the code you've written.
+- It is also suggested that you include the derivation if the library has a mathematical foundation.
+- All documentation files must have a developer stamp (a developer shield) in the end to show who worked on the library, the stamp must link to the GitHub profile. The shield must have _developer_ subject and the GitHub ID as the _status_ in blue color.
+
+(check the resources section for links)
+
+### Resources
+
+- [GitHub Markdown](https://guides.github.com/features/mastering-markdown/) for help regarding markdown.
+- [Atom](https://atom.io) as the _recommended_ editor for development (you're free to use anything that you're comfortable with).
+- [LaTeX Editor](https://www.codecogs.com/latex/eqneditor.php) for mathematical equations. _You'll have to attach the rendered equations as pictures for now_.
+- [Shields](https://shields.io/#/) for creating your custom developer shields. It's suggested that you create your own custom **static** shields for putting up in the end of your `README.md` files.

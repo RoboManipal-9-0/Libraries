@@ -8,11 +8,10 @@ Here are some important resources:
 - Git [documentation](https://git-scm.com/docs) and [cheatsheet](https://services.github.com/on-demand/downloads/github-git-cheat-sheet.pdf)
 
 # Testing
-All the libraries on the `master` branch are tested on the Arduino IDE by RoboManipal group. You can also test them personally, send us a 
+All the libraries on the `master` branch are tested on the Arduino IDE by RoboManipal group. You can also test them personally, send us a
 proof of work and your library too will be on the master branch.
 
 ## Minimum requirements
 - Documentation for all the libraries is mandatory, all the libraries must have a `README.md` file.
-- All developers are suggested to read the [README](../README.md) file.
+- All developers must read the [README](../README.md) file for this repository.
 - It's suggested that you use appropriate naming conventions for all your identifiers.
-
