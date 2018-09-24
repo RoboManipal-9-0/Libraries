@@ -1,15 +1,19 @@
 # Libraries
-The set of personal libraries RoboManipal uses
+The set of personal, low level arduino libraries that RoboManipal uses.
 
 ## NOTE FOR USERS
 
 Just download the repository and move the desired file to the include folder of Arduino on your system.
-On Ubuntu, it's ~/Arduino/libraries (Open the arduino app and check the $sketchbook location$/libraries folder)
+On Ubuntu, it's ~/Arduino/libraries (Open the arduino app and check the $sketchbook location$/libraries folder)<br>
 Note : The main branch is the stable branch. Any other branches are developer branches, ask the developers before using code from those branches. Please don't use the libraries in the ARCHIVES folder, the support for them has been discontinued.
+
+Please read the README file for any library before using them.
 
 
 ## NOTE FOR DEVELOPERS
+You are required to go through the [code of conduct](./.github/CODE_OF_CONDUCT.md) and [contributing](./.github/CONTRIBUTING.md) files first.
 
+### Creating a library
 Add all your files in folders having approprite names here
 (Individual people have their own branches, codes are later pushed to github and merged on master branch)
 
@@ -24,16 +28,7 @@ Follow the following procedure (To create a Library named `Sample`)
 - If needed, add an examples folder inside `Sample` folder, add some example codes there.
 
 Additional help on arduino libraries [here](https://www.arduino.cc/en/hacking/libraries).
-### Document your library
-You are also suggested to make useful documentation of all the libraries that you make. All the documentations must have the following standards:
-- All libraries must have a `README.md` file written in GitHub markdown. All documentation about the library goes here
-- A `Users Guide` section and a `Developers Guide` section.
-    - In `Users Guide`, please explain how a user can use the library and about an example (if you have any).
-    - The `Developers Guide` has info about all the code you've written.
-- It is also suggested that you include the derivation if the library has a mathematical foundation.
-- All documentation files must have a developer stamp (a developer shield) in the end to show who worked on the library, the stamp must link to the GitHub profile. The shield must have _developer_ subject and the GitHub ID as the _status_ in blue color.
 
-(check the resources section for links)
 
 ### Resources
 
