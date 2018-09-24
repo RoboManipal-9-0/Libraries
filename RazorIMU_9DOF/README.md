@@ -34,5 +34,4 @@ More info [here](https://github.com/Razor-AHRS/razor-9dof-ahrs/wiki/Tutorial#set
 # Developers Guide
 
 
-
 [![Image](https://img.shields.io/badge/Developer-TheProjectsGuy-blue.svg)](https://github.com/TheProjectsGuy)
