@@ -4,7 +4,17 @@ about: TODO and Task assignment
 
 ---
 
-# Task assignments
-- All task assignments have a `todo` label attached. They also have the developer
-name attached.
-- All tasks can have subtasks but must have proper assignees.
+**Task priority**
+The priority of the task []
+
+**Task description**
+A clear and concise description of task assigned
+
+**Person assigned**
+Task assigned to [...]
+
+# Must Haves
+Things that **have** to be there in the library.
+
+## Extras
+Things that must be worked on after the _must haves_ are finished.
