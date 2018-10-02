@@ -1,7 +1,7 @@
 # Introduction
 This library defines a PID controller (more info [here](https://en.wikipedia.org/wiki/PID_controller)).<br>
 Please refer to the following image for additional information
-![Controller characteristics](../DATA/Images/PIDController_Info.png)
+![Controller characteristics](../.DATA/Images/PIDController_Info.png)
 Here are a few descriptions and their relations with the variables, so that you know what the library is doing:
 - Value **S<sub>n</sub>** is to indicate the set point (target) of the controller (variable _setPoint_). Value **V<sub>n</sub>** is to indicate the current value of the controlled signal (variable _currentValue_), **V<sub>n-1</sub>** stands for the previous value (variable _previousValue_). These values are recorded against timestamps denoted by **T<sub>n</sub>**.
 - Value **e<sub>n</sub>** is the current error value (variable _currentErrorValue_). This makes **e<sub>n-1</sub>** the previous error value (variable _previousErrorValue_). The current error is for proportionality part of the controller.

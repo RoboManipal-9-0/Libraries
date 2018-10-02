@@ -4,11 +4,11 @@ This library is to control a four wheel holonomic drive for omni wheels. This cl
 ## Information
 ### Testing
 This library has been tested on the wheel configuration shown below
-![FourSBase image](../DATA/Images/FourSBase_Wheels.png)
+![FourSBase image](../.DATA/Images/FourSBase_Wheels.png)
 The image above is taken from the top view.
 ## Conventions
 Please refer to the image below for the conventions used in this library
-![FourSBase conventions](../DATA/Images/FourSBase_WheelConfigurations.png)
+![FourSBase conventions](../.DATA/Images/FourSBase_WheelConfigurations.png)
 The image above is taken from the top view.
 - The *wheels* are numbered in a counter clockwise sence from 1 to 4.
 - The *axis of rotation* is shown in light blue axis lines.
@@ -28,7 +28,7 @@ Move the folders into the *arduino libraries* folder on your PC. If you don't kn
 After moving the library to the correct location, you can check the following examples.
 ### Example 1
 You can check the **Competitions** repository (link [here](https://github.com/RoboManipal-9-0/Competitions)) for this example. The example we're looking for is [here](https://github.com/RoboManipal-9-0/Competitions/tree/master/WRO2018/Senior_Team/Testing_Codes/FourSBase_Test1) (WRO2018/Senior_Team/Testing_Codes/FourSBase_Test1). You can download it by clicking [here](https://minhaskamal.github.io/DownGit/#/home?url=https://github.com/RoboManipal-9-0/Competitions/tree/master/WRO2018/Senior_Team/Testing_Codes/FourSBase_Test1) and extracting the folder. The code inside the *.ino* file must look something like what's shown below
-![FourSBase example code](../DATA/Images/FourSBase_Code.png)<br>
+![FourSBase example code](../.DATA/Images/FourSBase_Code.png)<br>
 Before we get started with the example walkthrough, let's start with assumptions
 - You are using motor drivers that require only two control inputs, PWM (PWM voltage) and DIR (Direction, 1 is +ve sence rotation and 0 is -ve sence rotation).
 - Wheels are connected in the following manner to the microcontroller (Arduino Mega in our example).<br>
