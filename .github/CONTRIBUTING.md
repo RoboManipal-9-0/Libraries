@@ -19,7 +19,7 @@ There are some basic requirements that your library must satisfy
 - It's suggested that you use appropriate naming conventions for all your identifiers. Also, have a readable code well explained with comments.
 - All the developed libraries must have a debugger for debugging purposes. It's suggested that you use a Serial to do so.
 
-### Document your library
+### Documenting your library
 You are also suggested to make useful documentation of all the libraries that you make. All the documentations must have the following standards:
 - All libraries must have a `README.md` file written in GitHub markdown. All documentation about the library goes here
 - A `Users Guide` section and a `Developers Guide` section.

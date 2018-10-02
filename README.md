@@ -23,7 +23,7 @@ Follow the following procedure (To create a Library named `Sample`)
   - It's a good practice to have guard code to prevent importing your library more than once.
 - In the CPP file named *Sample.cpp*, write the code of all these functions (using the :: operator to define member functions outside class)
   - Be sure you include the header file first, so that you can use the class
-- It is highly suggested that you use a *keywords.txt* and a *README.txt* (or a *REAMDE.md*). Classes are KEYWORD1 and functions are KEYWORD2 type, you can try LITERAL1 if needed
+- It is highly suggested that you use a *keywords.txt* and a *README.txt* (or a *REAMDE.md*). For keywords, classes are KEYWORD1 and functions are KEYWORD2 type, you may use LITERAL1 for constants if needed. Check the [contributing](./.github/CONTRIBUTING.md) file for protocols to follow when making a README files.
 - Place the files in a folder named `Sample` and move it to ~/Arduino/Libraries (for Ubuntu/Linux users). Alternatively, you could move the entire repository there (not recommended, instead put individual folders there if you don't want to include everything).
 - If needed, add an examples folder inside `Sample` folder, add some example codes there.
 
