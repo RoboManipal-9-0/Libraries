@@ -4,7 +4,7 @@
   File created by : Avneesh Mishra
   Last commit done by : Avneesh Mishra
 */
-// Including derivatives
+// Including library
 #include "BotBase.h"
 
 // ################# Parent class : BotBase #######################
