@@ -41,6 +41,7 @@ public:
     void AttachIMUSerial(Stream *AttachedSerial);
     // Parse data from serial (raw) - Receive and store it
     void UpdateData();
+    void ResetReference();   // Reset reference values to current values
     // #############   Retrieving data from object   ############
     // Retrieving raw PRY values
     float GetRaw_PITCH();

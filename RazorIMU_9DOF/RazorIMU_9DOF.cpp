@@ -23,7 +23,7 @@ void RazorIMU_9DOF::AttachIMUSerial(Stream *AttachedSerial) {
     this->IMU_Serial = AttachedSerial;
 }
 
-// Update data from serial values that are parsed
+// Get raw data from the serial
 void RazorIMU_9DOF::GrabData() {
     // Send out a '#f' on the serial
     this->IMU_Serial->println("#f");
@@ -54,7 +54,7 @@ void RazorIMU_9DOF::GrabData() {
     // Reading done
 }
 
-// Full scale 0 to 360 degree data
+// Convert raw data to full scale: 0 to 360 degree data
 void RazorIMU_9DOF::Calculate_fullScales() {
     for (int i = 0; i < 3; i++) {
         /*
@@ -80,6 +80,7 @@ void RazorIMU_9DOF::UpdateData() {
     this->Calculate_fullScales();
 }
 
+// Get reference values for full scale values
 void RazorIMU_9DOF::GrabReference() {
     // Reset the reference values
     this->UpdateData();
@@ -87,8 +88,11 @@ void RazorIMU_9DOF::GrabReference() {
         this->PRY_full_scale_ref[i] = PRY_full_scale[i];
     }
 }
-
-// Getting raw PRY values from IMU
+// Get new reference
+void RazorIMU_9DOF::ResetReference() {
+    this->GrabReference();    // Get new reference
+}
+// -------- Getting raw PRY values from IMU ----------
 float RazorIMU_9DOF::GetRaw_PITCH() {
     // Read Pitch
     return this->PRY_raw_values[PITCH];

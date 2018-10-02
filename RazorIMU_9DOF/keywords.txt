@@ -1,0 +1,17 @@
+#######################################
+###### Classes in the library #########
+#######################################
+
+############ Main class ###############
+RazorIMU_9DOF	KEYWORD1
+
+############ Functions ################
+AttachIMUSerial	KEYWORD2
+UpdateData	KEYWORD2
+ResetReference	KEYWORD2
+GetRaw_PITCH	KEYWORD2
+GetRaw_ROLL	KEYWORD2
+GetRaw_YAW	KEYWORD2
+GetRoll	KEYWORD2
+GetPitch	KEYWORD2
+GetYaw	KEYWORD2
