@@ -16,7 +16,7 @@ Beta testing done :tada:
 ## Downloading the library
 It is suggested that you download the entire repository and then select this folder, so that you can enjoy the benifits of VCS like git. It makes it simpler to update the contents whenever patch fixes are done. You can simply open a terminal (or gitbash on windows), go to the folder where you want to save this repository and type the following command.
 ```
-git clone https://github.com/RoboManipal-9-0/Libraries.git -b Branch-AvneeshMishra
+git clone https://github.com/RoboManipal-9-0/Libraries.git -b dev
 ```
 _You might want to omit the `-b <branch>` tag if you're downloading from the master branch_.
 
