@@ -5,9 +5,9 @@ about: TODO and Task assignment
 ---
 
 **Task priority**
-The priority of the task []
+The priority of the task [HIGH, MEDIUM, LOW]
 
-**Task description**
+# Task description
 A clear and concise description of task assigned
 
 **Person assigned**
