@@ -1,7 +1,7 @@
 # Introduction
 This library is for defining any kind of base for a ground terrain robot.
 
-~~**Note** : This library is still in developer beta, ask the developer before using.~~ <br>
+~~**Note**: This library is still in developer beta, ask the developer before using.~~ <br>
 Beta testing done :tada:
 
 Select guide : [Users Guide](users-guide) or [Developers Guide](developers-guide)
@@ -10,10 +10,10 @@ Select guide : [Users Guide](users-guide) or [Developers Guide](developers-guide
 
 ## Downloading the library
 It is suggested that you download the entire repository and then select this folder, so that you can enjoy the benifits of VCS like git. It makes it simpler to update the contents whenever patch fixes are done. You can simply open a terminal (or gitbash on windows), go to the folder where you want to save this repository and type the following command.
-```
+```bash
 git clone https://github.com/RoboManipal-9-0/Libraries.git -b dev
 ```
-_You might want to omit the `-b <branch>` tag if you're downloading from the master version_
+_You might want to omit the `-b <branch>` tag if you're downloading from the master version_.
 
 **<font color="#AA0000">Not recommended</font>** : You can download just this folder by clicking [here](https://minhaskamal.github.io/DownGit/#/home?url=https://github.com/RoboManipal-9-0/Libraries/tree/Branch-AvneeshMishra/BotBase).
 
@@ -33,7 +33,7 @@ Let's first explore about all the files in this library
 This is the header file and contains the class blueprint (prototype). We will explore the details about the class soon.
 
 #### BotBase.cpp
-This is the file that contains the main code for the class. In the header file, only the function prototypes are mentioned, the code for the functions (definition) are present in this file.
+This is the file that contains the main code for the class. In the header file, only the function prototypes are mentioned, the code for the functions (definitions) are present in this file.
 
 #### keywords.txt
 This file contains the keywords that we want the Arduino IDE to identify. This provides syntax highlighting features for the library for convenience of the programmer.
