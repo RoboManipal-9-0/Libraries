@@ -18,7 +18,7 @@
 #define NOTIFICATION 10       // Notifications about the debugger ONLY 
 #define DEBUG 20              // Debugging level messages
 #define INFO 30               // Info level messages
-#define WARNING 40               // Warning level messages : Work can still go unaffected
+#define WARNING 40            // Warning level messages : Work can still go unaffected
 #define ERROR 50              // Error messages : Some aspects might not work
 #define FATAL 60              // Fatal messages : Some error caused the system to crash
 // Number to String function
@@ -30,7 +30,7 @@ protected:
     Stream *debuggerSerial;     // Main serial
     String name;    // Name of the debugger
     int debuggerPriorityLevel;    // The priority level of debugger
-    // Sanity flags
+    // ---------------- Sanity flags ----------------
     bool debuggerEnabled;         // Enable or disable the debugger
     bool debuggerSerialDefined;   // If the debuggerSerial is defined
     // ############## Private functions ###################
@@ -51,7 +51,7 @@ public:
     // All 3
     void Initialize(String name, Stream *debuggerSerial, int priorityLevel);
     void Initialize(Stream *debuggerSerial, int priorityLevel);  // Serial and priorityLevel
-    // Individual initializers
+    // ------------ Individual initializers ------------
     void AttachSerial(Stream *debuggerSerial);   // DebuggerSerial
     void InitializeName(String name);            // Name
     void SetDebuggerPriorityToLevel(int minLevel);  // Level

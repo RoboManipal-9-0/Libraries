@@ -146,7 +146,7 @@ void DebuggerSerial::print(String output, int level) {
     ############### Private functions ################
     ##################################################
 */
-
+// Main debugger output function
 void DebuggerSerial::DebuggerOutput(int Level, String output) {
     // Sanity check: See if the debugger is even supposed to print something
     if (!this->debuggerEnabled || !this->debuggerSerialDefined) {
@@ -193,6 +193,7 @@ void DebuggerSerial::DebuggerOutput(int Level, String output) {
     msg.concat(output);
     this->debuggerSerial->println(msg);
 }
+// Notification output on debugger
 void DebuggerSerial::RaiseNotification(String message) {
     this->DebuggerOutput(NOTIFICATION, message);
 }
