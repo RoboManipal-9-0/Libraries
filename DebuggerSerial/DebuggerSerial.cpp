@@ -129,7 +129,7 @@ void DebuggerSerial::printSensorData(double value) {
     // Print the sensor data as string
     String msg = "";
     msg.concat(value);
-    this->printMessage(NOTIFICATION, msg);
+    this->printMessage(SENSOR_FEED, msg);
 }
 void DebuggerSerial::print(int level, String output) {
     this->printMessage(level, output);
@@ -148,7 +148,15 @@ void DebuggerSerial::print(String output, int level) {
 */
 
 void DebuggerSerial::DebuggerOutput(int Level, String output) {
-    // ################# Protocol #################
+    // Sanity check: See if the debugger is even supposed to print something
+    if (!this->debuggerEnabled || !this->debuggerSerialDefined) {
+        return;
+    }
+    // Level check, if the debugger level is greater than message level, then return
+    if (this->debuggerPriorityLevel > Level) {
+        return;
+    }
+    //                      Protocol 
     // SENSOR_FEED type
     /*
         [TIMESTAMP] $NAME$ VALUE
@@ -164,13 +172,14 @@ void DebuggerSerial::DebuggerOutput(int Level, String output) {
     // Timestamp part 
     String msg = "[";
     msg.concat(millis());
-    if (Level == NOTIFICATION && Level == SENSOR_FEED) {
+    if (Level == NOTIFICATION || Level == SENSOR_FEED) {
         msg.concat("]");
     } else {
         msg.concat(" ");
         msg.concat(PriorityLevelName(Level));
         msg.concat("]");
     }
+    msg.concat(" ");
     // Modifier part (> or NAME)
     if (Level == NOTIFICATION) {
         msg.concat(">");
@@ -182,6 +191,7 @@ void DebuggerSerial::DebuggerOutput(int Level, String output) {
     msg.concat(" ");
     // Actual message / output
     msg.concat(output);
+    this->debuggerSerial->println(msg);
 }
 void DebuggerSerial::RaiseNotification(String message) {
     this->DebuggerOutput(NOTIFICATION, message);
