@@ -35,7 +35,7 @@ protected:
     bool debuggerSerialDefined;   // If the debuggerSerial is defined
     // ############## Private functions ###################
     void DebuggerOutput(int Level, String output);   // One stop for all output to debuggerSerial
-    void RaiseNotification(String message);
+    void RaiseNotification(String message);          // Notification messages
 public:
     // ################ Initializer functions ###############
     // ----------------- Constructors ----------------------
@@ -62,7 +62,7 @@ public:
     void printMessage(int level, String output);    // Print message
     void print(int level, String output);           // Print message
     void print(String output, int level);           // Print, order or args reversed
-    void printSensorData(double value);             // Println the value as SENSOR_FEED level
+    void printSensorData(double value);             // Print the value as SENSOR_FEED level
 };
 
 #endif
