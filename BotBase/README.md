@@ -9,7 +9,7 @@ Select guide : [Users Guide](users-guide) or [Developers Guide](developers-guide
 # Users Guide
 
 ## Downloading the library
-It is suggested that you download the entire repository and then select this folder, so that you can enjoy the benifits of VCS like git. It makes it simpler to update the contents whenever patch fixes are done. You can simply open a terminal (or gitbash on windows), go to the folder where you want to save this repository and type the following command.
+It is suggested that you download the entire repository and then select this folder, so that you can enjoy the benefits of VCS like git. It makes it simpler to update the contents whenever patch fixes are done. You can simply open a terminal (or gitbash on windows), go to the folder where you want to save this repository and type the following command.
 ```bash
 git clone https://github.com/RoboManipal-9-0/Libraries.git -b dev
 ```
@@ -66,7 +66,7 @@ Let's inspect in detail what all the members of the class do
 
 - **<font color="#FFB300">HardwareSerial</font> \*botDebuggerSerial** : This is the serial over which debugger messages are sent. It must be initialized beforehand (using the _Serial.begin_ function). It's also mentioned as _debugger serial_ at places.
 
-- **<font color="#CD00FF">int</font> debuggerPriorityLevel** : This variable is to signify the verbocity needed by the user while debugging. Messages having priority lesser that this will not be displayed on the _debugger serial_.
+- **<font color="#CD00FF">int</font> debuggerPriorityLevel** : This variable is to signify the verbosity needed by the user while debugging. Messages having priority lesser that this will not be displayed on the _debugger serial_.
 
 ##### Member functions
 - **<font color="#CD00FF">void</font> <font color="#5052FF">setNumberOfWheelsTo</font>(<font color="#FF00FF">int</font> number)** : Sets the *NUMBER_OF_WHEELS* value to the passed *number*. It's a good idea to make a call to this in the constructor of the derived classes.
