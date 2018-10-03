@@ -110,6 +110,7 @@ void DebuggerSerial::SetDebuggerPriorityToLevel(int priorityLevel) {
     msg.concat(PriorityLevelName(priorityLevel));
     this->RaiseNotification(msg);
 }
+
 // ###################### Settings ######################
 // Enable and disable the debugger
 void DebuggerSerial::enableDebugger() {
@@ -122,10 +123,13 @@ void DebuggerSerial::disableDebugger() {
 }
 // ########## Print messages to DebuggerSerial ############
 void DebuggerSerial::printMessage(int level, String output) {
-    // TODO: Implement this code
+    this->DebuggerOutput(level, output);      // DebuggerOutput function
 }
 void DebuggerSerial::printSensorData(double value) {
-    // TODO: Implement this code
+    // Print the sensor data as string
+    String msg = "";
+    msg.concat(value);
+    this->printMessage(NOTIFICATION, msg);
 }
 void DebuggerSerial::print(int level, String output) {
     this->printMessage(level, output);
