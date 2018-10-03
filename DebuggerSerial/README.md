@@ -3,7 +3,7 @@ This library is for defining and using a serial as a debugger.
 
 **Node**: This library is still in developer beta, ask the developer before using.
 
-Select guide : [Users Guide](users-guide) or [Developers Guide](developers-guide)
+Select guide : [Users Guide](#users-guide) or [Developers Guide](#developers-guide)
 
 # Users Guide
 
