@@ -19,17 +19,7 @@ _You might want to omit the `-b <branch>` tag if you're downloading from the mas
 ## Using the library with Arduino
 Move this folder into the arduino libraries folder on your PC. If you don't know where the libraries folder of your arduino is, you can check out the README file of this entire repository for this, click [here](../README.md).
 
-## Examples
-#### Repeated_HardwareSerial
-**File**: Code [here](./examples/Repeated_HardwareSerial/Repeated_HardwareSerial.ino).
-- Declare a DebuggerSerial and send messages of all priorities and a sensor reading every 5 seconds.
-
-#### Repeated_SoftwareSerial_TX
-**File**: Code [here](./examples/Repeated_SoftwareSerial_TX/Repeated_SoftwareSerial_TX.ino).
-- Same as **Repeated_HardwareSerial** 
-- We use a software serial instead of hardware serial here.
-
-### Protocol implementation
+## Protocol implementation
 - For `SENSOR_FEED` data
 ```
 [%Timestamp%] $%Name%$ %Value%
@@ -47,6 +37,16 @@ Move this folder into the arduino libraries folder on your PC. If you don't know
 > **Name**: Name of the debugger.<br>
 > **Value**: Sensor floating point data converted to string type.<br>
 > **Message**: String message to be sent.
+
+## Examples
+#### Repeated_HardwareSerial
+**File**: Code [here](./examples/Repeated_HardwareSerial/Repeated_HardwareSerial.ino).
+- Declare a DebuggerSerial and send messages of all priorities and a sensor reading every 5 seconds.
+
+#### Repeated_SoftwareSerial_TX
+**File**: Code [here](./examples/Repeated_SoftwareSerial_TX/Repeated_SoftwareSerial_TX.ino).
+- Same as **Repeated_HardwareSerial** 
+- We use a software serial instead of hardware serial here.
 
 # Developers Guide
 Here is the developers guide to the library. <br>
@@ -77,7 +77,7 @@ The purpose of the *DebuggerSerial* class is to create a pipeline for Debugger.
 
 Let's explore the code in detail
 ### Debugger 
-- Priority levels, each one of the is a constant defined in the file.
+- Priority levels, each one of these is a constant defined in the header file.
     - `SENSOR_FEED`: To send sensor data to the serial. Use _printSensorData_ to send sensor readings.
     - `NOTIFICATION`: To send out notifications from the library itself, it's suggested that the user doesn't use these. It's **only** for the library alone.
     - `DEBUG`: Debugging messages
