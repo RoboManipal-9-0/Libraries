@@ -13,12 +13,16 @@
 #include "Arduino.h"
 
 // Debugger Levels
-#define SENSOR_FEED 0
-#define DEBUG 1
-#define INFO 2
-#define WARN 3
-#define ERROR 4
-#define FATAL 5
+// DONE: Adjust levels and protocol
+#define SENSOR_FEED 0         // Sensor data feed
+#define NOTIFICATION 10       // Notifications about the debugger ONLY 
+#define DEBUG 20              // Debugging level messages
+#define INFO 30               // Info level messages
+#define WARNING 40               // Warning level messages : Work can still go unaffected
+#define ERROR 50              // Error messages : Some aspects might not work
+#define FATAL 60              // Fatal messages : Some error caused the system to crash
+// Number to String function
+String PriorityLevelName(int priorityLevel);
 
 class DebuggerSerial {
 protected:
@@ -26,10 +30,12 @@ protected:
     Stream *debuggerSerial;     // Main serial
     String name;    // Name of the debugger
     int debuggerPriorityLevel;    // The priority level of debugger
-    bool debuggerEnabled;         // Enable the debugger
+    // Sanity flags
+    bool debuggerEnabled;         // Enable or disable the debugger
     bool debuggerSerialDefined;   // If the debuggerSerial is defined
     // ############## Private functions ###################
     void DebuggerOutput(int Level, String output);   // One stop for all output to debuggerSerial
+    void RaiseNotification(String message);
 public:
     // ################ Initializer functions ###############
     // ----------------- Constructors ----------------------
@@ -41,13 +47,17 @@ public:
     DebuggerSerial(String name, Stream *debuggerSerial); // Name and serial
     // All 3 in one
     DebuggerSerial(String name, Stream *debuggerSerial, int priorityLevel);
-    // Standalone initializers
+    // ------------ Standalone initializers ------------
     // All 3
     void Initialize(String name, Stream *debuggerSerial, int priorityLevel);
-    void InitializeName(String name);            // Name
-    void AttachSerial(Stream *debuggerSerial);   // DebuggerSerial
-    void SetDebuggerPriorityToLevel(int minLevel);  // Level
     void Initialize(Stream *debuggerSerial, int priorityLevel);  // Serial and priorityLevel
+    // Individual initializers
+    void AttachSerial(Stream *debuggerSerial);   // DebuggerSerial
+    void InitializeName(String name);            // Name
+    void SetDebuggerPriorityToLevel(int minLevel);  // Level
+    // ------------ Settings for debugger ------------
+    void enableDebugger();       // Enable the debugger
+    void disableDebugger();      // Disable the debugger
     // ----------------- Print messages to debuggerSerial -----------------
     void printMessage(int level, String output);    // Print message
     void print(int level, String output);           // Print message
