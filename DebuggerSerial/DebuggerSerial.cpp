@@ -148,8 +148,41 @@ void DebuggerSerial::print(String output, int level) {
 */
 
 void DebuggerSerial::DebuggerOutput(int Level, String output) {
-    // TODO: Add code here with protocol implementation
+    // ################# Protocol #################
+    // SENSOR_FEED type
+    /*
+        [TIMESTAMP] $NAME$ VALUE
+    */
+    // Notifications
+    /*
+        [TIMESTAMP] > MESSAGE
+    */
+    // Debug and above
+    /* 
+        [TIMESTAMP LEVEL] $NAME$ MESSAGE
+    */
+    // Timestamp part 
+    String msg = "[";
+    msg.concat(millis());
+    if (Level == NOTIFICATION && Level == SENSOR_FEED) {
+        msg.concat("]");
+    } else {
+        msg.concat(" ");
+        msg.concat(PriorityLevelName(Level));
+        msg.concat("]");
+    }
+    // Modifier part (> or NAME)
+    if (Level == NOTIFICATION) {
+        msg.concat(">");
+    } else {
+        msg.concat("$");
+        msg.concat(this->name);
+        msg.concat("$");
+    }
+    msg.concat(" ");
+    // Actual message / output
+    msg.concat(output);
 }
-void DebuggerSerial::RaiseNotification(String name) {
-    // TODO: Add code here with NOTIFICATION level protocol implementation
+void DebuggerSerial::RaiseNotification(String message) {
+    this->DebuggerOutput(NOTIFICATION, message);
 }
