@@ -1,3 +1,4 @@
+![Version tag](https://img.shields.io/badge/version-1.0.1-orange.svg)
 # Introduction
 This library is for defining and using a serial as a debugger.
 
@@ -12,7 +13,7 @@ It is suggested that you download the entire repository and then select this fol
 ```bash
 git clone https://github.com/RoboManipal-9-0/Libraries.git -b dev
 ```
-_You might want to omit the `-b <branch>` tag if you're downloading from the master version_.
+_You might want to omit the `-b <branch>` tag if you're downloading from the master branch_.
 
 **<font color="#AA0000">Not recommended</font>** : You can download just this folder by clicking [here](placeholder).
 
@@ -20,6 +21,7 @@ _You might want to omit the `-b <branch>` tag if you're downloading from the mas
 Move this folder into the arduino libraries folder on your PC. If you don't know where the libraries folder of your arduino is, you can check out the README file of this entire repository for this, click [here](../README.md).
 
 ## Protocol implementation
+Here are how the messages are put out on the _debuggerSerial_ for different priority levels
 - For `SENSOR_FEED` data
 ```
 [%Timestamp%] $%Name%$ %Value%
@@ -28,15 +30,26 @@ Move this folder into the arduino libraries folder on your PC. If you don't know
 ```
 [%Timestamp%] > %Message%
 ```
-- For other priority levels
+- For other user based priority levels
 ```
 [%Timestamp% %LevelToString%] $%Name%$ %Message%
 ```
-> **Timestamp** is the number of milliseconds passed after the initialization of the microcontroller.<br>
+> **Timestamp** or **TS** is the number of milliseconds passed after the initialization of the microcontroller.<br>
 > **LevelToString** is the level converted to string form using the _PriorityLevelName_ function.<br>
 > **Name**: Name of the debugger.<br>
 > **Value**: Sensor floating point data converted to string type.<br>
 > **Message**: String message to be sent.
+
+### About the priority levels
+| Priority Level | Description |  Use case Example |Protocol implementation |
+| :------: | :---- | :------ | :----- |
+| **SENSOR_FEED** | Used to publish **ONLY** floating point data published by sensors. | IMU Data | [**TS**] \$**Name**\$ **Value** |
+| **NOTIFICATION** | Used by the _DebuggerSerial_ library to give notifications about the debugger itself. It's not suggested to use this priority level outside the _DebuggerSerial_ class. | Debugger initialized (_do not use this tag_) | [**TS**] > **Message** |
+| **DEBUG** | Debugging level messages for debugging phase | Continuous values given to actuators | [**TS** _**DEBUG**_] \$**NAME**\$ **Message** |
+| **INFO** | Information level messages | Pin connections and initialization, mode settings | [**TS** _**INFO**_] \$**NAME**\$ **Message** |
+| **WARNING** | Warning level messages. An exception occurred but it won't cause any problems in the functioning (it can be handled) | Collision alerts that can be handled | [**TS** _**WARNING**_] \$**NAME**\$ **Message** |
+| **ERROR** | Error level messages. An exception occurred and some functionalities might have been compromised | A sensor or serial connection disconnected | [**TS** _**ERROR**_] \$**NAME**\$ **Message** |
+| **FATAL** | Fatal level messages. An exception occurred and the entire functioning is jeopardized. | Battery level low; Controller link lost; | [**TS** _**FATAL**_] \$**NAME**\$ **Message** |
 
 ## Examples
 #### Repeated_HardwareSerial
@@ -67,7 +80,7 @@ This is the file that contains the main code for the class. In the header file, 
 This file contains the keywords that we want the Arduino IDE to identify. This provides syntax highlighting features for the library for convenience of the programmer.
 
 #### README.md
-The description file containing details about the library. The file that you are looking at right now
+The description file containing details about the library. The file that you are reading right now.
 
 ### Code description
 This library assumes the following :-
@@ -126,3 +139,4 @@ Let's explore the code in detail
 
 [![Image](https://img.shields.io/badge/developed%20using-VSCode-lightgrey.svg)](https://code.visualstudio.com/)
 [![Image](https://img.shields.io/badge/Developer-TheProjectsGuy-blue.svg)](https://github.com/TheProjectsGuy)
+[![Spawning issue](https://img.shields.io/badge/issue-%237-green.svg)](https://github.com/RoboManipal-9-0/Libraries/issues/7)
