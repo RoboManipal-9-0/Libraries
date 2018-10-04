@@ -62,41 +62,34 @@ Let's inspect in detail what all the members of the class do
 
 - **<font color="#CD00FF">int</font> \*DIR_values** : These are either HIGH or LOW. These are the directions of rotation for the motor. It's your wish to choose the directions (as per convenience).
 
-- **<font color="#CD00FF">String</font> name** : This is the name of the bot. This is used for debugging purposes and to avoid confusion in case of multiple instances. It's like an identity of the bot. It's suggested that you assign a unique name to every instance of this class.
+- **<font color="#CD00FF">bool</font> maxMode**: If `True`, then maxMode is enabled.
 
-- **<font color="#FFB300">HardwareSerial</font> \*botDebuggerSerial** : This is the serial over which debugger messages are sent. It must be initialized beforehand (using the _Serial.begin_ function). It's also mentioned as _debugger serial_ at places.
-
-- **<font color="#CD00FF">int</font> debuggerPriorityLevel** : This variable is to signify the verbosity needed by the user while debugging. Messages having priority lesser that this will not be displayed on the _debugger serial_.
+- **<font color="#CD00FF">int</font> maxModeValue**: The value to be given to the PWM pin of the motor driver.
 
 ##### Member functions
 - **<font color="#CD00FF">void</font> <font color="#5052FF">setNumberOfWheelsTo</font>(<font color="#FF00FF">int</font> number)** : Sets the *NUMBER_OF_WHEELS* value to the passed *number*. It's a good idea to make a call to this in the constructor of the derived classes.
 
-- **<font color="#CD00FF">void</font> <font color="#5052FF">DebuggerOutput</font>(<font color="#FF00FF">int</font> Level, <font color="#FF00FF">String</font> output)** : Used to put a debugger message into the serial. All debugger messages have the following format :<br>
-```
-$%Name%$:L%level%: %output%
-```
-Where stuff in % is the *name* of bot, it's *debuggerPriorityLevel* and the *output* message passed to the function respectively.
-
 #### Public Members
+##### Variables
+- **<font color="#CD00FF">DebuggerSerial</font> debugger**: The debugger object for the class. In case you want to use it, you'll have to initialize it. Read the documentation about **DebuggerSerial** class [here](./../DebuggerSerial/).
+
 ##### Constructors
 Though you'll never create any memory for objects of this class, it's advised to have a constructor anyways.
 
 - **<font color="#5052FF">BotBase</font>()** : Empty constructor
 
-- **<font color="#5052FF">BotBase</font>(<font color="#CD00FF">String</font> name, <font color="#FFB300">HardwareSerial</font> \*debugger_serial, <font color="#CD00FF">int</font> Level)** : Initialization constructor for the class. It calls the *Initialize* function
+- **<font color="#5052FF">BotBase</font>(<font color="#CD00FF">bool</font> maxMode, <font color="#CD00FF">int</font> maxModeValue = 255)** : Initialization constructor for the _MaxMode_. It calls the *configureMaxMode* function.
 
 ##### Functions
-- **<font color="#CD00FF">void</font> <font color="#5052FF">Initialize</font>(<font color="#CD00FF">String</font> name, <font color="#FFB300">HardwareSerial</font> \*debugger_serial, <font color="#CD00FF">int</font> Level)** : To assign *name*, *debugger_serial* and *Level* to the *name*, *botDebuggerSerial* and *debuggerPriorityLevel* respectively.
+- **<font color="#CD00FF">void</font> <font color="#5052FF">AddMotorDriverPins</font>(<font color="#CD00FF">int</font> \*PWM_pins, <font color="#CD00FF">int</font> \*DIR_pins)** : To attach the pins of the motors connected to the motor drivers. Pass it the list of *PWM_pins* and *DIR_pins*.
 
-- **<font color="#CD00FF">void</font> <font color="#5052FF">SetDebuggerPriorityToLevel</font>(<font color="#CD00FF">int</font> minLevel)** : To set the debugger level (*debuggerPriorityLevel*) to *minLevel*.
+- **<font color="#CD00FF">void</font> <font color="#5052FF">configureMaxModeTo</font>(<font color="#CD00FF">bool</font> value, <font color="#CD00FF">int</font> DIR_mag_value = 255)**: Configuring the _MaxMode_. If made true, it's assumed by the library that you're giving the PWM values to the DIR pin of the motor driver and the PWM pin of the motor driver gets *DIR_mag_value*.
 
-- **<font color="#CD00FF">void</font> <font color="#5052FF">AddMotorDriverPins</font>(<font color="#CD00FF">int</font> \*PWM_pins, <font color="#CD00FF">int</font> \*DIR_pins)** : To attach the pins of the botbase motors connected to the motor drivers.
+- **<font color="#CD00FF">void</font> <font color="#5052FF">Move_PWM_Angle</font>(<font color="#CD00FF">int</font> PWM, <font color="#CD00FF">float</font> angle)** : An abstract function which you must implement in the derived classes. This function has the code to move your bot at a particular speed (*PWM*) and in a particular direction (*angle* in radians). You needn't implement the actuation code (it's actuated in the _Move_ function).
 
-- **<font color="#CD00FF">void</font> <font color="#5052FF">Move_PWM_Angle</font>(<font color="#CD00FF">int</font> PWM, <font color="#CD00FF">float</font> angle)** : An abstract function which you must implement in the derived classes. This function has the code to move your bot at a particular speed (*PWM*) and in a particular direction (*angle* in radians).
+- **<font color="#CD00FF">void</font> <font color="#5052FF">Move</font>(<font color="#CD00FF">int</font> PWM, <font color="#CD00FF">int</font> angle_degrees)** : This is function that the user will call. It simply calls the *Move_PWM_Angle* function with the angle converted from degrees to radians, then it actuates the motors.
 
-- **<font color="#CD00FF">void</font> <font color="#5052FF">Move</font>(<font color="#CD00FF">int</font> PWM, <font color="#CD00FF">int</font> angle_degrees)** : This is function that the user will call. It simply calls the *Move_PWM_Angle* function with the angle converted from degrees to radians.
-
-- **<font color="#CD00FF">void</font> <font color="#5052FF">MoveMotor</font>(<font color="#CD00FF">int</font> motor_number)** : Moves the motor indexed at *motor_number* with PWM = _PWM_values[motor_number]_ and _DIR = DIR_values[motor_number]_.
+- **<font color="#CD00FF">void</font> <font color="#5052FF">MoveMotor</font>(<font color="#CD00FF">int</font> motor_number)** : Moves the motor indexed at *motor_number* giving values considering the mode of the motor driver.
 
 ## Making you own custom BotBase
 You must extend the properties of the class *BotBase* through inheritance into your own class (for your custom *BotBase*). There is a library made for this demo purpose, it's the **FourSBase** folder in this repository.
@@ -108,8 +101,8 @@ Perform the following to make use of this library in your BotBase :
 - Inherit the class *BotBase* publicly.
 - You can define properties just for your bot. For example, the reverseDIRs array in that file.
 - You must implement the following functions :
-    - **void Move_PWM_Angle(int PWM, float angle_radians)** : Contains code to move your bot at a particular PWM and at a particular angle (in radians). It's suggested that you assign values to the *DIR_pins* (as *DIR_values*) and *PWM_pins* (as *PWM_values*).
-    - It is suggested that you have a function to attach pins, in case you have properties that require Initialization. You may call the function **AddMotorDriverPins** in the BotBase class from it.
+    - **void Move_PWM_Angle(int PWM, float angle_radians)** : Contains code to move your bot at a particular PWM and at a particular angle (in radians). 
+    - It is suggested that you have a function to attach pins, in case you have more properties that require Initialization. You may call the function **AddMotorDriverPins** in the BotBase class from it.
         - (Both the above methods have been implemented in the [FourSBase](../FourSBase/) library).
 - After that, include the library you're working on into the code and create an object for the class. Additionally, make sure that you've called the **setNumberOfWheelsTo** function to set the number of wheels (motors), it's suggested that you implement this in the constructors of the class.
 

@@ -11,36 +11,33 @@
 
 // Include Arduino main files
 #include "Arduino.h"
+#include "DebuggerSerial.h"
 
 class BotBase {
 protected:
     // ######################### Parts of the base #########################
-    int NUMBER_OF_WHEELS;
-    int *PWM_pins;
-    int *PWM_values;
-    int *DIR_pins;
-    int *DIR_values;
-    // ################## Important features of every bot ##################
-    String name;    // Name of bot
-    HardwareSerial *botDebuggerSerial;  // Debugger Serial
-    int debuggerPriorityLevel;     // Debugger verbocity level
+    int NUMBER_OF_WHEELS;       // Number o wheels
+    int *PWM_pins;              // PWM Pin array
+    int *PWM_values;            // PWM array written to PWM pins
+    int *DIR_pins;              // DIR Pin array
+    int *DIR_values;            // DIR array written to DIR pins
+    // MaxMode
+    bool maxMode;               // MaxMode for the motor drivers
+    int maxModeValue;           // The value given to the PWM pin 
     // ##################### Private funcions ####################
     // Set number of wheels
     void setNumberOfWheelsTo(int number);
-    // ############################ Debugger #############################
-    // Debugger output through serial
-    void DebuggerOutput(int Level, String output);
 public:
+    // ################## Debugger Section ########################
+    DebuggerSerial debugger;
     // ##################### Initializer functions ####################
     // Constructors
     BotBase();
-    BotBase(String name, HardwareSerial *debugger_serial, int Level);
-    // Initializing bot parameters
-    void Initialize(String name, HardwareSerial *debugger_serial, int Level);
-    // Setting the debugger priority, messages less than this level are not displayed
-    void SetDebuggerPriorityToLevel(int minLevel);
+    BotBase(bool maxMode, int maxModeValue = 255);
     // Configure motor driver pins
     void AddMotorDriverPins(int *PWM_pins, int *DIR_PINs);
+    // Configure maxMode
+    void configureMaxModeTo(bool value, int DIR_mag_value = 255);
     // ######################### Motion funcions #########################
     // Motion of the bot : Every bot has a Move function (angle in radians)
     virtual void Move_PWM_Angle(int PWM, float angle) = 0;

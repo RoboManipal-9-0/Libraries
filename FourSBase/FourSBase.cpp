@@ -17,7 +17,7 @@ void FourSBase::AddPins(int *PWM_PINs, int *DIR_PINs, bool *reverseDIRs) {
         message.concat(reverseDIRs[i]);
         message.concat(" ");
     }
-    this->DebuggerOutput(2, message);
+    this->debugger.print(INFO, message);
 }
 // Motion code (angle in radians)
 void FourSBase::Move_PWM_Angle(int PWM, float angle) {
@@ -46,21 +46,8 @@ void FourSBase::Move_PWM_Angle(int PWM, float angle) {
         PWM_abs_vector[i] = abs(PWM_vector[i]);
     }
     debuggerMessage.concat("]");
-    this->DebuggerOutput(1, debuggerMessage);
+    this->debugger.print(debuggerMessage, DEBUG);
     // PWM and direction assignment
     this->PWM_values = PWM_abs_vector;
     this->DIR_values = DIR_vector;
-    // Writing to motors
-    for (int i = 0; i < this->NUMBER_OF_WHEELS; i++) {
-        String debuggerMessage = "Wheel ";
-        debuggerMessage.concat(i);
-        debuggerMessage.concat(" PWM: ");
-        debuggerMessage.concat(this->PWM_values[i]);
-        debuggerMessage.concat(" DIR: ");
-        debuggerMessage.concat(this->DIR_values[i]);
-        this->DebuggerOutput(1, debuggerMessage);
-    }
-    for (int i = 0; i < this->NUMBER_OF_WHEELS; i++) {
-        this->MoveMotor(i);
-    }
 }

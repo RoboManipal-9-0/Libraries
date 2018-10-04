@@ -2,7 +2,7 @@
 # Introduction
 This library is for defining and using a serial as a debugger.
 
-**Node**: This library is still in developer beta, ask the developer before using.
+~~**Node**: This library is still in developer beta, ask the developer before using.~~ This library has finished testing :tada:. Check [examples](#examples).
 
 Select guide : [Users Guide](#users-guide) or [Developers Guide](#developers-guide)
 

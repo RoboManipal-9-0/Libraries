@@ -12,27 +12,17 @@
 void BotBase::setNumberOfWheelsTo(int number) {
     // Number of wheels passed
     this->NUMBER_OF_WHEELS = number;
+    String msg = "Number of wheels set to ";
+    msg.concat(number);
+    this->debugger.print(DEBUG, msg);
 }
 // Constructors
 BotBase::BotBase() {
     // Nothing here
 }
-BotBase::BotBase(String name, HardwareSerial *debugger_serial, int Level) {
-    // Initializer function already implemented
-    this->Initialize(name, debugger_serial, Level);
-}
-// Initializer
-void BotBase::Initialize(String name, HardwareSerial *debugger_serial, int Level) {
-    // Name of bot
-    this->name = name;
-    // Debugger serial of bot
-    this->botDebuggerSerial = debugger_serial;
-    // Priority level of the debugger
-    this->debuggerPriorityLevel = Level;
-}
-// Debugger prioriy level adjustment
-void BotBase::SetDebuggerPriorityToLevel(int minLevel) {
-    this->debuggerPriorityLevel = minLevel;
+BotBase::BotBase(bool maxMode, int maxModeValue) {
+    // Set the max mode on or off
+    this->configureMaxModeTo(maxMode, maxModeValue);
 }
 // Configure motor driver pins for the base
 void BotBase::AddMotorDriverPins(int *PWM_PINs, int *DIR_PINs) {
@@ -51,8 +41,17 @@ void BotBase::AddMotorDriverPins(int *PWM_PINs, int *DIR_PINs) {
         message.concat(", ");
         message.concat(DIR_PINs[i]);
         // Ex = Motor 1 attached to (PWM, DIR): 45, 5
-        this->DebuggerOutput(2, message);
+        this->debugger.print(INFO, message);
     }
+}
+void BotBase::configureMaxModeTo(bool value, int DIR_mag_value) {
+    this->maxMode = value;
+    this->maxModeValue = DIR_mag_value;
+    String msg = "Max mode set to ";
+    msg.concat(value?"TRUE":"FALSE");
+    msg.concat(" Magnitude : ");
+    msg.concat(this->maxModeValue);
+    this->debugger.print(INFO, msg);
 }
 // Move the bot with speed PWM at angle 'angle_degrees'
 void BotBase::Move(int PWM, int angle_degrees) {
@@ -60,41 +59,60 @@ void BotBase::Move(int PWM, int angle_degrees) {
     float angle_radians = angle_degrees * PI/180.0;
     // Use the default move function
     this->Move_PWM_Angle(PWM, angle_radians);
+    // Call the MoveMotor on every motor (actual actuation of motors)
+    for (int i = 0; i < this->NUMBER_OF_WHEELS; i++) {
+        this->MoveMotor(i);
+    }
 }
 // Move motor i on the bot
 void BotBase::MoveMotor(int i) {
-    // PWM
-    analogWrite(this->PWM_pins[i], this->PWM_values[i]);
-    // Direction
-    digitalWrite(this->DIR_pins[i], this->DIR_values[i]);
+    // PWM and DIR values
+    int PWM;
+    bool DIR;
+    if (!this->maxMode) {
+        /* Standard 
+            PWM connected to PWM of motor driver
+            DIR connected to DIR of motor driver
+                Direct connection here
+        */
+        PWM = this->PWM_values[i];   // PWM 
+        DIR = this->DIR_values[i];   // DIR
+        // Write the values on pins
+        // PWM
+        analogWrite(this->PWM_pins[i], PWM);
+        // Direction
+        digitalWrite(this->DIR_pins[i], DIR);
+    } else if (this->maxMode) {
+        /* MaxMode 
+            PWM connected to the DIR pin of motor driver
+            PWM pin of motor driver is given a constant HIGH voltage
+        */
+        DIR = this->DIR_values[i];
+        PWM = 127;
+        // Adjust PWM
+        if (DIR == HIGH) {         // Forward
+            PWM += this->PWM_values[i]/2;
+        } else if (DIR == LOW) {   // Reverse
+            PWM -= this->PWM_values[i]/2;
+        }
+        // Write PWM to DIR pin of motor driver
+        analogWrite(this->DIR_pins[i], PWM);
+        // PWM pin gets the maxModeValue
+        analogWrite(this->PWM_pins[i], this->maxModeValue);
+    }
     // Send message on terminal
     // Motor %i+1% status = [3: 123, 7: HIGH]
+    // Debugger message
     String message = "Motor ";
     message.concat(i + 1);
     message.concat(" status = [");
     message.concat(this->PWM_pins[i]);
     message.concat(": ");
-    message.concat(this->PWM_values[i]);
+    message.concat(PWM);
     message.concat(", ");
     message.concat(this->DIR_pins[i]);
     message.concat(": ");
-    message.concat(this->DIR_values[i]);
+    message.concat(DIR);
     message.concat("]");
-    this->DebuggerOutput(1, message);
-}
-// Debugger output function
-void BotBase::DebuggerOutput(int level, String output) {
-    // If the message priority is less, then no need to display
-    if (this->debuggerPriorityLevel > level) {
-        return;
-    }
-    // Print the message on serial monitor in fashion
-    // $%name%$:L%level%: %output%
-    this->botDebuggerSerial->print("$");
-    this->botDebuggerSerial->print(this->name);
-    this->botDebuggerSerial->print("$:L");
-    this->botDebuggerSerial->print(level);
-    this->botDebuggerSerial->print(": ");
-    this->botDebuggerSerial->print(output);         // Main message
-    this->botDebuggerSerial->println("");
+    this->debugger.print(message, DEBUG);
 }
