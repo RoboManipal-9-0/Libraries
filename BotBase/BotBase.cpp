@@ -24,8 +24,8 @@ BotBase::BotBase(bool maxMode, int maxModeValue) {
     // Set the max mode on or off
     this->configureMaxModeTo(maxMode, maxModeValue);
 }
-// Configure motor driver pins for the base
-void BotBase::AddMotorDriverPins(int *PWM_PINs, int *DIR_PINs) {
+// Configure motor driver pins for the base (when only PWM and DIR pins are passed, by default reverseDIRs are all false)
+void BotBase::AttachPins(int *PWM_PINs, int *DIR_PINs) {
     // Attach PWM and DIR pins to the motor drivers
     this->PWM_pins = PWM_PINs;
     this->DIR_pins = DIR_PINs;
@@ -33,16 +33,24 @@ void BotBase::AddMotorDriverPins(int *PWM_PINs, int *DIR_PINs) {
         // PWM and DIR pins are OUTPUT type
         pinMode(PWM_PINs[i], OUTPUT);
         pinMode(DIR_PINs[i], OUTPUT);
-        // Debugger level is 1 (lowest priority)
-        String message = "Motor ";
+        // Debugger INFO message
+        String message = "Motor number ";
         message.concat(i + 1);
         message.concat(" attached to (PWM, DIR): ");
         message.concat(PWM_PINs[i]);
         message.concat(", ");
         message.concat(DIR_PINs[i]);
+        message.concat(" Reverse DIR: ");
+        message.concat(this->reverseDIRs?"TRUE":"FALSE");
         // Ex = Motor 1 attached to (PWM, DIR): 45, 5
         this->debugger.print(INFO, message);
     }
+}
+void BotBase::AttachPins(int *PWM_PINs, int *DIR_PINs, bool *reverseDIRs) {
+    // Direction configuration first
+    this->reverseDIRs = reverseDIRs;
+    // Attach PWM_PINs and DIR_PINs 
+    this->AttachPins(PWM_PINs, DIR_PINs);
 }
 void BotBase::configureMaxModeTo(bool value, int DIR_mag_value) {
     this->maxMode = value;
@@ -54,14 +62,14 @@ void BotBase::configureMaxModeTo(bool value, int DIR_mag_value) {
     this->debugger.print(INFO, msg);
 }
 // Move the bot with speed PWM at angle 'angle_degrees'
-void BotBase::Move(int PWM, int angle_degrees) {
+void BotBase::Move(int PWM, int angle_degrees, float w) {
     // Convert angle to radians
     float angle_radians = angle_degrees * PI/180.0;
     // Use the default move function
-    this->Move_PWM_Angle(PWM, angle_radians);
+    this->Move_PWM_Angle(PWM, angle_radians, w);
     // Call the MoveMotor on every motor (actual actuation of motors)
     for (int i = 0; i < this->NUMBER_OF_WHEELS; i++) {
-        this->MoveMotor(i);
+        this->MoveMotor(i);     // Move the motor 
     }
 }
 // Move motor i on the bot
@@ -76,7 +84,7 @@ void BotBase::MoveMotor(int i) {
                 Direct connection here
         */
         PWM = this->PWM_values[i];   // PWM 
-        DIR = this->DIR_values[i];   // DIR
+        DIR = this->reverseDIRs[i] ^ this->DIR_values[i];   // DIR : If reverseDIRs is true, then toggle DIR_value
         // Write the values on pins
         // PWM
         analogWrite(this->PWM_pins[i], PWM);
@@ -87,7 +95,7 @@ void BotBase::MoveMotor(int i) {
             PWM connected to the DIR pin of motor driver
             PWM pin of motor driver is given a constant HIGH voltage
         */
-        DIR = this->DIR_values[i];
+        DIR = this->reverseDIRs[i] ^ this->DIR_values[i]; // DIR : If reverseDIRs is true, then toggle DIR_value
         PWM = 127;
         // Adjust PWM
         if (DIR == HIGH) {         // Forward

@@ -21,6 +21,7 @@ protected:
     int *PWM_values;            // PWM array written to PWM pins
     int *DIR_pins;              // DIR Pin array
     int *DIR_values;            // DIR array written to DIR pins
+    bool *reverseDIRs;          // Reverse the directions on the motor driver (motor connections are reversed if true)
     // MaxMode
     bool maxMode;               // MaxMode for the motor drivers
     int maxModeValue;           // The value given to the PWM pin 
@@ -35,13 +36,16 @@ public:
     BotBase();
     BotBase(bool maxMode, int maxModeValue = 255);
     // Configure motor driver pins
-    void AddMotorDriverPins(int *PWM_pins, int *DIR_PINs);
+    void AttachPins(int *PWM_pins, int *DIR_PINs);         // PWM and DIR
+    void AttachPins(int *PWM_pins, int *DIR_PINs, bool *reverseDIRs);   // PWM, DIR and reverse DIR array
     // Configure maxMode
     void configureMaxModeTo(bool value, int DIR_mag_value = 255);
     // ######################### Motion funcions #########################
     // Motion of the bot : Every bot has a Move function (angle in radians)
-    virtual void Move_PWM_Angle(int PWM, float angle) = 0;
-    void Move(int PWM, int angle_degrees);
+    virtual void Move_PWM_Angle(int PWM, float angle, float w = 0) = 0;
+    // Main motion code called by user
+    void Move(int PWM, int angle_degrees, float w = 0);
+    // Move motor function
     void MoveMotor(int motor_number);
 };
 
