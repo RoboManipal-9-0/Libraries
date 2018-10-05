@@ -1,10 +1,37 @@
+![Version 1.0.0](https://img.shields.io/badge/version-1.0.0-orange.svg)
+
 # Introduction
 This library is for defining any kind of wheeled base for a ground terrain robot.
 
 ~~**Note**: This library is still in developer beta, ask the developer before using.~~ <br>
 Beta testing done :tada:
 
-Select guide: [Users Guide](users-guide) or [Developers Guide](developers-guide)
+# Index
+- [Introduction](#introduction)
+- [Index](#index)
+- [Users Guide](#users-guide)
+    - [Downloading the library](#downloading-the-library)
+    - [Using the library with Arduino](#using-the-library-with-arduino)
+    - [Using the library](#using-the-library)
+    - [MaxMode](#maxmode)
+        - [Configuring the MaxMode](#configuring-the-maxmode)
+- [Developers Guide](#developers-guide)
+    - [Library Details](#library-details)
+        - [Files in the library](#files-in-the-library)
+            - [BotBase.h](#botbaseh)
+            - [BotBase.cpp](#botbasecpp)
+            - [keywords.txt](#keywordstxt)
+            - [README.md](#readmemd)
+        - [Class description](#class-description)
+            - [Protected members](#protected-members)
+                - [Variables](#variables)
+                - [Member functions](#member-functions)
+            - [Public Members](#public-members)
+                - [Constructors](#constructors)
+                - [Functions](#functions)
+    - [Making you own custom BotBase](#making-you-own-custom-botbase)
+        - [Guide](#guide)
+            - [Examples](#examples)
 
 # Users Guide
 
@@ -15,7 +42,7 @@ git clone https://github.com/RoboManipal-9-0/Libraries.git -b dev
 ```
 _You might want to omit the `-b <branch>` tag if you're downloading from the master version_.
 
-**<font color="#AA0000">Not recommended</font>** : You can download just this folder by clicking [here](https://minhaskamal.github.io/DownGit/#/home?url=https://github.com/RoboManipal-9-0/Libraries/tree/Branch-AvneeshMishra/BotBase).
+**<font color="#AA0000">Not recommended</font>** : You can download just this folder by clicking [here](https://minhaskamal.github.io/DownGit/#/home?url=https://github.com/RoboManipal-9-0/Libraries/tree/dev/BotBase).
 
 ## Using the library with Arduino
 Move this folder into the arduino libraries folder on your PC. If you don't know where the libraries folder of your arduino is, you can check out the README file of this entire repository for this, click [here](../README.md).<br>
@@ -23,11 +50,11 @@ Move this folder into the arduino libraries folder on your PC. If you don't know
 ## Using the library
 You simply have to do the following to use this library
 1. Create an object using one of the derived classes (you've already done this if you've been redirected here from a documentation page).
-2. Call the function `AttachPins`. This function is used to initialize the connection terminals (pins) to the motor driver taking commands. You must pass it the following arguments
+2. Call the function `AttachPins`. This function is used to initialize the connection terminals (pins) to the motor driver taking commands. You must pass it the following arguments<br>
 > **\*PWM_pins**: The array pointer (name of the array) consisting the PWM pin numbers of the motor drivers.<br>
 > **\*DIR_PINs**: The array pointer (name of the array) consisting the DIR pin numbers of the motor drivers.<br>
 > (OPTIONAL) **\*reverseDIRs**: This is a boolean array of the same length as the number of wheels your bot has. Each element is defaulted to false. If you manually create this array and feed a true at some _index_ (numbering starts from 0 here), then it implies that the motors at those indices are connected in the reverse fashion (forward will actually mean that the particular motor moves in the -ve sense).<br>
-3. To move the base, call the `Move` function. This function handles the movement of the bot. You must pass it the following arguments
+3. To move the base, call the `Move` function. This function handles the movement of the bot. You must pass it the following arguments<br>
 > **PWM**: Velocity vector length.<br>
 > **angle_degrees**: Angle the velocity vector makes with the reference (in degrees).<br>
 > (OPTIONAL) **w** _value_: angular velocity with respect to the center.<br>
@@ -120,8 +147,8 @@ Though you'll never create any memory for objects of this class, it's advised to
 - **<font color="#CD00FF">void</font> <font color="#5052FF">AttachPins</font>(<font color="#CD00FF">int</font> \*PWM_pins, <font color="#CD00FF">int</font> \*DIR_pins)** : To attach the pins of the motors connected to the motor drivers. Pass it the list of *PWM_pins* and *DIR_pins*.
 
 - **<font color="#CD00FF">void</font> <font color="#5052FF">AttachPins</font>(<font color="#CD00FF">int</font> \*PWM_pins, <font color="#CD00FF">int</font> \*DIR_pins, <font color="#CD00FF">bool</font> \*reverseDIRs)** : To attach the pins of the motors connected to the motor drivers. Pass it the list of *PWM_pins* and *DIR_pins*. You can also initialize the array for _reverseDIRs_ through this.
-<!-- TODO: Add links here -->
-- **<font color="#CD00FF">void</font> <font color="#5052FF">ConfigureMaxModeTo</font>(<font color="#CD00FF">bool</font> value, <font color="#CD00FF">int</font> DIR_mag_value = 255)**: Configuring the _MaxMode_. If made true, it's assumed by the library that you're giving the PWM values to the DIR pin of the motor driver and the PWM pin of the motor driver gets *DIR_mag_value*. (check the [MaxMode part of this documentation]() for more on this).
+
+- **<font color="#CD00FF">void</font> <font color="#5052FF">ConfigureMaxModeTo</font>(<font color="#CD00FF">bool</font> value, <font color="#CD00FF">int</font> DIR_mag_value = 255)**: Configuring the _MaxMode_. If made true, it's assumed by the library that you're giving the PWM values to the DIR pin of the motor driver and the PWM pin of the motor driver gets *DIR_mag_value*. (check the [MaxMode part of this documentation](#maxmode) for more on this).
 
 - **<font color="#CD00FF">void</font> <font color="#5052FF">Move_PWM_Angle</font>(<font color="#CD00FF">int</font> PWM, <font color="#CD00FF">float</font> angle, <font color="#CD00FF">float</font> w = 0)** : An abstract function which you must implement in the derived classes. This function has the code to move your bot at a particular speed (*PWM*) and in a particular direction (*angle* in radians) with a particular angular velocity about the center (*w*, which is defaulted to 0). You needn't implement the actuation code (it's written in the _Move_ function for you).
 
@@ -148,4 +175,6 @@ Perform the following to make use of this library in your BotBase :
 We have already made some example libraries, just to show you how to make your own libraries using the BotBase class.
 - **FourSBase** library: This library is for a four wheel omni base, you can click [here](../FourSBase) to check it out.
 
-[![Image](https://img.shields.io/badge/Developer-TheProjectsGuy-blue.svg)](https://github.com/TheProjectsGuy)
+[![Developed using VSCode](https://img.shields.io/badge/developed%20using-VSCode-lightgrey.svg)](https://code.visualstudio.com/)
+[![Developed using Atom](https://img.shields.io/badge/developed%20using-Atom-lightgrey.svg)](https://atom.io/)
+[![Developer @TheProjectsGuy](https://img.shields.io/badge/Developer-TheProjectsGuy-blue.svg)](https://github.com/TheProjectsGuy)
