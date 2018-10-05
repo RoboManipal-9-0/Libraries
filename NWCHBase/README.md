@@ -5,7 +5,25 @@ The library stands for _N Wheel Concentric Holonomic Base_.
 
 **Note**: This library is still in developer beta, ask the developer before using.
 <!-- TODO: Add links to the user guide and developers guide in the same README documentation -->
-Select guide: [Users Guide]() or [Developers Guide]()
+# Index
+- [Introduction](#introduction)
+- [Index](#index)
+- [Users Guide](#users-guide)
+    - [Downloading the library](#downloading-the-library)
+    - [Using the library with Arduino](#using-the-library-with-arduino)
+    - [Usage of the library](#usage-of-the-library)
+- [Library Explanation](#library-explanation)
+- [Developers Guide](#developers-guide)
+    - [Class contents](#class-contents)
+        - [Protected members](#protected-members)
+            - [Variables](#variables)
+            - [Member functions](#member-functions)
+        - [Public members](#public-members)
+            - [Constructors](#constructors)
+            - [Member functions](#member-functions)
+- [Debugger Notifications](#debugger-notifications)
+    - [Debug level](#debug-level)
+    - [Info level](#info-level)
 
 # Users Guide
 ## Downloading the library
@@ -76,29 +94,29 @@ This library consists of only one class, the `NWCHBase` class. Let's explore it'
 Here are the messages that the library might send out onto the debugger. This library inherits the entire debugger from the `BotBase` library.
 
 ## Debug level
-### Move_PWM_Angle function
+1. **Move_PWM_Angle** function<br>
 Sends out the PWM vector
-```bash
-Wheel motion vector: %val1% %val2% %val3% ... %valN%
-```
-**For example:** <br>
-For four wheels (don't pay attention to the values, they're arbitrary)
-```bash
-Wheel motion vector: 76 54 -76 -54
-```
+    ```bash
+    Wheel motion vector: %val1% %val2% %val3% ... %valN%
+    ```
+    **For example:** <br>
+    - For four wheels (don't pay attention to the values, they're arbitrary)
+        ```bash
+        Wheel motion vector: 76 54 -76 -54
+        ```
 
 ## Info level
-### InitializeWheels function
-Sends out an info message that the wheels have been initialized (it only notifies you about the angle vector)
-```bash
-Initializing angle configuration: %ang1_deg%(%ang1_rad%) %ang2_deg%(%ang2_rad%) ... %angN_deg%(%angN_rad%)
-```
-**For example:**<br>
-For a four wheel bot
-```bash
-Initializing angle configuration: 45(0.785398) 135(2.356194) 225(3.926990) 315(5.497787)
-```
-For a three wheel bot
-```bash
-Initializing angle configuration: 90(1.570796) 210(3.665191) 330(5.759586)
-```
+1. **InitializeWheels** function<br>
+    Sends out an info message that the wheels have been initialized (it only notifies you about the angle vector)
+    ```bash
+    Initializing angle configuration: %ang1_deg%(%ang1_rad%) %ang2_deg%(%ang2_rad%) ... %angN_deg%(%angN_rad%)
+    ```
+    **For example:**<br>
+    - For a four wheel bot
+        ```bash
+        Initializing angle configuration: 45(0.785398) 135(2.356194) 225(3.926990) 315(5.497787)
+        ```
+    - For a three wheel bot
+        ```bash
+        Initializing angle configuration: 90(1.570796) 210(3.665191) 330(5.759586)
+        ```
