@@ -5,7 +5,7 @@ This library is for defining and controlling an **N** omni wheel base where all 
 The library stands for _N Wheel Concentric Holonomic Base_.
 
 **Note**: This library is still in developer beta, ask the developer before using.
-<!-- TODO: Add links to the user guide and developers guide in the same README documentation -->
+
 # Index
 - [Introduction](#introduction)
 - [Index](#index)
@@ -33,12 +33,12 @@ It is suggested that you download the entire repository and then select this fol
 git clone https://github.com/RoboManipal-9-0/Libraries.git -b dev
 ```
 _You might want to omit the `-b <branch>` tag if you're downloading from the master version_.
-<!-- TODO: Add folder download link -->
-**<font color="#AA0000">Not recommended</font>** : You can download just this folder by clicking [here]().
+
+**<font color="#AA0000">Not recommended</font>** : You can download just this folder by clicking [here](https://minhaskamal.github.io/DownGit/#/home?url=https://github.com/RoboManipal-9-0/Libraries/tree/dev/NWCHBase).
 
 ## Using the library with Arduino
 Move this folder into the arduino libraries folder on your PC. If you don't know where the libraries folder of your arduino is, you can check out the README file of this entire repository for this, click [here](../README.md).<br>
-<!-- TODO: Add links to the BotBase documentation -->
+
 ## Usage of the library
 - Create an object of the `NWCHBase` class.
 - Initialize the number of wheels that the bot has and their respective angles (in ascending order). The wheels are numbered from 1 to **N** (number of wheels) in a counter clockwise fashion, however, they're indexed from 0 to **N-1**.
@@ -62,8 +62,7 @@ As you can observe, these two components (**V<sub>x</sub>** and **V<sub>y</sub>*
 Add this with ω x 1 (velocity superimposed to get the angular velocity).
 
 # Developers Guide
-<!-- TODO: Add links -->
-This library class inherits the **BotBase** class (documentation [here]()). Let's have a detailed look at the contents of the class `NWCHBase`
+This library class inherits the **BotBase** class (documentation [here](./../BotBase/)). Let's have a detailed look at the contents of the class `NWCHBase`
 
 ## Class contents
 This library consists of only one class, the `NWCHBase` class. Let's explore it's contents.
