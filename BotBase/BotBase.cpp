@@ -12,6 +12,11 @@
 void BotBase::setNumberOfWheelsTo(int number) {
     // Number of wheels passed
     this->NUMBER_OF_WHEELS = number;
+    // Debugger message (Level: DEBUG)
+    // Number of wheels set to %number%
+    // Examples:
+    // Number of wheels set to 4
+    // Number of wheels set to 3
     String msg = "Number of wheels set to ";
     msg.concat(number);
     this->debugger.print(DEBUG, msg);
@@ -22,7 +27,7 @@ BotBase::BotBase() {
 }
 BotBase::BotBase(bool maxMode, int maxModeValue) {
     // Set the max mode on or off
-    this->configureMaxModeTo(maxMode, maxModeValue);
+    this->ConfigureMaxModeTo(maxMode, maxModeValue);
 }
 // Configure motor driver pins for the base (when only PWM and DIR pins are passed, by default reverseDIRs are all false)
 void BotBase::AttachPins(int *PWM_PINs, int *DIR_PINs) {
@@ -33,7 +38,11 @@ void BotBase::AttachPins(int *PWM_PINs, int *DIR_PINs) {
         // PWM and DIR pins are OUTPUT type
         pinMode(PWM_PINs[i], OUTPUT);
         pinMode(DIR_PINs[i], OUTPUT);
-        // Debugger INFO message
+        // Debugger message (Level: INFO)
+        // Motor number %index + 1% attached to (PWM, DIR): %PWM_pin%, %DIR_PINs% Reverse DIR: %reverseDIRs[index]%
+        // Examples:
+        // Motor number 1 attached to (PWM, DIR): 5, 7 Reverse DIR: FALSE
+        // Motor number 2 attached to (PWM, DIR): 6, 8 Reverse DIR: TRUE
         String message = "Motor number ";
         message.concat(i + 1);
         message.concat(" attached to (PWM, DIR): ");
@@ -42,25 +51,65 @@ void BotBase::AttachPins(int *PWM_PINs, int *DIR_PINs) {
         message.concat(DIR_PINs[i]);
         message.concat(" Reverse DIR: ");
         message.concat(this->reverseDIRs[i] ? "TRUE" : "FALSE");
-        // Ex = Motor 1 attached to (PWM, DIR): 45, 5
-        this->debugger.print(INFO, message);
+        this->debugger.print(INFO, message);        // Publish debugger message
     }
 }
+// Attach even reverseDIRs as well
 void BotBase::AttachPins(int *PWM_PINs, int *DIR_PINs, bool *reverseDIRs) {
     // Direction configuration first
     this->reverseDIRs = reverseDIRs;
     // Attach PWM_PINs and DIR_PINs 
     this->AttachPins(PWM_PINs, DIR_PINs);
 }
-void BotBase::configureMaxModeTo(bool value, int DIR_mag_value) {
+void BotBase::ConfigureMaxModeTo(bool value, int DIR_mag_value) {
     // Configuration of MaxMode
     this->maxMode = value;               // Enable or disable it
     this->maxModeValue = DIR_mag_value;  // Value to give to the PWM pin if maxMode is ON
+    // Debugger message (Level: INFO)
+    // Max mode set to %value% Magnitude: %this->maxModeValue%
+    // Examples:
+    // Max mode set to TRUE Magnitude 255
+    // Max mode set to FALSE Magnitude 80
     String msg = "Max mode set to ";
-    msg.concat(value?"TRUE":"FALSE");
-    msg.concat(" Magnitude : ");
+    msg.concat((this->maxMode)?"TRUE":"FALSE");
+    msg.concat(" Magnitude: ");
     msg.concat(this->maxModeValue);
     this->debugger.print(INFO, msg);
+}
+void BotBase::VectorTo_PWM_DIR_SingleWheel(int vect_value, int wheel_number) {
+    this->PWM_values[wheel_number] = abs(vect_value);                   // Magnitude
+    this->DIR_values[wheel_number] = (vect_value >= 0) ? HIGH : LOW;    // Direction
+    // Debugger message
+    // Vector[%wheel_number%] -> %vect_value% = %PWM%, %DIR%
+    // Examples:
+    // Vector[1] -> -53 = 53, LOW
+    // Vector[3] -> 189 = 189, HIGH
+    String msg = "Vector[";
+    msg.concat(wheel_number);
+    msg.concat("] -> ");
+    msg.concat(vect_value);
+    msg.concat(" = ");
+    msg.concat(this->PWM_values[wheel_number]);
+    msg.concat(", ");
+    msg.concat((this->DIR_values[wheel_number] == HIGH) ? "HIGH" : "LOW");
+}
+void BotBase::VectorTo_PWM_DIR_SingleWheel(float vect_value, int wheel_number) {
+    int vect = floor(vect_value);               // We can write only integers
+    this->VectorTo_PWM_DIR_SingleWheel(vect, wheel_number);   // Call the integer ones
+}
+void BotBase::VectorTo_PWM_DIR(float *vect) {
+    // Call the SingleWheel function repeatedly
+    for (int i = 0; i < this->NUMBER_OF_WHEELS; i ++) {
+        this->VectorTo_PWM_DIR_SingleWheel(vect[i], i);
+    }
+}
+void BotBase::VectorTo_PWM_DIR(int *vect) {
+    // Convert a vector having signed magnitudes to PWM and DIR values
+    for (int i = 0; i < this->NUMBER_OF_WHEELS; i++) {
+        // this->PWM_values[i] = abs(vect[i]);                  // Magnitude
+        // this->DIR_values[i] = (vect[i] > 0) ? HIGH : LOW;    // Direction
+        this->VectorTo_PWM_DIR_SingleWheel(vect[i], i);
+    }
 }
 // Move the bot with speed PWM at angle 'angle_degrees'
 void BotBase::Move(int PWM, int angle_degrees, float w) {

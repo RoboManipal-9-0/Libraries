@@ -13,7 +13,6 @@ BotBase	KEYWORD1
 ################# Functions ########################
 ####################################################
 # Parent class functions (for all classes)
-Initialize	KEYWORD2
-AddMotorDriverPins	KEYWORD2
+AttachPins	KEYWORD2
+ConfigureMaxModeTo	KEYWORD2
 Move	KEYWORD2
-MoveMotor	KEYWORD2

@@ -28,9 +28,14 @@ protected:
     // ##################### Private funcions ####################
     // Set number of wheels
     void setNumberOfWheelsTo(int number);
-public:
+    // Functions to convert Vector to PWM and DIR values
+    void VectorTo_PWM_DIR(float *vector);
+    void VectorTo_PWM_DIR(int *vector);
+    void VectorTo_PWM_DIR_SingleWheel(float vect_value, int wheel_number);
+    void VectorTo_PWM_DIR_SingleWheel(int vect_value, int wheel_number);
     // ################## Debugger Section ########################
     DebuggerSerial debugger;
+public:
     // ##################### Initializer functions ####################
     // Constructors
     BotBase();
@@ -39,7 +44,7 @@ public:
     void AttachPins(int *PWM_pins, int *DIR_PINs);         // PWM and DIR
     void AttachPins(int *PWM_pins, int *DIR_PINs, bool *reverseDIRs);   // PWM, DIR and reverse DIR array
     // Configure maxMode
-    void configureMaxModeTo(bool value, int DIR_mag_value = 255);
+    void ConfigureMaxModeTo(bool value, int DIR_mag_value = 255);
     // ######################### Motion funcions #########################
     // Motion of the bot : Every bot has a Move function (angle in radians)
     virtual void Move_PWM_Angle(int PWM, float angle, float w = 0) = 0;

@@ -1,10 +1,10 @@
 # Introduction
-This library is for defining any kind of base for a ground terrain robot.
+This library is for defining any kind of wheeled base for a ground terrain robot.
 
 ~~**Note**: This library is still in developer beta, ask the developer before using.~~ <br>
 Beta testing done :tada:
 
-Select guide : [Users Guide](users-guide) or [Developers Guide](developers-guide)
+Select guide: [Users Guide](users-guide) or [Developers Guide](developers-guide)
 
 # Users Guide
 
@@ -20,9 +20,36 @@ _You might want to omit the `-b <branch>` tag if you're downloading from the mas
 ## Using the library with Arduino
 Move this folder into the arduino libraries folder on your PC. If you don't know where the libraries folder of your arduino is, you can check out the README file of this entire repository for this, click [here](../README.md).<br>
 
+## Using the library
+You simply have to do the following to use this library
+1. Create an object using one of the derived classes (you've already done this if you've been redirected here from a documentation page).
+2. Call the function `AttachPins`. This function is used to initialize the connection terminals (pins) to the motor driver taking commands. You must pass it the following arguments
+> **\*PWM_pins**: The array pointer (name of the array) consisting the PWM pin numbers of the motor drivers.<br>
+> **\*DIR_PINs**: The array pointer (name of the array) consisting the DIR pin numbers of the motor drivers.<br>
+> (OPTIONAL) **\*reverseDIRs**: This is a boolean array of the same length as the number of wheels your bot has. Each element is defaulted to false. If you manually create this array and feed a true at some _index_ (numbering starts from 0 here), then it implies that the motors at those indices are connected in the reverse fashion (forward will actually mean that the particular motor moves in the -ve sense).<br>
+3. To move the base, call the `Move` function. This function handles the movement of the bot. You must pass it the following arguments
+> **PWM**: Velocity vector length.<br>
+> **angle_degrees**: Angle the velocity vector makes with the reference (in degrees).<br>
+> (OPTIONAL) **w** _value_: angular velocity with respect to the center.<br>
+
+You can imagine the velocity vector as a point in the [polar coordinate system](https://en.wikipedia.org/wiki/Polar_coordinate_system).
+
+## MaxMode
+The MaxMode is basically when we give the _PWM output to the DIR pin of the motor driver_ and the _PWM input of the motor driver gets a constant voltage_. Here's how it works:
+- Say that we give 50% (duty cycle) as the PWM output into the DIR terminal of the motor driver. This means that 50 percent of the time the motor gets current in the forward direction and 50 percent of the time it gets current in the reverse direction, this gives the motor extraordinary braking capabilities.
+- If we give more than 50% duty cycle, say 65%: Then the motor gets current in the forward direction 65 percent of the time and gets current in the reverse direction 35 percent of the time (100 - 65 = 35). This means that the forward current lasts longer and will dominate in the final effect. So we add something to the duty cycle if we want the motor to move forward (rotate in positive sense).
+- If we give less than 50% duty cycle, say 25%: Then the motor gets current in the forward direction 25 percent of the time and gets current in the reverse direction 75 percent of the time. This means that the reverse direction gets the priority. So we subtract something from the duty cycle if we want the motor to move backward (rotate in negative sense).
+
+Therefore if we already have a PWM value (say _P_) and a DIR (_HIGH_ or _LOW_), we simply get the new MaxMode PWM (say _P<sub>n</sub>_) by simply doing the following
+- If DIR is _HIGH_ (forward or positive sense): **P<sub>n</sub>** = 127 + **P** / 2.
+- If DIR is _LOW_ (backward or negative sense): **P<sub>n</sub>** = 127 - **P** / 2.
+
+### Configuring the MaxMode
+You can directly do it through a constructor of the `BotBase` class or call the `ConfigureMaxModeTo` function.
+
 # Developers Guide
 Here is the developers guide to the library. <br>
-This markdown is best viewed in [_Atom_](https://atom.io/) editor.
+This markdown is best viewed in [Atom](https://atom.io/) or [VSCode](https://code.visualstudio.com/) editor.
 
 ## Library Details
 
@@ -62,17 +89,26 @@ Let's inspect in detail what all the members of the class do
 
 - **<font color="#CD00FF">int</font> \*DIR_values** : These are either HIGH or LOW. These are the directions of rotation for the motor. It's your wish to choose the directions (as per convenience).
 
+- **<font color="#CD00FF">bool</font> \*reverseDIRs** : If the particular motor is connected in a reversed fashion, then pass it _true_, else it's defaulted to _false_. The directions are simply reversed while writing to the motor driver if they're true (only for the particular motor for which it is true).
+
 - **<font color="#CD00FF">bool</font> maxMode**: If `True`, then maxMode is enabled.
 
 - **<font color="#CD00FF">int</font> maxModeValue**: The value to be given to the PWM pin of the motor driver.
 
+- **<font color="#CD00FF">DebuggerSerial</font> debugger**: The debugger object for the class. In case you want to use it, you'll have to initialize it. Read the documentation about **DebuggerSerial** class [here](./../DebuggerSerial/).
+
 ##### Member functions
 - **<font color="#CD00FF">void</font> <font color="#5052FF">setNumberOfWheelsTo</font>(<font color="#FF00FF">int</font> number)** : Sets the *NUMBER_OF_WHEELS* value to the passed *number*. It's a good idea to make a call to this in the constructor of the derived classes.
 
-#### Public Members
-##### Variables
-- **<font color="#CD00FF">DebuggerSerial</font> debugger**: The debugger object for the class. In case you want to use it, you'll have to initialize it. Read the documentation about **DebuggerSerial** class [here](./../DebuggerSerial/).
+- **<font color="#CD00FF">void</font> <font color="#5052FF">VectorTo_PWM_DIR</font>(<font color="#FF00FF">float</font> \*vector)** : To convert an array of vector wheel rotations to PWMs to be given to the motors and their respective DIR values. Make note that the array must have the same length as the number of wheels.
 
+- **<font color="#CD00FF">void</font> <font color="#5052FF">VectorTo_PWM_DIR</font>(<font color="#FF00FF">int</font> \*vector)** : To convert an array of vector wheel rotations to PWMs to be given to the motors and their respective DIR values. Make note that the array must have the same length as the number of wheels.
+
+- **<font color="#CD00FF">void</font> <font color="#5052FF">VectorTo_PWM_DIR_SingleWheel</font>(<font color="#FF00FF">float</font> vect_value, <font color="#FF00FF">int</font> wheel_number)** : Do the above for a single wheel at index *wheel_number* (counting starts from 0).
+
+- **<font color="#CD00FF">void</font> <font color="#5052FF">VectorTo_PWM_DIR_SingleWheel</font>(<font color="#FF00FF">int</font> vect_value, <font color="#FF00FF">int</font> wheel_number)** : Same as above.
+
+#### Public Members
 ##### Constructors
 Though you'll never create any memory for objects of this class, it's advised to have a constructor anyways.
 
@@ -81,13 +117,15 @@ Though you'll never create any memory for objects of this class, it's advised to
 - **<font color="#5052FF">BotBase</font>(<font color="#CD00FF">bool</font> maxMode, <font color="#CD00FF">int</font> maxModeValue = 255)** : Initialization constructor for the _MaxMode_. It calls the *configureMaxMode* function.
 
 ##### Functions
-- **<font color="#CD00FF">void</font> <font color="#5052FF">AddMotorDriverPins</font>(<font color="#CD00FF">int</font> \*PWM_pins, <font color="#CD00FF">int</font> \*DIR_pins)** : To attach the pins of the motors connected to the motor drivers. Pass it the list of *PWM_pins* and *DIR_pins*.
+- **<font color="#CD00FF">void</font> <font color="#5052FF">AttachPins</font>(<font color="#CD00FF">int</font> \*PWM_pins, <font color="#CD00FF">int</font> \*DIR_pins)** : To attach the pins of the motors connected to the motor drivers. Pass it the list of *PWM_pins* and *DIR_pins*.
 
-- **<font color="#CD00FF">void</font> <font color="#5052FF">configureMaxModeTo</font>(<font color="#CD00FF">bool</font> value, <font color="#CD00FF">int</font> DIR_mag_value = 255)**: Configuring the _MaxMode_. If made true, it's assumed by the library that you're giving the PWM values to the DIR pin of the motor driver and the PWM pin of the motor driver gets *DIR_mag_value*.
+- **<font color="#CD00FF">void</font> <font color="#5052FF">AttachPins</font>(<font color="#CD00FF">int</font> \*PWM_pins, <font color="#CD00FF">int</font> \*DIR_pins, <font color="#CD00FF">bool</font> \*reverseDIRs)** : To attach the pins of the motors connected to the motor drivers. Pass it the list of *PWM_pins* and *DIR_pins*. You can also initialize the array for _reverseDIRs_ through this.
+<!-- TODO: Add links here -->
+- **<font color="#CD00FF">void</font> <font color="#5052FF">ConfigureMaxModeTo</font>(<font color="#CD00FF">bool</font> value, <font color="#CD00FF">int</font> DIR_mag_value = 255)**: Configuring the _MaxMode_. If made true, it's assumed by the library that you're giving the PWM values to the DIR pin of the motor driver and the PWM pin of the motor driver gets *DIR_mag_value*. (check the [MaxMode part of this documentation]() for more on this).
 
-- **<font color="#CD00FF">void</font> <font color="#5052FF">Move_PWM_Angle</font>(<font color="#CD00FF">int</font> PWM, <font color="#CD00FF">float</font> angle)** : An abstract function which you must implement in the derived classes. This function has the code to move your bot at a particular speed (*PWM*) and in a particular direction (*angle* in radians). You needn't implement the actuation code (it's actuated in the _Move_ function).
+- **<font color="#CD00FF">void</font> <font color="#5052FF">Move_PWM_Angle</font>(<font color="#CD00FF">int</font> PWM, <font color="#CD00FF">float</font> angle, <font color="#CD00FF">float</font> w = 0)** : An abstract function which you must implement in the derived classes. This function has the code to move your bot at a particular speed (*PWM*) and in a particular direction (*angle* in radians) with a particular angular velocity about the center (*w*, which is defaulted to 0). You needn't implement the actuation code (it's written in the _Move_ function for you).
 
-- **<font color="#CD00FF">void</font> <font color="#5052FF">Move</font>(<font color="#CD00FF">int</font> PWM, <font color="#CD00FF">int</font> angle_degrees)** : This is function that the user will call. It simply calls the *Move_PWM_Angle* function with the angle converted from degrees to radians, then it actuates the motors.
+- **<font color="#CD00FF">void</font> <font color="#5052FF">Move</font>(<font color="#CD00FF">int</font> PWM, <font color="#CD00FF">int</font> angle_degrees, <font color="#CD00FF">float</font> w = 0)** : This is function that the user will call. It simply calls the *Move_PWM_Angle* function with the angle converted from degrees to radians, then it actuates the motors.
 
 - **<font color="#CD00FF">void</font> <font color="#5052FF">MoveMotor</font>(<font color="#CD00FF">int</font> motor_number)** : Moves the motor indexed at *motor_number* giving values considering the mode of the motor driver.
 
@@ -98,16 +136,16 @@ You must extend the properties of the class *BotBase* through inheritance into y
 After you place this library folder in the libraries folder of the Arduino environment, you can include it in your codes. To know more about making your own library, you can read [this](../README.md) file.<br>
 Perform the following to make use of this library in your BotBase :
 - Include the library in your header file (\*.h file). You can check a sample header file [here](../FourSBase/FourSBase.h).
-- Inherit the class *BotBase* publicly.
-- You can define properties just for your bot. For example, the reverseDIRs array in that file.
-- You must implement the following functions :
-    - **void Move_PWM_Angle(int PWM, float angle_radians)** : Contains code to move your bot at a particular PWM and at a particular angle (in radians). 
-    - It is suggested that you have a function to attach pins, in case you have more properties that require Initialization. You may call the function **AddMotorDriverPins** in the BotBase class from it.
-        - (Both the above methods have been implemented in the [FourSBase](../FourSBase/) library).
-- After that, include the library you're working on into the code and create an object for the class. Additionally, make sure that you've called the **setNumberOfWheelsTo** function to set the number of wheels (motors), it's suggested that you implement this in the constructors of the class.
+- Inherit the class *BotBase* publicly, so that the `Move` function does not fall under the _private_ or _protected_ scope.
+- You can define properties just for your bot as well, in case you want some.
+- You must implement the following function definitions:
+    - **void Move_PWM_Angle(int PWM, float angle_radians, float w = 0)** : Contains code to move your bot at a particular PWM and at a particular angle (in radians). 
+    - It is suggested that you have a function to attach pins only in case you have more properties that require Initialization. You may call the function **AttachPins** in the BotBase class from it.
+    - Additionally, make sure that you've called the **setNumberOfWheelsTo** function to set the number of wheels (motors that you're actuating), it's suggested that you implement this in the constructors of the class. For example, if you're dealing with a four wheel bot, then it is 4.
+- After that, include the library you're working on into the code and create an object for the class. 
 
 #### Examples
-We have already made some example libraries, just to show how to make your own libraries using the BotBase class.
-- **FourSBase** library: This library is for a four wheel base omni, you can click [here](../FourSBase) to check it out.
+We have already made some example libraries, just to show you how to make your own libraries using the BotBase class.
+- **FourSBase** library: This library is for a four wheel omni base, you can click [here](../FourSBase) to check it out.
 
 [![Image](https://img.shields.io/badge/Developer-TheProjectsGuy-blue.svg)](https://github.com/TheProjectsGuy)
