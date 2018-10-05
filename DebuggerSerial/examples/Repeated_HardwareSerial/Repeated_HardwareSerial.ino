@@ -14,6 +14,7 @@
  * Maintained by : RoboManipal-9-0 organization
  */
 // Include the header file 
+
 #include <DebuggerSerial.h>
 // Declare the object and pass it a name
 DebuggerSerial debuggerObj("SampleDebugger");

@@ -163,7 +163,7 @@ void S4Base::DebuggerOutput(int Level, String output) {
 }
 // Print something to serial
 void S4Base::DebuggerOutput(String output) {
-  // Defaul level for debugger
+  // Default level for debugger
   int DEFAULT_LEVEL = 3;
   this->DebuggerOutput(DEFAULT_LEVEL, output);
 }
