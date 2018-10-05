@@ -1,16 +1,30 @@
 # Introduction
 This library defines a PID controller (more info [here](https://en.wikipedia.org/wiki/PID_controller)).<br>
-Please refer to the following image for additional information
-![Controller characteristics](../.DATA/Images/PIDController_Info.png)
-Here are a few descriptions and their relations with the variables, so that you know what the library is doing:
-- Value **S<sub>n</sub>** is to indicate the set point (target) of the controller (variable _setPoint_). Value **V<sub>n</sub>** is to indicate the current value of the controlled signal (variable _currentValue_), **V<sub>n-1</sub>** stands for the previous value (variable _previousValue_). These values are recorded against timestamps denoted by **T<sub>n</sub>**.
-- Value **e<sub>n</sub>** is the current error value (variable _currentErrorValue_). This makes **e<sub>n-1</sub>** the previous error value (variable _previousErrorValue_). The current error is for proportionality part of the controller.
-- Value **de<sub>n</sub>** stands for difference error (or differential error). The code to calculate this is in *calculate\_Kd\_error* function.
-- Value **ae<sub>n</sub>** stands for accumulated error (weighed sum of errors over time) (variable _accumulatedError_). The weights of the past accumulated error and current error to be added are **a<sub>past</sub>** and **a<sub>present</sub>** respectively. They're stored in variables _accFactorPast_ and _accFactorPresent_ respectively.
-- Value **E<sub>n</sub>** is known as the total net error (calculated and returned using the _retError_ function). It's comprised of three sums which are proportionality part (variable *part_Kp*), differential part (variable *part_Kd*) and integral part (variable *part_Ki*). The function _getCorrectedValue_ returns the **Corrected Value<sub>n</sub>** for the controller.
 
 ~~**WARNING**: This library is still in development. Please ask the developers before using it.~~ <br>
 Beta testing done :tada:
+
+# Index
+- [Introduction](#introduction)
+- [Index](#index)
+- [User Guide](#user-guide)
+    - [Downloading the library](#downloading-the-library)
+    - [Using the library with Arduino](#using-the-library-with-arduino)
+- [Library Explanation](#library-explanation)
+- [Developers Guide](#developers-guide)
+    - [Library Details](#library-details)
+        - [Class implementation](#class-implementation)
+            - [PIDController.h](#pidcontrollerh)
+            - [PIDController.cpp](#pidcontrollercpp)
+            - [keywords.txt](#keywordstxt)
+            - [README.md](#readmemd)
+        - [Class description](#class-description)
+            - [Private members](#private-members)
+                - [Variables](#variables)
+                - [Member functions](#member-functions)
+            - [Public Members](#public-members)
+                - [Constructors](#constructors)
+                - [Functions](#functions)
 
 # User Guide
 ## Downloading the library
@@ -25,12 +39,25 @@ _You might want to omit the `-b <branch>` tag if you're downloading from the mas
 ## Using the library with Arduino
 Move this folder into the arduino libraries folder on your PC. If you don't know where the libraries folder of your arduino is, you can check out the README file of this entire repository for this, click [here](../README.md).<br>
 
+# Library Explanation
+Please refer to the following image for additional information
+![Controller characteristics](../.DATA/Images/PIDController_Info.png)
+Here are a few descriptions and their relations with the variables, so that you know what the library is doing:
+- Value **S<sub>n</sub>** is to indicate the set point (target) of the controller (variable _setPoint_). Value **V<sub>n</sub>** is to indicate the current value of the controlled signal (variable _currentValue_), **V<sub>n-1</sub>** stands for the previous value (variable _previousValue_). These values are recorded against timestamps denoted by **T<sub>n</sub>**.
+- Value **e<sub>n</sub>** is the current error value (variable _currentErrorValue_). This makes **e<sub>n-1</sub>** the previous error value (variable _previousErrorValue_). The current error is for proportionality part of the controller.
+- Value **de<sub>n</sub>** stands for difference error (or differential error). The code to calculate this is in *calculate\_Kd\_error* function.
+- Value **ae<sub>n</sub>** stands for accumulated error (weighed sum of errors over time) (variable _accumulatedError_). The weights of the past accumulated error and current error to be added are **a<sub>past</sub>** and **a<sub>present</sub>** respectively. They're stored in variables _accFactorPast_ and _accFactorPresent_ respectively.
+- Value **E<sub>n</sub>** is known as the total net error (calculated and returned using the _retError_ function). It's comprised of three sums which are proportionality part (variable *part_Kp*), differential part (variable *part_Kd*) and integral part (variable *part_Ki*). The function _getCorrectedValue_ returns the **Corrected Value<sub>n</sub>** for the controller.
+
 # Developers Guide
 Here is the developers guide to the library. <br>
 This file is best viewed in the [_Atom_](https://atom.io/) text editor.
 
 ## Library Details
 Here's a brief description of all the files in this library.
+
+### Class implementation
+Implementation of class is as shown below.
 
 #### PIDController.h
 This is the header file and contains the class blueprint (prototype). It contains the *PIDController* class. Details about the class is later in this documentation.
