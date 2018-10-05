@@ -1,3 +1,4 @@
+![Version tag](https://img.shields.io/badge/version-1.0.1-orange.svg)
 # Introduction
 This library is for defining and controlling an **N** omni wheel base where all the axis of the wheels pass through a central point. It's like following the euler coordinate system.
 
@@ -49,9 +50,9 @@ Move this folder into the arduino libraries folder on your PC. If you don't know
 You can check out the [examples]() for more.
 
 # Library Explanation
-Here's the **mathematical derivation**.
-![Mathematical Derivation](./../.DATA/Images/NWCHBase_derivation.jpg)
-The explanation of every term is as follows:
+Here's the **mathematical derivation**.<br>
+![Mathematical Derivation](./../.DATA/Images/NWCHBase_derivation.jpg)<br>
+The explanation of every term is as follows:<br>
 > **θ<sub>i</sub>** is the angle the i<sup>th</sup> wheel makes with the horizontal axis.<br>
 > **V<sub>i</sub>** is the velocity vector of the i<sup>th</sup> wheel.<br>
 > **V** is the command velocity. This is given with respect to the vertical (as shown by the triangle with acute angle θ). This is resolved into two components (**V<sub>x</sub>** and **V<sub>y</sub>**).<br>
@@ -62,7 +63,7 @@ Add this with ω x 1 (velocity superimposed to get the angular velocity).
 
 # Developers Guide
 <!-- TODO: Add links -->
-This library class inherits the **BotBase** class (documentation [here]()). Let's have a detailed look at the contents of the class **NWCHBase**
+This library class inherits the **BotBase** class (documentation [here]()). Let's have a detailed look at the contents of the class `NWCHBase`
 
 ## Class contents
 This library consists of only one class, the `NWCHBase` class. Let's explore it's contents.
@@ -120,3 +121,7 @@ Sends out the PWM vector
         ```bash
         Initializing angle configuration: 90(1.570796) 210(3.665191) 330(5.759586)
         ```
+
+[![Image](https://img.shields.io/badge/developed%20using-VSCode-lightgrey.svg)](https://code.visualstudio.com/)
+[![Image](https://img.shields.io/badge/Developer-TheProjectsGuy-blue.svg)](https://github.com/TheProjectsGuy)
+[![Spawning issue](https://img.shields.io/badge/issue-%236-green.svg)](https://github.com/RoboManipal-9-0/Libraries/issues/6)
