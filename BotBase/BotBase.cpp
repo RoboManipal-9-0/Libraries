@@ -41,7 +41,7 @@ void BotBase::AttachPins(int *PWM_PINs, int *DIR_PINs) {
         message.concat(", ");
         message.concat(DIR_PINs[i]);
         message.concat(" Reverse DIR: ");
-        message.concat(this->reverseDIRs?"TRUE":"FALSE");
+        message.concat(this->reverseDIRs[i] ? "TRUE" : "FALSE");
         // Ex = Motor 1 attached to (PWM, DIR): 45, 5
         this->debugger.print(INFO, message);
     }
@@ -53,8 +53,9 @@ void BotBase::AttachPins(int *PWM_PINs, int *DIR_PINs, bool *reverseDIRs) {
     this->AttachPins(PWM_PINs, DIR_PINs);
 }
 void BotBase::configureMaxModeTo(bool value, int DIR_mag_value) {
-    this->maxMode = value;
-    this->maxModeValue = DIR_mag_value;
+    // Configuration of MaxMode
+    this->maxMode = value;               // Enable or disable it
+    this->maxModeValue = DIR_mag_value;  // Value to give to the PWM pin if maxMode is ON
     String msg = "Max mode set to ";
     msg.concat(value?"TRUE":"FALSE");
     msg.concat(" Magnitude : ");
@@ -63,8 +64,8 @@ void BotBase::configureMaxModeTo(bool value, int DIR_mag_value) {
 }
 // Move the bot with speed PWM at angle 'angle_degrees'
 void BotBase::Move(int PWM, int angle_degrees, float w) {
-    // Convert angle to radians
-    float angle_radians = angle_degrees * PI/180.0;
+    // Convert angle from degrees to radians
+    float angle_radians = angle_degrees * DEG_TO_RAD;
     // Use the default move function
     this->Move_PWM_Angle(PWM, angle_radians, w);
     // Call the MoveMotor on every motor (actual actuation of motors)

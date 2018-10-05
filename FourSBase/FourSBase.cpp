@@ -5,20 +5,6 @@ FourSBase::FourSBase() {
     // 4 wheel bot
     this->setNumberOfWheelsTo(4);
 }
-// Add motor driver pins
-void FourSBase::AddPins(int *PWM_PINs, int *DIR_PINs, bool *reverseDIRs) {
-    // Call the function of super class and assign PWM, DIR pins
-    this->AddMotorDriverPins(PWM_PINs, DIR_PINs);
-    // Assign reverse directions
-    this->reverseDIRs = reverseDIRs;
-    // Debugger output
-    String message = "Wheel Reverse DIRs : ";
-    for (int i = 0; i < this->NUMBER_OF_WHEELS; i++) {
-        message.concat(reverseDIRs[i]);
-        message.concat(" ");
-    }
-    this->debugger.print(INFO, message);
-}
 // Motion code (angle in radians)
 void FourSBase::Move_PWM_Angle(int PWM, float angle) {
     // PWM vector created from directions
