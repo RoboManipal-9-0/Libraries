@@ -4,7 +4,37 @@ This library is for defining and using a serial as a debugger.
 
 ~~**Node**: This library is still in developer beta, ask the developer before using.~~ This library has finished testing :tada:. Check [examples](#examples).
 
-Select guide : [Users Guide](#users-guide) or [Developers Guide](#developers-guide)
+# Index
+- [Introduction](#introduction)
+- [Index](#index)
+- [Users Guide](#users-guide)
+    - [Downloading the library](#downloading-the-library)
+    - [Using the library with Arduino](#using-the-library-with-arduino)
+    - [Protocol implementation](#protocol-implementation)
+        - [About the priority levels](#about-the-priority-levels)
+    - [Examples](#examples)
+            - [Repeated_HardwareSerial](#repeatedhardwareserial)
+            - [Repeated_SoftwareSerial_TX](#repeatedsoftwareserialtx)
+- [Developers Guide](#developers-guide)
+    - [Library Details](#library-details)
+        - [Files in the library](#files-in-the-library)
+            - [DebuggerSerial.h](#debuggerserialh)
+            - [DebuggerSerial.cpp](#debuggerserialcpp)
+            - [keywords.txt](#keywordstxt)
+            - [README.md](#readmemd)
+        - [Code description](#code-description)
+        - [Debugger](#debugger)
+        - [DebuggerSerial class](#debuggerserial-class)
+            - [Protected members](#protected-members)
+                - [Variables](#variables)
+                - [Functions](#functions)
+            - [Public](#public)
+                - [Constructors](#constructors)
+                - [Functions](#functions)
+- [Debugger Notifications](#debugger-notifications)
+    - [Notification level](#notification-level)
+    - [Sensor feed level](#sensor-feed-level)
+    - [All user levels](#all-user-levels)
 
 # Users Guide
 
@@ -136,6 +166,68 @@ Let's explore the code in detail
 - **<font color="#3d8aff">void</font> <font color="#f9e784">print</font>(<font color="#3d8aff">int</font> level, <font color="#3d8aff">String</font> output)**: Print message to the _debuggerSerial_ (alternate to printMessage)
 - **<font color="#3d8aff">void</font> <font color="#f9e784">print</font>(<font color="#3d8aff">String</font> output, <font color="#3d8aff">int</font> level)**: Print message to the _debuggerSerial_ (alternate to printMessage). Arguments are reversed
 - **<font color="#3d8aff">void</font> <font color="#f9e784">printSensorData</font>(<font color="#3d8aff">double</font> value)**: Print the value of a sensor reading on _debuggerSerial_.
+
+# Debugger Notifications
+## Notification level
+1. **AttachSerial** function<br>
+    Notifies about the debugger link being connected.
+    ```bash
+    [TIMESTAMP] > DebuggerSerial attached
+    ```
+    For example:<br>
+    - Debugger attached 10 milliseconds into the program
+        ```bash
+        [10] > DebuggerSerial attached
+        ```
+2. **InitializeName** function<br>
+   Notifies about the name of the debugger being initialized.
+   ```bash
+   [TIMESTAMP] > Debugger name initialized to %name%
+   ```
+   For example:<br>
+    - Debugger name set to _TWBase_ 11524 milliseconds into the start of the execution.
+        ```bash
+        [11524] > Debugger name initialized to TWBase
+        ```
+3. **SetDebuggerPriorityToLevel** function<br>
+    Notifies about the current priority level of the debugger.
+    ```
+    [TIMESTAMP] > Debugger set to %LEVEL_STRING%
+    ```
+    For example:<br>
+    - Debugger set to priority **WARNING** at 11500 milliseconds from start of execution
+        ```
+        [11500] > Debugger set to WARNING
+        ```
+4. **enableDebugger** and **disableDebugger** functions<br>
+    Tell the state of the debugger (if changed). Note that the debugger is activated the moment you initialize it a serial.
+    ```
+    [TIMESTAMP] > Debugger %state%
+    ```
+    For example:
+    - Debugger enabled after 24000 milliseconds from start
+        ```
+        [24000] > Debugger enabled
+        ```
+    - Debugger disabled after 72000 milliseconds from start
+        ```
+        [72000] > Debugger disabled
+        ```
+
+## Sensor feed level
+1. **printSensorData** function<br>
+    It takes in sensor readings (as a floating value) and prints it as a string.
+    ```
+    [TIMESTAMP] $%Name%$ %value%
+    ```
+    For example:
+    - Print the sensor value 25.7 after 76000 milliseconds from start on a serial named _BaseDebugger_
+        ```
+        [76000] $BaseDebugger$ 25.7
+        ```
+
+## All user levels
+All user levels can be accessed using the function **DebuggerOutput**. It's a private function, only **print**, **printMessage** and **printSensorData** can access it.
 
 [![Image](https://img.shields.io/badge/developed%20using-VSCode-lightgrey.svg)](https://code.visualstudio.com/)
 [![Image](https://img.shields.io/badge/Developer-TheProjectsGuy-blue.svg)](https://github.com/TheProjectsGuy)

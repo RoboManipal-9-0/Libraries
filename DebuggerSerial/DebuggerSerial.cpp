@@ -93,13 +93,17 @@ void DebuggerSerial::AttachSerial(Stream *debuggerSerial) {
     this->debuggerSerial = debuggerSerial;
     this->debuggerSerialDefined = true;
     this->enableDebugger();
+    // Debugger message (Level: NOTIFICATION)
     this->RaiseNotification("DebuggerSerial attached");
 }
 // Name initializer
 void DebuggerSerial::InitializeName(String name) {
     // Initialize the name of debugger
     this->name=name;
-    // Debugger
+    // Debugger message (Level: NOTIFICATION)
+    // Debugger name initialized to %name%
+    // For example:
+    // Debugger name initialized to FourWheelBase
     String msg = "Debugger name initialized to ";
     msg.concat(this->name);
     this->RaiseNotification(msg);
