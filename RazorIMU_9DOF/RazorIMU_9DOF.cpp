@@ -27,10 +27,17 @@ void RazorIMU_9DOF::AttachIMUSerial(Stream *AttachedSerial) {
 void RazorIMU_9DOF::GrabData() {
     // Send out a '#f' on the serial
     this->IMU_Serial->println("#f");
+    // Debugger message about the inquiry
+    this->debugger.print("Sending a '#f' to IMU serial", DEBUG); 
     // Wait until response
     while(!this->IMU_Serial->available()) {
         // Do nothing
     }
+    // Debugger message (Level: DEBUG)
+    // Values Y: %YAW% P: %PITCH% R: %ROLL%
+    // For example:
+    // Values Y: -172 P: 96 R: 100
+    String msg = "Values";
     // Output is like : #YPR=<YAW>,<PITCH>,<ROLL>
     // In case the IMU side has been modified to send in another order
     if (this->IMU_Serial->available()) {
@@ -41,21 +48,29 @@ void RazorIMU_9DOF::GrabData() {
             String s_buffer = this->IMU_Serial->readStringUntil(',');
             int c;   // Command sent
             if (s1[i] == 'Y') {
+                msg.concat(" Y: ");
                 c = YAW;
             } else if (s1[i] == 'P') {
+                msg.concat(" P: ");
                 c = PITCH;
             } else if (s1[i] == 'R') {
+                msg.concat(" R: ");
                 c = ROLL;
             }
             // Assign the PITCH, ROLL and YAW values
             this->PRY_raw_values[c] = s_buffer.toFloat();
+            msg.concat(this->PRY_raw_values[c]);
         }
     }
     // Reading done
+    this->debugger.print(msg, DEBUG);
 }
 
 // Convert raw data to full scale: 0 to 360 degree data
 void RazorIMU_9DOF::Calculate_fullScales() {
+    // Debugger message (Level: DEBUG)
+    // Full scale PRY values: %FS_PITCH% %FS_ROLL% %FS_YAW%
+    String msg = "Full scale PRY values: ";
     for (int i = 0; i < 3; i++) {
         /*
         *    If raw > 0 => 0 to 180, then let it be as it is
@@ -69,7 +84,10 @@ void RazorIMU_9DOF::Calculate_fullScales() {
         } else {
             this->PRY_full_scale[i] = 360 + this->PRY_raw_values[i];
         }
+        msg.concat(this->PRY_full_scale[i]);
+        msg.concat(" ");
     }
+    this->debugger.print(DEBUG, msg);
 }
 
 // Update all the PRY parameters
@@ -84,9 +102,17 @@ void RazorIMU_9DOF::UpdateData() {
 void RazorIMU_9DOF::GrabReference() {
     // Reset the reference values
     this->UpdateData();
+    // Debugger message (Level: INFO)
+    // PRY reference set to: %PITCH_REF% %ROLL_REF% %YAW_REF%
+    // For example:
+    // PRY reference set to: 187 90 86
+    String msg = "PRY reference set to: ";
     for (int i = 0; i < 3; i++) {
         this->PRY_full_scale_ref[i] = PRY_full_scale[i];
+        msg.concat(this->PRY_full_scale_ref[i]);
+        msg.concat(" ");
     }
+    this->debugger.print(msg, INFO);
 }
 // Get new reference
 void RazorIMU_9DOF::ResetReference() {

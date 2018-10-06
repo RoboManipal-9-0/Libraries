@@ -13,6 +13,8 @@
 #include "Arduino.h"
 // Versatile for serial
 #include "Stream.h"
+// Debugger
+#include "DebuggerSerial.h"
 
 // Axis values
 #define PITCH 0
@@ -33,6 +35,8 @@ class RazorIMU_9DOF {
     // Serial line to which the IMU is attached
     Stream *IMU_Serial;
 public:
+    // ----------------- Debugger -------------------------
+    DebuggerSerial debugger;
     // ##################   Constructors   ######################
     RazorIMU_9DOF();
     RazorIMU_9DOF(Stream *AttachedSerial);
