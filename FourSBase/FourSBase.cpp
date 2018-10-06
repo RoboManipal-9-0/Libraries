@@ -16,6 +16,10 @@ void FourSBase::Move_PWM_Angle(int PWM, float angle) {
     };
     int PWM_abs_vector[4];
     int DIR_vector[4] = {false, false, false, false};
+    // Debugger message (Level: DEBUG)
+    // Calculated wheel vectors : [ %val1% %val2% %val3% %val4% ]
+    // For example
+    // Calculated wheel vectors : [ 100 0 -100 0 ]
     String debuggerMessage = "Calculated wheel vectors : [ ";
     // Get the DIR_values vector from PWM_vector and get PWM_values
     for (int i = 0; i < this->NUMBER_OF_WHEELS; i++) {

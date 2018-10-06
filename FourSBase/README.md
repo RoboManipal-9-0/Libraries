@@ -1,5 +1,34 @@
 # Introduction
-This library is to control a four wheel holonomic drive for omni wheels. This class is derived from [BotBase](../BotBase/) class, so it's suggested that you go through it's documentation first.<br>
+The **FourSBase** library is to control a four wheel holonomic drive for omni wheels. This class is derived from [BotBase](../BotBase/) class, so it's suggested that you go through it's documentation first.<br>
+
+# Index
+- [Introduction](#introduction)
+- [Index](#index)
+    - [Information](#information)
+        - [Testing](#testing)
+    - [Conventions](#conventions)
+- [Users Guide](#users-guide)
+    - [Downloading the Library](#downloading-the-library)
+    - [Using the library with Arduino](#using-the-library-with-arduino)
+    - [Using the library](#using-the-library)
+    - [Examples](#examples)
+        - [~~Example 1~~ (Example outdated)](#example-1-example-outdated)
+- [Developers Guide](#developers-guide)
+    - [Library Details](#library-details)
+        - [Files in the library](#files-in-the-library)
+            - [FourSBase.h](#foursbaseh)
+            - [FourSBase.cpp](#foursbasecpp)
+            - [keywords.txt](#keywordstxt)
+            - [README.md](#readmemd)
+        - [Class description](#class-description)
+            - [Protected members](#protected-members)
+                - [Variables](#variables)
+                - [Mamber functions](#mamber-functions)
+            - [Public members](#public-members)
+                - [Constructors](#constructors)
+                - [Member Functions](#member-functions)
+- [Debugger notifications](#debugger-notifications)
+    - [Debug level](#debug-level)
 
 ## Information
 ### Testing
@@ -24,9 +53,16 @@ It's suggested that you download the entire repository and then select the folde
 ## Using the library with Arduino
 Move the folders into the *arduino libraries* folder on your PC. If you don't know where the libraries folder of your arduino installation is, you can check out the README file of this entire repository (click [here](../README.md)).
 
+## Using the library
+- Include the header file in the program.
+- Create arrays for the PWM pins, DIR pins and reverse directions (if needed). Check the [BotBase documentation](./../BotBase/) for more.
+- Create an object of the **FourSBase** class.
+- Call the _AttachPins_ function (it's there in [BotBase documentation](./../BotBase/)). Pass it the PWM pins, DIR pins and reverseDIR values.
+- Call the **Move** function to apply motion to the bot. (The description about this is in the [BotBase documentation](./../BotBase/))
+
 ## Examples
 After moving the library to the correct location, you can check the following examples.
-### Example 1
+### ~~Example 1~~ (Example outdated)
 You can check the **Competitions** repository (link [here](https://github.com/RoboManipal-9-0/Competitions)) for this example. The example we're looking for is [here](https://github.com/RoboManipal-9-0/Competitions/tree/master/WRO2018/Senior_Team/Testing_Codes/FourSBase_Test1) (WRO2018/Senior_Team/Testing_Codes/FourSBase_Test1). You can download it by clicking [here](https://minhaskamal.github.io/DownGit/#/home?url=https://github.com/RoboManipal-9-0/Competitions/tree/master/WRO2018/Senior_Team/Testing_Codes/FourSBase_Test1) and extracting the folder. The code inside the *.ino* file must look something like what's shown below
 ![FourSBase example code](../.DATA/Images/FourSBase_Code.png)<br>
 Before we get started with the example walkthrough, let's start with assumptions
@@ -92,5 +128,19 @@ This class is derived directly from the BotBase class (public inheritance).
 
 ##### Member Functions
 - **<font color="#CD00FF">void</font> <font color="#5052FF">AddPins</font>(<font color="#FF00FF">int</font> \*PWM\_pins, <font color="#FF00FF">int</font> \*DIR\_PINs, <font color="#FF00FF">bool</font> \*reverseDIRs)**: Attaches the *PWM\_pins*, *DIR\_PINs* and *reverseDIRs* to the bot base.
+
+# Debugger notifications
+## Debug level
+1. **Move_PWM_Angle** functions<br>
+    Prints the wheel vectors.
+    ```
+    [%TIMESTAMP% DEBUG] $%name%$ Calculated wheel vectors : [ %val1% %val2% %val3% %val4% ]
+    ```
+    For example:
+    - After 18000 milliseconds, `FSB01` (name) develops vectors `[ 100 0 -100 0 ]`.
+        ```
+        [18000 DEBUG] $FSB01$ Calculated wheel vectors : [ 100 0 -100 0 ]
+        ```
+
 
 [![Image](https://img.shields.io/badge/Developer-TheProjectsGuy-blue.svg)](https://github.com/TheProjectsGuy)
