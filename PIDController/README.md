@@ -1,3 +1,4 @@
+![Version tag](https://img.shields.io/badge/version-1.0.1-orange.svg)
 # Introduction
 This library defines a PID controller (more info [here](https://en.wikipedia.org/wiki/PID_controller)).<br>
 
@@ -23,8 +24,12 @@ Beta testing done :tada:
                 - [Variables](#variables)
                 - [Member functions](#member-functions)
             - [Public Members](#public-members)
+                - [Members](#members)
                 - [Constructors](#constructors)
                 - [Functions](#functions)
+- [Debugger notifications](#debugger-notifications)
+    - [Info level](#info-level)
+    - [Debug level](#debug-level)
 
 # User Guide
 ## Downloading the library
@@ -88,17 +93,8 @@ This library has the following classes
 - **<font color="#CD00FF">double</font> accumulatedError**: The weighed sum of the current accumulated error and the current direct difference error. You can control the accumulation factor using the following variables. It's achieved by `accFactorPresent * currentErrorValue + accFactorPast * accumulatedError`. You can set the _accFactor_ values to better match your needs.
 - **<font color="#CD00FF">double</font> accFactorPast, accFactorPresent**: The accumulation factors (as observed in the above equation) of the accumulated error values. These together with _Ki_ determine the steady state performance of the system.
 - **<font color="#CD00FF">double</font> part_Kp, part_Kd, part_Ki**: The part of the error associated to proportionality, derivative and integral respectively. The error is calculated using `part_Kp +part_Kd + part_Ki` and received using the _retError_ function.
-- **<font color="#CD00FF">String</font> name**: Name of the node, using which the debugger will publish messages on a serial (only Hardware Serials are supported for now).
-- **<font color="#CD00FF">HardwareSerial</font> \* debuggerSerial**: Hardware Serial on which the debugger is attached. The messages are put on this serial.
-- **<font color="#CD00FF">bool</font> debuggerAttached**: If false, the debugger doesn't print out messages. It's set to _true_ after debugger is Initialized using _InitializeDebugger_ function.
-- **<font color="#CD00FF">int</font> debuggerPriorityLevel**: The user defined priority level of the debugger. Messages having a level lesser than _debuggerPriorityLevel_ aren't sent to the debugger.
 
 ##### Member functions
-- **<font color="#CD00FF">void</font> <font color="#5052FF">DebuggerOutput</font>(<font color="#FF00FF">int</font> level, <font color="#FF00FF">String</font> message, <font color="#FF00FF">bool</font> printName = <font color="#FFB300">true</font>)**: Print a _message_ on the debugger. The message has a priority _level_ and anonimity can be maintained using the _printName_ flag. The message format is as follows
-```
-$%Name%$:L%level%: %message%
-```
-Where _%Name%_ is the name of the debugger (if printName is false, then it's PID\_CONTROLLER\_\_NAME), _%level%_ is the priority level (note that if this is less than _debuggerPriorityLevel_ then the message will not be displayed) and the _%message%_ is the message to print.
 - **<font color="#CD00FF">void</font> <font color="#5052FF">calculateError</font>()**: Calculates the _previousErrorValue_, _currentErrorValue_ and _accumulatedError_ using the following three formulas.
 ```
 previousErrorValue := currentErrorValue
@@ -111,9 +107,11 @@ accumulatedError := currentErrorValue * accFactorPresent + accumulatedError * ac
 - **<font color="#CD00FF">void</font> <font color="#5052FF">assignParameters</font>(<font color="#FF00FF">double</font> Kp, <font color="#FF00FF">double</font> Ki, <font color="#FF00FF">double</font> Kd)**: Assigns the values of Kp, Ki and Kd to the passed values.
 
 #### Public Members
+##### Members
+- **<font color="#CD00FF">DebuggerSerial</font> debugger**: The debugger for the class. Check the [DebuggerSerial documentation](./../DebuggerSerial/) for more on this.
+  
 ##### Constructors
 - **<font color="#5052FF">PIDController</font>()**: Empty constructor of the class. It sets both the integral accumulation factors to 0.5 (their default value).
-- **<font color="#5052FF">PIDController</font>(<font color="#FF00FF">String</font> name, <font color="#FF00FF">double</font> Kp, <font color="#FF00FF">double</font> Ki, <font color="#FF00FF">double</font> Kd)**: Initializes the name and assigns the control parameters of the controller.
 
 ##### Functions
 - **<font color="#CD00FF">void</font> assignPIDParameters(<font color="#FF00FF">double</font> Kp, <font color="#FF00FF">double</font> Ki, <font color="#FF00FF">double</font> Kd)**: Assigns the PID parameters.
@@ -126,8 +124,111 @@ accumulatedError := currentErrorValue * accFactorPresent + accumulatedError * ac
 - **<font color="#CD00FF">double</font> getCorrectedValue()**: It calculates the error (using the _retError_ function) and returns `error + currentValue`. This is called the _correctedValue_.
 - **<font color="#CD00FF">double</font> getCorrectedValue(<font color="#FF00FF">double</font> currentValue)**: Sets the _currentValue_ and then returns the _correctedValue_.
 - **<font color="#CD00FF">double</font> getCorrectedValue(<font color="#FF00FF">double</font> setPoint, <font color="#FF00FF">double</font> currentValue)**: Sets the _setPoint_ and _currentValue_, then returns the _correctedValue_.
-- **<font color="#CD00FF">void</font> attachName(<font color="#FF00FF">String</font> name)**: Assigns a _name_ to the controller.
-- **<font color="#CD00FF">void</font> InitializeDebugger(<font color="#FF00FF">HardwareSerial</font> \* debuggerSerial, <font color="#FF00FF">int</font> priorityLevel)**: Initializes the debugger on _debuggerSerial_ (for now only hardware serials are supported). It also sets the _debuggerPriorityLevel_ to _priorityLevel_.
-- **<font color="#CD00FF">void</font> InitializeDebugger(<font color="#FF00FF">String</font> name, <font color="#FF00FF">HardwareSerial</font> \* debuggerSerial, <font color="#FF00FF">int</font> priorityLevel)**: Assigns _name_, initializes the debugger on _debuggerSerial_ (for now only hardware serials are supported). It also sets the _debuggerPriorityLevel_ to _priorityLevel_.
 
+# Debugger notifications
+## Info level
+1. **assignParameters** function<br>
+    Notifies about the current Kp, Ki and Kd values
+    ```
+    [%TIMESTAMP% INFO] $%name%$ Kp: %Kp%, Ki: %Ki%, Kd: %Kd%
+    ```
+    For example:<br>
+    - If 10054 milliseconds after starting, the parameters are initialized to `Kp = 0.5`, `Kd = 0.03` and `Ki = 0.002` and the debugger is named `PID_base_controller`.
+        ```
+        [10054 INFO] $PID_base_controller$ Kp: 0.5, Ki: 0.002, Kd: 0.03
+        ```
+
+2. **setAccFactor** function<br>
+   Notifies about the change in accumulation factor (gives you previous and current values).
+   ```
+   [%TIMESTAMP% INFO] $%name%$ Accumulation factors updated {Past: %old_accFactorPast% to %new_accFactorPast%, Present: %old_accFactorPresent% to %new_accFactorPresent%}
+   ```
+   For example:<br>
+   - If 10956 milliseconds after starting, the accumulation parameters were updated, _accValuePast_ became 0.004 from 0.003 and _accValuePresent_ became 0.050 from 0.070. The debugger is named `PID_base_controller`. 
+        ```
+        [10956 INFO] $PID_base_controller$ Accumulation factors updated {Past: 0.003 to 0.004, Present: 0.070 to 0.050}
+        ```
+## Debug level
+1. **assignSetPoint** function<br>
+    Notifies about the set point being assigned
+    ```
+    [%TIMESTAMP% DEBUG] $%name%$ Set point value assigned: %setPointValue%
+    ```
+    For example:
+    - Debugger name is `PID_debug`. After 15843 milliseconds from start, set point is set to 45.
+        ```
+        [15843 DEBUG] $PID_debug$ Set point value assigned: 45
+        ```
+2. **assignCurrentValue** function<br>
+    Notifies about the current value being updated. 
+    ```
+    [%TIMESTAMP% DEBUG] $%name%$ Current value assigned: %currentValue%
+    ```
+    For example:
+    - Debugger name is `PID_debug`. After 17862 milliseconds from start, current value is set to 20.
+        ```
+        [17862 DEBUG] $PID_debug$ Current value assigned: 20
+        ```
+3. **calculateError** function<br>
+    Calculates all the error parts (proportional, derivative and integral) and notifies about the result. Note that only the error values are displayed here, not the error parts. They're displayed by functions **calculate_Kp_error**, **calculate_Kd_error** and **calculate_Ki_error**.
+    ```
+    [%TIMESTAMP% DEBUG] $%name%$ Errors (P, D and I): %Ep%, %Ed%, %Ei%
+    ```
+    For example:
+    - Debugger name is `PID_debug`. After 18000 milliseconds from start, errors are 10, -0.5 and 0.03.
+        ```
+        [18000 DEBUG] $PID_debug$ Errors (P, D and I): 10, -0.5, 0.03
+        ```
+4. **calculate_Kp_error** function<br>
+    Calculates the proportional error part and puts the result.
+    ```
+    [%TIMESTAMP% DEBUG] $%name%$ Kp_Error: %Kp% * %currentErrorValue% = %part_Kp%
+    ```
+    For example:
+    - Debugger name is `PID_debug`. After 16543 milliseconds from start, proportional error is 18 (setPoint - currentValue), Kp was set to 0.8.
+        ```
+        [16543 DEBUG] $PID_debug$ Kp_Error: 0.8 * 18 = 14.4
+        ```
+5. **calculate_Kd_error** function<br>
+    Calculates the derivative error part and puts the result.
+    ```
+    [%TIMESTAMP% DEBUG] $%name%$ Kd_Error: %Kd% * %differentialError% = %part_Kd%
+    ```
+    For example:
+    - Debugger name is `PID_debug`. After 18543 milliseconds from start, derivative error is -10 (current proportional error - previous proportional error), Kd was set to 0.5.
+        ```
+        [18543 DEBUG] $PID_debug$ Kd_Error: 0.5 * -10 = -5
+        ```
+6. **calculate_Ki_error** function<br>
+    Calculates the integral error part and puts the result.
+    ```
+    [%TIMESTAMP% DEBUG] $%name%$ Ki_Error: %Ki% * %accumulatedError% = %part_Ki%
+    ```
+    For example:
+    - Debugger name is `PID_debug`. After 919700 milliseconds from start, integral error is 75 (accumulated error over past and present), Ki was set to 0.05 initially.
+        ```
+        [919700 DEBUG] $PID_debug$ Ki_Error: 0.05 * 75 = 3.75
+        ```
+7. **retError** function<br>
+    Returns the total, final error (which must be added to the current value). It is the sum of the results of the functions **calculate_Kp_error**, **calculate_Kd_error** and **calculate_Ki_error**. This is printed to the debugger.
+    ```
+    [%TIMESTAMP% DEBUG] $%name%$ Total error: %totalError%
+    ```
+    For example:
+    - Debugger name is `PID_debug`. After 17600 milliseconds, the total error is calculated to be 0.5.
+        ```
+        [17600 DEBUG] $PID_debug$ Total error: 0.5
+        ```
+8. **getCorrectedValue** function<br>
+    Returns the corrected value. This is sum of the total error and current value. 
+    ```
+    [%TIMESTAMP% DEBUG] $%name%$ Corrected value: %value%
+    ```
+    For example:
+    - Debugger name is `PID_debug`. After 6800 milliseconds, the corrected value is 8.
+        ```
+        [6800 DEBUG] $PID_debug$ Corrected value: 8
+        ```
+
+[![Image](https://img.shields.io/badge/developed%20using-VSCode-lightgrey.svg)](https://code.visualstudio.com/)
 [![Image](https://img.shields.io/badge/Developer-TheProjectsGuy-blue.svg)](https://github.com/TheProjectsGuy)

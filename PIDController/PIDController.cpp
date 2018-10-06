@@ -7,111 +7,85 @@ PIDController::PIDController() {
     this->setAccFactor(0.5, 0.5);
 }
 
-PIDController::PIDController(String name, double Kp, double Ki, double Kd) : PIDController() {
-    // Name of the controller
-    this->attachName(name);
+PIDController::PIDController(double Kp, double Ki, double Kd) : PIDController() {
     // Assign constants Kp, Ki and Kd
     this->assignParameters(Kp, Ki, Kd);
 }
 
 // ::::::::::::::::::::: Member Functions ::::::::::::::::::::
-void PIDController::DebuggerOutput(int level, String message, bool printName = true) {
-    // If message priority is lesser, then don't print
-    if (this->debuggerPriorityLevel > level || !debuggerAttached) {
-        return;
-    }
-    // Print the message on serial monitor in fashion
-    // $%name%$:L%level%: %message%
-    this->debuggerSerial->print("$");
-    if (printName) {
-        this->debuggerSerial->print(this->name);
-    }
-    else {
-        this->debuggerSerial->print("PID_CONTROLLER__NAME");
-    }
-    this->debuggerSerial->print("$:L");
-    this->debuggerSerial->print(level);
-    this->debuggerSerial->print(": ");
-    this->debuggerSerial->print(message);     // Main message
-    this->debuggerSerial->println("");
-}
-
 // Attach parameters
 void PIDController::assignParameters(double Kp, double Ki, double Kd) {
     // Assign Kp, Ki and Kd
     this->Kp = Kp;
     this->Ki = Ki;
     this->Kd = Kd;
-    // Debugger output
+    // Debugger message (Level: INFO)
+    // Kp: %Kp%, Ki: %Ki%, Kd: %Kd%
+    // For example:
+    // Kp: 0.7, Ki: 0.0001, Kd: 0.08
+    // Kp: 0.4, Ki: 0, Kd: 0.09
     String msg = "Kp: ";
     msg.concat(Kp);
     msg.concat(", Ki: ");
     msg.concat(Ki);
     msg.concat(", Kd: ");
     msg.concat(Kd);
-    this->DebuggerOutput(LEVEL_INIT, msg);
+    this->debugger.print(INFO, msg);
 }
 void PIDController::assignPIDParameters(double Kp, double Ki, double Kd) {
     this->assignParameters(Kp, Ki, Kd);
 }
 // Accumulator factor
 void PIDController::setAccFactor(double newValuePast, double newValuePresent) {
-    String msg = "Accumulation factor updated from {Past: ";
+    // Debugger message (Level: INFO)
+    // Accumulation factors updated {Past: %old_accFactorPast% to %new_accFactorPast%, Present: %old_accFactorPresent% to %new_accFactorPresent%}
+    // For example:
+    // Accumulation factors updated {Past: 0.003 to 0.004, Present: 0.070 to 0.050}
+    // Accumulation factors updated {Past: 0.010 to 0.009, Present: 0.060 to 0.090}
+    String msg = "Accumulation factors updated {Past: ";
     msg.concat(this->accFactorPast);
     msg.concat(" to ");
-    // Set new accumulation factor (updation factor)
+    // Set new accumulation factor (updating factor) for the past
     this->accFactorPast = newValuePast;
     msg.concat(this->accFactorPast);
     msg.concat(", Present: ");
     msg.concat(this->accFactorPresent);
     msg.concat(" to ");
+    // Set new accumulation factor (updating factor) for the present
     this->accFactorPresent = newValuePresent;
     msg.concat(this->accFactorPresent);
-    msg.concat(" }");
+    msg.concat("}");
     // Debugger
-    this->DebuggerOutput(LEVEL_ASSIGNMENT, msg);
+    this->debugger.print(INFO, msg);
 }
-// Attach name
-void PIDController::attachName(String name) {
-    // Name assignment
-    this->name = name;
-    // Debugger output
-    String msg = "Name assigned: ";
-    msg.concat(name);
-    this->DebuggerOutput(LEVEL_INIT, msg, false);
-}
-// Initialize the controller
-void PIDController::InitializeDebugger(String name, HardwareSerial* debuggerSerial, int priorityLevel) {
-    this->InitializeDebugger(debuggerSerial, priorityLevel);
-    // Name of bot
-    this->attachName(name);
-}
-void PIDController::InitializeDebugger(HardwareSerial* debuggerSerial, int priorityLevel) {
-    this->debuggerAttached = true;
-    // Debugger Serial
-    this->debuggerSerial = debuggerSerial;
-    // Priority level
-    this->debuggerPriorityLevel = priorityLevel;
-}
-
 // Main error calculations part
 // Assignment of Set Point
 void PIDController::assignSetPoint(double setPointValue) {
     // Assign set point
     this->setPoint = setPointValue;
     // Show the message on terminal
+    // Debugger message (Level: DEBUG)
+    // Set point value assigned: %setPointValue%
+    // For example:
+    // Set point value assigned: 35.5
+    // Set point value assigned: 60
     String msg = "Set point value assigned: ";
-    msg.concat(setPointValue);
-    this->DebuggerOutput(LEVEL_ASSIGNMENT, msg);
+    msg.concat(this->setPoint);
+    this->debugger.print(DEBUG, msg);
 }
 // Assignment of Current Value
 void PIDController::assignCurrentValue(double currentValue) {
     // Assign current value
     this->currentValue = currentValue;
     // Show the message on terminal
+    // Debugger message (Level: DEBUG)
+    // Current value assigned: %currentValue%
+    // For example: 
+    // Current value assigned: 20
+    // Current value assigned: 90
     String msg = "Current value assigned: ";
-    msg.concat(currentValue);
-    this->DebuggerOutput(LEVEL_ASSIGNMENT, msg);
+    msg.concat(this->currentValue);
+    this->debugger.print(DEBUG, msg);
 }
 // Calculate the error function (difference b/w set and curr)
 void PIDController::calculateError() {
@@ -122,49 +96,67 @@ void PIDController::calculateError() {
     // Add to accumulated errors
     this->accumulatedError = this->currentErrorValue * this->accFactorPresent
                              + this->accumulatedError * this->accFactorPast;
+    // Debugger message (Level: DEBUG)
+    // Errors (P, D and I): %Ep%, %Ed%, %Ei%
+    // For example:
+    // Errors (P, D and I): 10, -0.5, 0.03
+    // Errors (P, D and I): 25, -0.9, 0.09
     String msg = "Errors (P, D and I): ";
     msg.concat(this->currentErrorValue);
     msg.concat(", ");
     msg.concat(this->currentErrorValue - this->previousErrorValue);
     msg.concat(", ");
     msg.concat(this->accumulatedError);
-    this->DebuggerOutput(LEVEL_ERROR_REPORTING, msg);
+    this->debugger.print(DEBUG, msg);
 }
 // Kp part
 void PIDController::calculate_Kp_error() {
     this->part_Kp = this->Kp * this->currentErrorValue;
-    // Debugger
-    String msg = "Kp_Error : ";
+    // Debugger messages (Level: DEBUG)
+    // Kp_Error: %Kp% * %currentErrorValue% = %part_Kp%
+    // For example:
+    // Kp_Error: 0.7 * 10 = 7
+    // Kp_Error: 0.4 * 25 = 10
+    String msg = "Kp_Error: ";
     msg.concat(this->Kp);
     msg.concat(" * ");
     msg.concat(this->currentErrorValue);
     msg.concat(" = ");
     msg.concat(this->part_Kp);
-    this->DebuggerOutput(LEVEL_ERROR_REPORTING, msg);
+    this->debugger.print(DEBUG, msg);
 }
 // Kd part
 void PIDController::calculate_Kd_error() {
-    this->part_Kd = this->Kd * (this->currentErrorValue - this->previousErrorValue);
-    // Debugger
-    String msg = "Kd_Error : ";
+    double differentialError = (this->currentErrorValue - this->previousErrorValue);
+    this->part_Kd = this->Kd * differentialError;
+    // Debugger message (Level: DEBUG)
+    // Kd_Error: %Kd% * %differentialError% = %part_Kd%
+    // For example:
+    // Kd_Error: 0.08 * -0.5 = -0.04
+    // Kd_Error: 0.09 * -0.9 = -0.081
+    String msg = "Kd_Error: ";
     msg.concat(this->Kd);
     msg.concat(" * ");
     msg.concat(this->currentErrorValue - this->previousErrorValue);
     msg.concat(" = ");
     msg.concat(this->part_Kd);
-    this->DebuggerOutput(LEVEL_ERROR_REPORTING, msg);
+    this->debugger.print(DEBUG, msg);
 }
 // Ki part
 void PIDController::calculate_Ki_error() {
     this->part_Ki = this->Ki * this->accumulatedError;
-    // Debugger
-    String msg = "Ki_Error : ";
+    // Debugger message (Level: DEBUG)
+    // Ki_Error: %Ki% * %accumulatedError% = %part_Ki%
+    // For example:
+    // Ki_Error: 0.001 * 45 = 0.045
+    // Ki_Error: 0.03 * 10 = 0.3
+    String msg = "Ki_Error: ";
     msg.concat(this->Ki);
     msg.concat(" * ");
     msg.concat(this->accumulatedError);
     msg.concat(" = ");
     msg.concat(this->part_Ki);
-    this->DebuggerOutput(LEVEL_ERROR_REPORTING, msg);
+    this->debugger.print(DEBUG, msg);
 }
 // Return the total error function
 double PIDController::retError() {
@@ -174,9 +166,14 @@ double PIDController::retError() {
     this->calculate_Ki_error();
     this->calculate_Kd_error();
     double totalError = this->part_Kp + this->part_Ki + this->part_Kd;
-    String msg = "Total error : ";
+    // Debugger message (Level: DEBUG)
+    // Total error: %totalError%
+    // For example:
+    // Total error: 19
+    // Total error: -0.05
+    String msg = "Total error: ";
     msg.concat(totalError);
-    this->DebuggerOutput(LEVEL_ERROR_REPORTING, msg);
+    this->debugger.print(DEBUG, msg);
     return totalError;
 }
 double PIDController::retError(double currentValue) {
@@ -193,7 +190,15 @@ double PIDController::retError(double setPoint, double currentValue) {
 }
 double PIDController::getCorrectedValue() {
     // Error + current value = corrected value
-    return this->currentValue + this->retError();
+    double value = this->currentValue + this->retError();
+    // Debugger message (Level: DEBUG)
+    // Corrected value: %value%
+    // For example:
+    // Corrected value: 18
+    String msg = "Corrected value: ";
+    msg.concat(value);
+    this->debugger.print(DEBUG, msg);
+    return value;
 }
 double PIDController::getCorrectedValue(double currentValue) {
     // Set corrected value

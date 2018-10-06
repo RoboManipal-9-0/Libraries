@@ -14,6 +14,4 @@ setAccFactor	KEYWORD2
 assignCurrentValue	KEYWORD2
 retError	KEYWORD2
 getCorrectedValue	KEYWORD2
-attachName	KEYWORD2
-InitializeDebugger	KEYWORD2
 

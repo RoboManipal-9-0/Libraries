@@ -11,11 +11,7 @@
 
 // Include basic libraries
 #include "Arduino.h"
-
-// Level definitions
-#define LEVEL_ERROR_REPORTING 1
-#define LEVEL_ASSIGNMENT 2
-#define LEVEL_INIT 3
+#include "DebuggerSerial.h"
 
 // Main class
 class PIDController {
@@ -34,14 +30,7 @@ class PIDController {
     // Activating the controller (Automatic)
     int activationBuffer;      // Number of samples for which the controller is inactive
     bool controllerEnable;     // Manually enable or disable the controller
-    // ------------------ Debugger ----------------------
-    String name;                    // Name of the node (controller)
-    HardwareSerial *debuggerSerial; // Hardware Serial
-    bool debuggerAttached;          // If debugger has been attached or not
-    int debuggerPriorityLevel;      // Priority level
     // ================ Functions ================
-    // Debugger
-    void DebuggerOutput(int level, String message, bool printName = true);
     // Error values (assigned to the variables)
     void calculateError();        // Main error calculation
     void calculate_Kp_error();    // Proportional error calculation
@@ -50,11 +39,13 @@ class PIDController {
     void assignParameters(double Kp, double Ki, double Kd); // Assign PID parameters
 public:
     // :::::::::::::::::: Public members :::::::::::::::::::::::::::
+    // -------------------- Debugger ------------------------
+    DebuggerSerial debugger;
     // ===================== Constructors ===========================
     // Constructor: Empty constructor
     PIDController();
     // Constructor: Assign name, Kp, Ki and Kd
-    PIDController(String name, double Kp, double Ki, double Kd);
+    PIDController(double Kp, double Ki, double Kd);
     // ===================== Member functions ========================
     // Assignment and return of control signals
     void assignPIDParameters(double Kp, double Ki, double Kd);
@@ -67,10 +58,6 @@ public:
     double getCorrectedValue();  // Returns the final corrected signal (after controller is applied)
     double getCorrectedValue(double currentValue); // Same as getCorrectedValue()
     double getCorrectedValue(double setPoint, double currentValue); // Same as getCorrectedValue()
-    // Assignment and debugger control
-    void attachName(String name);   // Assign name
-    void InitializeDebugger(HardwareSerial* debuggerSerial, int priorityLevel); // Debugger serial
-    void InitializeDebugger(String name, HardwareSerial* debuggerSerial, int priorityLevel); // Debugger serial
 };
 
 
