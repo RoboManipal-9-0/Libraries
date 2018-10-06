@@ -34,5 +34,4 @@ More info about setting up software  [here](https://github.com/Razor-AHRS/razor-
 # Developers Guide
 
 
-
 [![Image](https://img.shields.io/badge/Developer-TheProjectsGuy-blue.svg)](https://github.com/TheProjectsGuy)
