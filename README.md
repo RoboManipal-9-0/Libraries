@@ -33,6 +33,7 @@ Additional help on arduino libraries [here](https://www.arduino.cc/en/hacking/li
 ### Resources
 
 - [GitHub Markdown](https://guides.github.com/features/mastering-markdown/) for help regarding markdown.
-- [Atom](https://atom.io) as the _recommended_ editor for development (you're free to use anything that you're comfortable with).
+- [VSCode](https://code.visualstudio.com/) as the _recommended_ editor for development of libraries.
+- [Atom](https://atom.io) is another good choice (you're free to use anything that you're comfortable with).
 - [LaTeX Editor](https://www.codecogs.com/latex/eqneditor.php) for mathematical equations. _You'll have to attach the rendered equations as pictures for now_.
 - [Shields](https://shields.io/#/) for creating your custom developer shields. It's suggested that you create your own custom **static** shields for putting up in the end of your `README.md` files.

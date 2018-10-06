@@ -1,6 +1,6 @@
 ![Version tag](https://img.shields.io/badge/version-1.0.1-orange.svg)
 # Introduction
-This library is for defining and using a serial as a debugger.
+The **DebuggerSerial** library is for defining and using a serial as a debugger.
 
 ~~**Node**: This library is still in developer beta, ask the developer before using.~~ This library has finished testing :tada:. Check [examples](#examples).
 
