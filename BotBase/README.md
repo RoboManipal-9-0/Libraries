@@ -1,4 +1,4 @@
-![Version 1.0.0](https://img.shields.io/badge/version-1.0.0-orange.svg)
+![Version 1.0.1](https://img.shields.io/badge/version-1.0.1-orange.svg)
 
 # Introduction
 This library is for defining any kind of wheeled base for a ground terrain robot.
