@@ -57,8 +57,10 @@ You can check out the examples for more.
 In order to know these examples in detail, go through the [library explanation](#library-explanation) first.
 
 ### FourWheel45Omni
-This code assumes that you have a four wheel bot with omni wheels at angles 45°, 135°, 225° and 315°, these are the **θ<sub>i</sub>** values. The file is in the examples folder. <br>
-**On the debugger**: Open the debugger serial (serial monitor in out case, because we used the default serial).<br>
+This code assumes that you have a four wheel bot with omni wheels at angles 45°, 135°, 225° and 315°, these are the **θ<sub>i</sub>** values. The bot must look something like this
+[![](./../.DATA/Images/FourWheel45Omni-holonomic-drive-motor-diagram.png)](https://www.google.co.in/url?sa=i&rct=j&q=&esrc=s&source=images&cd=&cad=rja&uact=8&ved=2ahUKEwjVvdiYtPTdAhXFsI8KHQ3QBGgQjRx6BAgBEAU&url=https%3A%2F%2Frenegaderobotics.org%2Frobotc-chassis-programming%2F&psig=AOvVaw2jddfq6ZmbYXwnhVE_geW1&ust=1539004341009670)<br>
+The [file](./examples/FourWheel45Omni) is in the examples folder, open it in Arduino and upload it.<br>
+**On the debugger**: Open the debugger serial (serial monitor in our case, because we used the default serial).<br>
 Upon startup, you must see this on the DebuggerSerial (your timestamps might differ).
 ```
 [0] > DebuggerSerial attached
