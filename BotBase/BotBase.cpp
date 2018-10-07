@@ -36,8 +36,8 @@ void BotBase::AttachPins(int *PWM_PINs, int *DIR_PINs) {
     this->DIR_pins = DIR_PINs;
     for (int i = 0; i < this->NUMBER_OF_WHEELS; i++) {
         // PWM and DIR pins are OUTPUT type
-        pinMode(PWM_PINs[i], OUTPUT);
-        pinMode(DIR_PINs[i], OUTPUT);
+        pinMode(this->PWM_pins[i], OUTPUT);
+        pinMode(this->DIR_pins[i], OUTPUT);
         // Debugger message (Level: INFO)
         // Motor number %index + 1% attached to (PWM, DIR): %PWM_pin%, %DIR_PINs% Reverse DIR: %reverseDIRs[index]%
         // Examples:
@@ -46,13 +46,21 @@ void BotBase::AttachPins(int *PWM_PINs, int *DIR_PINs) {
         String message = "Motor number ";
         message.concat(i + 1);
         message.concat(" attached to (PWM, DIR): ");
-        message.concat(PWM_PINs[i]);
+        message.concat(this->PWM_pins[i]);
         message.concat(", ");
-        message.concat(DIR_PINs[i]);
+        message.concat(this->DIR_pins[i]);
         message.concat(" Reverse DIR: ");
         message.concat(this->reverseDIRs[i] ? "TRUE" : "FALSE");
         this->debugger.print(INFO, message);        // Publish debugger message
     }
+    // Debugger message (Level: DEBUG)
+
+    int buf_PWM_vals[this->NUMBER_OF_WHEELS];    // FIXME: Default initialization
+    int buf_DIR_vals[this->NUMBER_OF_WHEELS];   // FIXME: Default initialization
+    this->PWM_values = buf_PWM_vals;            // FIXME: Default initialization
+    this->DIR_values = buf_DIR_vals;            // FIXME: Default initialization
+
+    this->debugger.print("All pins attached", DEBUG);   // FIXME: Added this line
 }
 // Attach even reverseDIRs as well
 void BotBase::AttachPins(int *PWM_PINs, int *DIR_PINs, bool *reverseDIRs) {
@@ -76,40 +84,28 @@ void BotBase::ConfigureMaxModeTo(bool value, int DIR_mag_value) {
     msg.concat(this->maxModeValue);
     this->debugger.print(INFO, msg);
 }
-void BotBase::VectorTo_PWM_DIR_SingleWheel(int vect_value, int wheel_number) {
-    this->PWM_values[wheel_number] = abs(vect_value);                   // Magnitude
-    this->DIR_values[wheel_number] = (vect_value >= 0) ? HIGH : LOW;    // Direction
-    // Debugger message
-    // Vector[%wheel_number%] -> %vect_value% = %PWM%, %DIR%
-    // Examples:
-    // Vector[1] -> -53 = 53, LOW
-    // Vector[3] -> 189 = 189, HIGH
-    String msg = "Vector[";
-    msg.concat(wheel_number);
-    msg.concat("] -> ");
-    msg.concat(vect_value);
-    msg.concat(" = ");
-    msg.concat(this->PWM_values[wheel_number]);
-    msg.concat(", ");
-    msg.concat((this->DIR_values[wheel_number] == HIGH) ? "HIGH" : "LOW");
-}
-void BotBase::VectorTo_PWM_DIR_SingleWheel(float vect_value, int wheel_number) {
-    int vect = floor(vect_value);               // We can write only integers
-    this->VectorTo_PWM_DIR_SingleWheel(vect, wheel_number);   // Call the integer ones
-}
-void BotBase::VectorTo_PWM_DIR(float *vect) {
-    // Call the SingleWheel function repeatedly
-    for (int i = 0; i < this->NUMBER_OF_WHEELS; i ++) {
-        this->VectorTo_PWM_DIR_SingleWheel(vect[i], i);
-    }
-}
 void BotBase::VectorTo_PWM_DIR(int *vect) {
-    // Convert a vector having signed magnitudes to PWM and DIR values
-    for (int i = 0; i < this->NUMBER_OF_WHEELS; i++) {
-        // this->PWM_values[i] = abs(vect[i]);                  // Magnitude
-        // this->DIR_values[i] = (vect[i] > 0) ? HIGH : LOW;    // Direction
-        this->VectorTo_PWM_DIR_SingleWheel(vect[i], i);
-    }
+    // Dynamic memory allocation for PWM_values and DIR_values
+    this->PWM_values = new int[this->NUMBER_OF_WHEELS];   // PWM values
+    this->DIR_values = new int[this->NUMBER_OF_WHEELS];   // DIR values
+    for (int wheel_number = 0; wheel_number < this->NUMBER_OF_WHEELS; wheel_number++) {
+        this->PWM_values[wheel_number] = abs(vect[wheel_number]);
+        this->DIR_values[wheel_number] = vect[wheel_number] >= 0 ? HIGH : LOW;
+        // Debugger message
+        // Vector[%wheel_number%] -> %vect_value% = %PWM%, %DIR%
+        // Examples:
+        // Vector[1] -> -53 = 53, LOW
+        // Vector[3] -> 189 = 189, HIGH
+        String msg = "Vector[";
+        msg.concat(wheel_number);
+        msg.concat("] -> ");
+        msg.concat(vect[wheel_number]);
+        msg.concat(" = ");
+        msg.concat(this->PWM_values[wheel_number]);
+        msg.concat(", ");
+        msg.concat((this->DIR_values[wheel_number]) ? "HIGH" : "LOW");
+        this->debugger.print(msg, DEBUG);
+    }    
 }
 // Move the bot with speed PWM at angle 'angle_degrees'
 void BotBase::Move(int PWM, int angle_degrees, float w) {
@@ -121,18 +117,27 @@ void BotBase::Move(int PWM, int angle_degrees, float w) {
     for (int i = 0; i < this->NUMBER_OF_WHEELS; i++) {
         this->MoveMotor(i);     // Move the motor 
     }
+    delete [] this->PWM_values;   // Remove the dynamic memory
+    delete [] this->DIR_values;   
 }
 // Move motor i on the bot
 void BotBase::MoveMotor(int i) {
     // PWM and DIR values
     int PWM;
     bool DIR;
+    // Debugger message (Level: DEBUG)
+    // Mode: %mode%
+    // For example:
+    // Mode: Standard
+    // Mode: MaxMode
+    String msg = "Mode: ";
     if (!this->maxMode) {
         /* Standard 
             PWM connected to PWM of motor driver
             DIR connected to DIR of motor driver
                 Direct connection here
         */
+        msg.concat("Standard"); // Standard mode
         PWM = this->PWM_values[i];   // PWM 
         DIR = this->reverseDIRs[i] ^ this->DIR_values[i];   // DIR : If reverseDIRs is true, then toggle DIR_value
         // Write the values on pins
@@ -145,6 +150,7 @@ void BotBase::MoveMotor(int i) {
             PWM connected to the DIR pin of motor driver
             PWM pin of motor driver is given a constant HIGH voltage
         */
+        msg.concat("MaxMode"); // MaxMode mode
         DIR = this->reverseDIRs[i] ^ this->DIR_values[i]; // DIR : If reverseDIRs is true, then toggle DIR_value
         PWM = 127;
         // Adjust PWM
@@ -158,6 +164,7 @@ void BotBase::MoveMotor(int i) {
         // PWM pin gets the maxModeValue
         analogWrite(this->PWM_pins[i], this->maxModeValue);
     }
+    this->debugger.print(msg, DEBUG); // DebuggerSerial message
     // Send message on terminal
     // Motor %i+1% status = [3: 123, 7: HIGH]
     // Debugger message

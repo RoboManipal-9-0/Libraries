@@ -27,6 +27,7 @@ Beta testing done :tada:
                 - [Variables](#variables)
                 - [Member functions](#member-functions)
             - [Public Members](#public-members)
+                - [Variables](#variables)
                 - [Constructors](#constructors)
                 - [Functions](#functions)
     - [Making you own custom BotBase](#making-you-own-custom-botbase)
@@ -122,20 +123,15 @@ Let's inspect in detail what all the members of the class do
 
 - **<font color="#CD00FF">int</font> maxModeValue**: The value to be given to the PWM pin of the motor driver.
 
-- **<font color="#CD00FF">DebuggerSerial</font> debugger**: The debugger object for the class. In case you want to use it, you'll have to initialize it. Read the documentation about **DebuggerSerial** class [here](./../DebuggerSerial/).
-
 ##### Member functions
 - **<font color="#CD00FF">void</font> <font color="#5052FF">setNumberOfWheelsTo</font>(<font color="#FF00FF">int</font> number)** : Sets the *NUMBER_OF_WHEELS* value to the passed *number*. It's a good idea to make a call to this in the constructor of the derived classes.
 
-- **<font color="#CD00FF">void</font> <font color="#5052FF">VectorTo_PWM_DIR</font>(<font color="#FF00FF">float</font> \*vector)** : To convert an array of vector wheel rotations to PWMs to be given to the motors and their respective DIR values. Make note that the array must have the same length as the number of wheels.
-
-- **<font color="#CD00FF">void</font> <font color="#5052FF">VectorTo_PWM_DIR</font>(<font color="#FF00FF">int</font> \*vector)** : To convert an array of vector wheel rotations to PWMs to be given to the motors and their respective DIR values. Make note that the array must have the same length as the number of wheels.
-
-- **<font color="#CD00FF">void</font> <font color="#5052FF">VectorTo_PWM_DIR_SingleWheel</font>(<font color="#FF00FF">float</font> vect_value, <font color="#FF00FF">int</font> wheel_number)** : Do the above for a single wheel at index *wheel_number* (counting starts from 0).
-
-- **<font color="#CD00FF">void</font> <font color="#5052FF">VectorTo_PWM_DIR_SingleWheel</font>(<font color="#FF00FF">int</font> vect_value, <font color="#FF00FF">int</font> wheel_number)** : Same as above.
+- **<font color="#CD00FF">void</font> <font color="#5052FF">VectorTo_PWM_DIR</font>(<font color="#FF00FF">int</font> \*vector)** : To convert an array of vector wheel rotations to DIR and PWM values to be given to the motors. Make note that the array must have the same length as the number of wheels. This function does **not** call the _MoveMotor_ function.
 
 #### Public Members
+##### Variables
+- **<font color="#CD00FF">DebuggerSerial</font> debugger**: The debugger object for the class. In case you want to use it, you'll have to initialize it. Read the documentation about **DebuggerSerial** class [here](./../DebuggerSerial/).
+
 ##### Constructors
 Though you'll never create any memory for objects of this class, it's advised to have a constructor anyways.
 
@@ -152,7 +148,7 @@ Though you'll never create any memory for objects of this class, it's advised to
 
 - **<font color="#CD00FF">void</font> <font color="#5052FF">Move_PWM_Angle</font>(<font color="#CD00FF">int</font> PWM, <font color="#CD00FF">float</font> angle, <font color="#CD00FF">float</font> w = 0)** : An abstract function which you must implement in the derived classes. This function has the code to move your bot at a particular speed (*PWM*) and in a particular direction (*angle* in radians) with a particular angular velocity about the center (*w*, which is defaulted to 0). You needn't implement the actuation code (it's written in the _Move_ function for you).
 
-- **<font color="#CD00FF">void</font> <font color="#5052FF">Move</font>(<font color="#CD00FF">int</font> PWM, <font color="#CD00FF">int</font> angle_degrees, <font color="#CD00FF">float</font> w = 0)** : This is function that the user will call. It simply calls the *Move_PWM_Angle* function with the angle converted from degrees to radians, then it actuates the motors.
+- **<font color="#CD00FF">void</font> <font color="#5052FF">Move</font>(<font color="#CD00FF">int</font> PWM, <font color="#CD00FF">int</font> angle_degrees, <font color="#CD00FF">float</font> w = 0)** : This is function that the user will call. It simply calls the *Move_PWM_Angle* function with the angle converted from degrees to radians, then it actuates the motors by calling _MoveMotor_ onto the individual motors.
 
 - **<font color="#CD00FF">void</font> <font color="#5052FF">MoveMotor</font>(<font color="#CD00FF">int</font> motor_number)** : Moves the motor indexed at *motor_number* giving values considering the mode of the motor driver.
 
@@ -173,6 +169,7 @@ Perform the following to make use of this library in your BotBase :
 
 #### Examples
 We have already made some example libraries, just to show you how to make your own libraries using the BotBase class.
+- **NWCHBase** library: This library is for an **N** wheel base made using omni wheels and all their axis coincide.
 - **FourSBase** library: This library is for a four wheel omni base, you can click [here](../FourSBase) to check it out.
 
 [![Developed using VSCode](https://img.shields.io/badge/developed%20using-VSCode-lightgrey.svg)](https://code.visualstudio.com/)

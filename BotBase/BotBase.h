@@ -29,13 +29,10 @@ protected:
     // Set number of wheels
     void setNumberOfWheelsTo(int number);
     // Functions to convert Vector to PWM and DIR values
-    void VectorTo_PWM_DIR(float *vector);
-    void VectorTo_PWM_DIR(int *vector);
-    void VectorTo_PWM_DIR_SingleWheel(float vect_value, int wheel_number);
-    void VectorTo_PWM_DIR_SingleWheel(int vect_value, int wheel_number);
+    void VectorTo_PWM_DIR(int *vector);     
+public:
     // ################## Debugger Section ########################
     DebuggerSerial debugger;
-public:
     // ##################### Initializer functions ####################
     // Constructors
     BotBase();
