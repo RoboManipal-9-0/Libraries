@@ -31,12 +31,12 @@ void NWCHBase::InitializeWheels(int *angles_deg) {
     // Examples: 
     // Initializing angle configuration: 45(0.785398) 135(2.356194) 225(3.926990) 315(5.497787)
     // Initializing angle configuration: 90(1.570796) 210(3.665191) 330(5.759586)
+    this->angles = angles_deg;      
     String msg = "Initializing angle configuration: ";
     for (int i = 0; i < this->NUMBER_OF_WHEELS; i ++) {
-        this->angles[i] = angles_deg[i] * DEG_TO_RAD;    // Convert angles to radians and assign them
         msg.concat(angles_deg[i]);
         msg.concat("(");
-        msg.concat(this->angles[i]);
+        msg.concat(DEG2RAD(this->angles[i]));
         msg.concat(") ");
     }
     this->debugger.print(INFO, msg);
@@ -57,7 +57,8 @@ void NWCHBase::Move_PWM_Angle(int PWM, float angle, float w) {
     // Properties (for the actuation)
     float Vx = PWM * sin(angle);      // X component of velocity
     float Vy = PWM * cos(angle);      // Y component of velocity
-    float *vector;                    // Actuation vector
+
+    int vector[this->NUMBER_OF_WHEELS];   // Actuation vector
     // Debugger message (Level: DEBUG)
     // Wheel motion vector: %val1% %val2% %val3% ... %valN%
     // Example:
@@ -66,9 +67,10 @@ void NWCHBase::Move_PWM_Angle(int PWM, float angle, float w) {
     String msg = "Wheel motion vector: ";
     for (int i = 0; i < this->NUMBER_OF_WHEELS; i++) {
         // Vi = Vx Sin(Qi) + Vy Cos(Qi) + w
-        vector[i] = Vx * sin(this->angles[i]) + Vy * cos(this->angles[i]) + w;
-        // Debugger message
-        msg.concat(vector[i]);    
+        float vect = Vx * sin(DEG2RAD(this->angles[i])) + Vy * cos(DEG2RAD(this->angles[i])) + w; // Floating point vector
+        vector[i] = int(vect);     // Truncated integer conversion
+        // Debugger message 
+        msg.concat(vect);
         msg.concat(" ");
     }
     this->debugger.print(DEBUG, msg);

@@ -12,9 +12,12 @@
 #include "Arduino.h"
 #include "BotBase.h"
 
+// Macro definitions
+#define DEG2RAD(x) x * DEG_TO_RAD    // Degree to radian values
+
 class NWCHBase : public BotBase {
 protected:
-    float *angles;      // Array of angle (in radians) values 
+    int *angles;      // Array of angle (in degrees) values
     // Main motion code
     void Move_PWM_Angle(int PWM, float angle_radian, float w = 0);
 public:
