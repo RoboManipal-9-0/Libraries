@@ -10,11 +10,12 @@ The **DebuggerSerial** library is for defining and using a serial as a debugger.
 - [Users Guide](#users-guide)
     - [Downloading the library](#downloading-the-library)
     - [Using the library with Arduino](#using-the-library-with-arduino)
+    - [Using the library](#using-the-library)
     - [Protocol implementation](#protocol-implementation)
         - [About the priority levels](#about-the-priority-levels)
     - [Examples](#examples)
-            - [Repeated_HardwareSerial](#repeatedhardwareserial)
-            - [Repeated_SoftwareSerial_TX](#repeatedsoftwareserialtx)
+        - [Repeated_HardwareSerial](#repeatedhardwareserial)
+        - [Repeated_SoftwareSerial_TX](#repeatedsoftwareserialtx)
 - [Developers Guide](#developers-guide)
     - [Library Details](#library-details)
         - [Files in the library](#files-in-the-library)
@@ -50,6 +51,10 @@ _You might want to omit the `-b <branch>` tag if you're downloading from the mas
 ## Using the library with Arduino
 Move this folder into the arduino libraries folder on your PC. If you don't know where the libraries folder of your arduino is, you can check out the README file of this entire repository for this, click [here](../README.md).
 
+## Using the library
+- Declare an object of `DebuggerSerial` class.
+- Call the function **Initialize** to initialize the debugger, you may also use the constructor.
+
 ## Protocol implementation
 Here are how the messages are put out on the _debuggerSerial_ for different priority levels
 - For `SENSOR_FEED` data
@@ -82,11 +87,11 @@ Here are how the messages are put out on the _debuggerSerial_ for different prio
 | **FATAL** | Fatal level messages. An exception occurred and the entire functioning is jeopardized. | Battery level low; Controller link lost; | [**TS** _**FATAL**_] \$**NAME**\$ **Message** |
 
 ## Examples
-#### Repeated_HardwareSerial
+### Repeated_HardwareSerial
 **File**: Code [here](./examples/Repeated_HardwareSerial/Repeated_HardwareSerial.ino).
 - Declare a DebuggerSerial and send messages of all priorities and a sensor reading every 5 seconds.
 
-#### Repeated_SoftwareSerial_TX
+### Repeated_SoftwareSerial_TX
 **File**: Code [here](./examples/Repeated_SoftwareSerial_TX/Repeated_SoftwareSerial_TX.ino).
 - Same as **Repeated_HardwareSerial** 
 - We use a software serial instead of hardware serial here.
@@ -155,8 +160,8 @@ Let's explore the code in detail
 - **<font color="#fceb8f">DebuggerSerial</font> (<font color="#3d8aff">String</font> name, <font color="#87ff7c">Stream</font> \*debuggerSerial, <font color="#3d8aff">int</font> priorityLevel)**: Assign _name_, _debuggerSerial_ and _priorityLevel_
 
 ##### Functions
-- **<font color="#3d8aff">void</font> <font color="#f9e784">Initialize</font>(<font color="#3d8aff">String</font> name, <font color="#87ff7c">Stream</font> \*debuggerSerial, <font color="#3d8aff">int</font> priorityLevel)**: Initializer to assign _name_, _debuggerSerial_ and _priorityLevel_
-- **<font color="#3d8aff">void</font> <font color="#f9e784">Initialize</font>(<font color="#87ff7c">Stream</font> \*debuggerSerial, <font color="#3d8aff">int</font> priorityLevel)**: Initializer for _debuggerSerial_ and _priorityLevel_
+- **<font color="#3d8aff">void</font> <font color="#f9e784">Initialize</font>(<font color="#3d8aff">String</font> name, <font color="#87ff7c">Stream</font> \*debuggerSerial, <font color="#3d8aff">int</font> priorityLevel = 0)**: Initializer to assign _name_, _debuggerSerial_ and _priorityLevel_. By default, the lowest level is 0 (minimum), it's the *SENSOR_FEED* level.
+- **<font color="#3d8aff">void</font> <font color="#f9e784">Initialize</font>(<font color="#87ff7c">Stream</font> \*debuggerSerial, <font color="#3d8aff">int</font> priorityLevel = 0)**: Initializer for _debuggerSerial_ and _priorityLevel_
 - **<font color="#3d8aff">void</font> <font color="#f9e784">AttachSerial</font>(<font color="#87ff7c">Stream</font> \*debuggerSerial)**: Attach the _debuggerSerial_ only (standalone)
 - **<font color="#3d8aff">void</font> <font color="#f9e784">AttachSerial</font>(<font color="#3d8aff">String</font> name)**: Attach the _name_ only (standalone)
 - **<font color="#3d8aff">void</font> <font color="#f9e784">SetDebuggerPriorityToLevel</font>(<font color="#3d8aff">int</font> minLevel)**: Attach the _debuggerPriorityLevel_ only (standalone)

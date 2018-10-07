@@ -49,8 +49,8 @@ public:
     DebuggerSerial(String name, Stream *debuggerSerial, int priorityLevel);
     // ------------ Standalone initializers ------------
     // All 3
-    void Initialize(String name, Stream *debuggerSerial, int priorityLevel);
-    void Initialize(Stream *debuggerSerial, int priorityLevel);  // Serial and priorityLevel
+    void Initialize(String name, Stream *debuggerSerial, int priorityLevel = 0);
+    void Initialize(Stream *debuggerSerial, int priorityLevel = 0);  // Serial and priorityLevel
     // ------------ Individual initializers ------------
     void AttachSerial(Stream *debuggerSerial);   // DebuggerSerial
     void InitializeName(String name);            // Name
