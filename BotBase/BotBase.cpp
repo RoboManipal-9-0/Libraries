@@ -24,10 +24,12 @@ void BotBase::setNumberOfWheelsTo(int number) {
 // Constructors
 BotBase::BotBase() {
     // Nothing here
+    this->modesAttached = false;
 }
-BotBase::BotBase(bool maxMode, int maxModeValue) {
-    // Set the max mode on or off
-    this->ConfigureMaxModeTo(maxMode, maxModeValue);
+// Configure motor modes
+void BotBase::ConfigureModes(int *modes) {
+    this->motorModes = modes;   // Motor modes
+    this->modesAttached = true; // Attached
 }
 // Configure motor driver pins for the base (when only PWM and DIR pins are passed, by default reverseDIRs are all false)
 void BotBase::AttachPins(int *PWM_PINs, int *DIR_PINs) {
@@ -54,13 +56,7 @@ void BotBase::AttachPins(int *PWM_PINs, int *DIR_PINs) {
         this->debugger.print(INFO, message);        // Publish debugger message
     }
     // Debugger message (Level: DEBUG)
-
-    int buf_PWM_vals[this->NUMBER_OF_WHEELS];    // FIXME: Default initialization
-    int buf_DIR_vals[this->NUMBER_OF_WHEELS];   // FIXME: Default initialization
-    this->PWM_values = buf_PWM_vals;            // FIXME: Default initialization
-    this->DIR_values = buf_DIR_vals;            // FIXME: Default initialization
-
-    this->debugger.print("All pins attached", DEBUG);   // FIXME: Added this line
+    this->debugger.print("All pins attached", DEBUG);
 }
 // Attach even reverseDIRs as well
 void BotBase::AttachPins(int *PWM_PINs, int *DIR_PINs, bool *reverseDIRs) {
@@ -69,21 +65,16 @@ void BotBase::AttachPins(int *PWM_PINs, int *DIR_PINs, bool *reverseDIRs) {
     // Attach PWM_PINs and DIR_PINs 
     this->AttachPins(PWM_PINs, DIR_PINs);
 }
-void BotBase::ConfigureMaxModeTo(bool value, int DIR_mag_value) {
-    // Configuration of MaxMode
-    this->maxMode = value;               // Enable or disable it
-    this->maxModeValue = DIR_mag_value;  // Value to give to the PWM pin if maxMode is ON
-    // Debugger message (Level: INFO)
-    // Max mode set to %value% Magnitude: %this->maxModeValue%
-    // Examples:
-    // Max mode set to TRUE Magnitude 255
-    // Max mode set to FALSE Magnitude 80
-    String msg = "Max mode set to ";
-    msg.concat((this->maxMode)?"TRUE":"FALSE");
-    msg.concat(" Magnitude: ");
-    msg.concat(this->maxModeValue);
-    this->debugger.print(INFO, msg);
+// Mode configuration
+void BotBase::ConfigureModes(int *modes) {
+    this->motorModes = modes;        // Modes specified
+    this->modesAttached = true;      // Mode specifier called
 }
+// LAP PWM assignment
+void BotBase::setLAP_PWMto(int PWM_value) {
+    this->LAP_PWM_value = PWM_value;   // PWM value in LAP mode
+}
+// Function to convert integer vector to PWM and DIR values
 void BotBase::VectorTo_PWM_DIR(int *vect) {
     // Dynamic memory allocation for PWM_values and DIR_values
     this->PWM_values = new int[this->NUMBER_OF_WHEELS];   // PWM values
@@ -131,13 +122,13 @@ void BotBase::MoveMotor(int i) {
     // Mode: Standard
     // Mode: MaxMode
     String msg = "Mode: ";
-    if (!this->maxMode) {
-        /* Standard 
+    if (!this->modesAttached || this->motorModes[i] == MODE_SM) {
+        /* Standard : Sign magnitude mode 
             PWM connected to PWM of motor driver
             DIR connected to DIR of motor driver
                 Direct connection here
         */
-        msg.concat("Standard"); // Standard mode
+        msg.concat("Sign Magnitude"); // Standard mode
         PWM = this->PWM_values[i];   // PWM 
         DIR = this->reverseDIRs[i] ^ this->DIR_values[i];   // DIR : If reverseDIRs is true, then toggle DIR_value
         // Write the values on pins
@@ -145,12 +136,12 @@ void BotBase::MoveMotor(int i) {
         analogWrite(this->PWM_pins[i], PWM);
         // Direction
         digitalWrite(this->DIR_pins[i], DIR);
-    } else if (this->maxMode) {
-        /* MaxMode 
+    } else if (this->motorModes[i] == MODE_LAP) {
+        /* Locked Anti Phase
             PWM connected to the DIR pin of motor driver
             PWM pin of motor driver is given a constant HIGH voltage
         */
-        msg.concat("MaxMode"); // MaxMode mode
+        msg.concat("Locked Anti Phase"); // MaxMode mode
         DIR = this->reverseDIRs[i] ^ this->DIR_values[i]; // DIR : If reverseDIRs is true, then toggle DIR_value
         PWM = 127;
         // Adjust PWM
@@ -161,8 +152,8 @@ void BotBase::MoveMotor(int i) {
         }
         // Write PWM to DIR pin of motor driver
         analogWrite(this->DIR_pins[i], PWM);
-        // PWM pin gets the maxModeValue
-        analogWrite(this->PWM_pins[i], this->maxModeValue);
+        // LAP Mode PWM value
+        analogWrite(this->PWM_pins[i], this->LAP_PWM_value);
     }
     this->debugger.print(msg, DEBUG); // DebuggerSerial message
     // Send message on terminal

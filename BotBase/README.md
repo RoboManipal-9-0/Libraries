@@ -1,4 +1,5 @@
-![Version 1.0.1](https://img.shields.io/badge/version-1.0.1-orange.svg)
+![Version 2.0.0 dev](https://img.shields.io/badge/version-2.0.0-orange.svg)
+![Dev mode](https://img.shields.io/badge/mode-developer-ff69ff.svg)
 
 # Introduction
 This library is for defining any kind of wheeled base for a ground terrain robot.
@@ -13,8 +14,9 @@ Beta testing done :tada:
     - [Downloading the library](#downloading-the-library)
     - [Using the library with Arduino](#using-the-library-with-arduino)
     - [Using the library](#using-the-library)
-    - [MaxMode](#maxmode)
-        - [Configuring the MaxMode](#configuring-the-maxmode)
+    - [Motor driver modes](#motor-driver-modes)
+        - [Configuring the Mode](#configuring-the-mode)
+        - [Lock Anti-Phase Drive](#lock-anti-phase-drive)
 - [Developers Guide](#developers-guide)
     - [Library Details](#library-details)
         - [Files in the library](#files-in-the-library)
@@ -62,18 +64,23 @@ You simply have to do the following to use this library
 
 You can imagine the velocity vector as a point in the [polar coordinate system](https://en.wikipedia.org/wiki/Polar_coordinate_system).
 
-## MaxMode
-The MaxMode is basically when we give the _PWM output to the DIR pin of the motor driver_ and the _PWM input of the motor driver gets a constant voltage_. Here's how it works:
+<!-- TODO: Work required here -->
+## Motor driver modes
+
+<!-- TODO: Work required here -->
+### Configuring the Mode
+You can directly do it through a constructor of the `BotBase` class or call the `configureModes` function with the mode parameters.
+
+### Lock Anti-Phase Drive
+The _Lock Anti-Phase Drive_ is basically when we give the _PWM output to the DIR pin of the motor driver_ and the _PWM input of the motor driver gets a constant voltage_. Here's how it works:
 - Say that we give 50% (duty cycle) as the PWM output into the DIR terminal of the motor driver. This means that 50 percent of the time the motor gets current in the forward direction and 50 percent of the time it gets current in the reverse direction, this gives the motor extraordinary braking capabilities.
 - If we give more than 50% duty cycle, say 65%: Then the motor gets current in the forward direction 65 percent of the time and gets current in the reverse direction 35 percent of the time (100 - 65 = 35). This means that the forward current lasts longer and will dominate in the final effect. So we add something to the duty cycle if we want the motor to move forward (rotate in positive sense).
 - If we give less than 50% duty cycle, say 25%: Then the motor gets current in the forward direction 25 percent of the time and gets current in the reverse direction 75 percent of the time. This means that the reverse direction gets the priority. So we subtract something from the duty cycle if we want the motor to move backward (rotate in negative sense).
+- You could check out this [video on YouTube](https://www.youtube.com/watch?v=zu6k8kHkd9M), this [blog article](http://www.modularcircuits.com/blog/articles/h-bridge-secrets/lock-anti-phase-drive/) or run a simple [google search](https://www.google.co.in/search?q=locked+antiphase+motor+control&oq=locked+antiphase+motor+control&).
 
 Therefore if we already have a PWM value (say _P_) and a DIR (_HIGH_ or _LOW_), we simply get the new MaxMode PWM (say _P<sub>n</sub>_) by simply doing the following
 - If DIR is _HIGH_ (forward or positive sense): **P<sub>n</sub>** = 127 + **P** / 2.
 - If DIR is _LOW_ (backward or negative sense): **P<sub>n</sub>** = 127 - **P** / 2.
-
-### Configuring the MaxMode
-You can directly do it through a constructor of the `BotBase` class or call the `ConfigureMaxModeTo` function.
 
 # Developers Guide
 Here is the developers guide to the library. <br>
