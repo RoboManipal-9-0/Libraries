@@ -28,6 +28,7 @@ The library stands for _N Wheel Concentric Holonomic Base_.
 - [Debugger Notifications](#debugger-notifications)
     - [Debug level](#debug-level)
     - [Info level](#info-level)
+- [References](#references)
 
 # Users Guide
 ## Downloading the library
@@ -50,7 +51,7 @@ Move this folder into the arduino libraries folder on your PC. If you don't know
 - Configure debugger using the `.debugger` member, if you're using it. More about it in the [DebuggerSerial documentation](./../DebuggerSerial).
 - Attach the pins (PWM and DIR) of the motor driver using the _AttachPins_ function. You may configure the MaxMode using the _ConfigureMaxModeTo_ function. It's suggested that you check out the [BotBase documentation](./../BotBase/) for more.
 - Call the _Move_ function to move the bot at a velocity, with some angle to the reference and having some angular velocity about the center of the bot. More about it in the [BotBase documentation](./../BotBase/).
-<!-- TODO: Add links to the examples -->
+
 You can check out the examples for more.
 
 ## Examples
@@ -179,6 +180,9 @@ Sends out the PWM vector
         ```bash
         Initializing angle configuration: 90(1.570796) 210(3.665191) 330(5.759586)
         ```
+
+# References
+- [Paper for reference](https://www.mindraces.org/public_references/idsia_publications/omnidrive_kiart_preprint.pdf): idsia_publications/omnidrive_kiart_preprint.pdf
 
 [![Image](https://img.shields.io/badge/developed%20using-VSCode-lightgrey.svg)](https://code.visualstudio.com/)
 [![Image](https://img.shields.io/badge/Developer-TheProjectsGuy-blue.svg)](https://github.com/TheProjectsGuy)
