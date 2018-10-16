@@ -129,17 +129,21 @@ void DebuggerSerial::disableDebugger() {
 void DebuggerSerial::printMessage(int level, String output) {
     this->DebuggerOutput(level, output);      // DebuggerOutput function
 }
+void DebuggerSerial::print(int level, String output) {
+    this->printMessage(level, output);
+}
+void DebuggerSerial::print(String output, int level) {
+    this->print(level, output);
+}
 void DebuggerSerial::printSensorData(double value) {
     // Print the sensor data as string
     String msg = "";
     msg.concat(value);
     this->printMessage(SENSOR_FEED, msg);
 }
-void DebuggerSerial::print(int level, String output) {
-    this->printMessage(level, output);
-}
-void DebuggerSerial::print(String output, int level) {
-    this->print(level, output);
+void DebuggerSerial::printSensorData(String data) {
+    // Print direct sensor feed
+    this->printMessage(SENSOR_FEED, data);
 }
 
 

@@ -171,6 +171,7 @@ Let's explore the code in detail
 - **<font color="#3d8aff">void</font> <font color="#f9e784">print</font>(<font color="#3d8aff">int</font> level, <font color="#3d8aff">String</font> output)**: Print message to the _debuggerSerial_ (alternate to printMessage)
 - **<font color="#3d8aff">void</font> <font color="#f9e784">print</font>(<font color="#3d8aff">String</font> output, <font color="#3d8aff">int</font> level)**: Print message to the _debuggerSerial_ (alternate to printMessage). Arguments are reversed
 - **<font color="#3d8aff">void</font> <font color="#f9e784">printSensorData</font>(<font color="#3d8aff">double</font> value)**: Print the value of a sensor reading on _debuggerSerial_.
+- **<font color="#3d8aff">void</font> <font color="#f9e784">printSensorData</font>(<font color="#3d8aff">String</font> data)**: Print the data of a sensor reading on _debuggerSerial_ (data is passed as a string here).
 
 # Debugger Notifications
 ## Notification level
