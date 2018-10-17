@@ -1,0 +1,128 @@
+#include <PS2Controller.h>
+
+//Constructor to initialise the RX and TX Pins for Software Serial
+PS2Controller::PS2Controller(int rx_pin, int tx_pin)
+{
+  ps2.Initialize(rx_pin,tx_pin);
+}
+
+//###################### DEBUGGER ############################
+// Initializing debugger serial parameters
+void PS2Controller::InitializeDebugger(HardwareSerial *debugger_serial, int Level)
+{
+  // Debugger serial of bot
+  this->ps2DebuggerSerial = debugger_serial;
+  // Priority level of the debugger
+  this->debuggerPriorityLevel = Level;
+}
+// Initialises baud rate for PS2 Serial
+// Note that the baud rate should be  same as the jumper connection with PS2 shield
+void PS2Controller::InitializePS2Serial(uint32_t baud_rate)
+{
+  ps2.begin(baud_rate);
+}
+// Setting the debugger priority, messages less than this level are not displayed
+void PS2Controller::SetDebuggerPriorityToLevel(int minLevel)
+{
+  this->debuggerPriorityLevel = minLevel;
+}
+//######################## PS2 ###################################
+// To read PS2 button values
+void PS2Controller::ReadButtonStates(String button)
+{
+  String message=" BUTTON PRESSED : ";
+  if(button=="start")
+  {
+    this->start_Bstate=this->ps2.readButton(PS2_START);
+    message.concat(" Start " );
+  }
+  else if(button=="select")
+  {
+    this->select_Bstate= this->ps2.readButton(PS2_CROSS);
+    message.concat(" Cross " );
+  }
+  else if(button=="triangle")
+  {
+    this->triangle_Bstate=this->ps2.readButton(PS2_TRIANGLE);
+      message.concat(" Triangle " );
+  }
+  else if(button=="circle")
+  {
+    this->circle_Bstate=this->ps2.readButton(PS2_CIRCLE);
+      message.concat(" Circle " );
+  }
+  else if(button=="cross")
+  {
+    this->cross_Bstate=this->ps2.readButton(PS2_CROSS);
+  }
+  else if(button="square")
+  {
+    this->square_Bstate=this->ps2.readButton(PS2_SQUARE);
+    message.concat(" Square " );
+  }
+  this->DebuggerOutput(1, message);
+}
+
+//To obtain the analog values from the left side of the joystick
+void PS2Controller::ReadPS2Values()
+{
+  this->left_x = 255 - this->ps2.readButton(PS2_JOYSTICK_LEFT_X_AXIS);
+  this->left_y = this->ps2.readButton(PS2_JOYSTICK_LEFT_Y_AXIS);
+  String message=" PS2 VALUES: ";
+  message.concat(" X coordinates : ");
+  message.concat(this->left_x);
+  message.concat("     Y coordinates : ");
+  message.concat(this->left_y);
+  this->DebuggerOutput(1,message);
+  //AdjustCoordinates();
+}
+
+//Calculate the value of the angle in radians
+void PS2Controller::CalcAngleSpeed()
+{
+  float temp=(float)this->left_y/ this->left_x;
+  this->angle=atan2(this->left_x,this->left_y);
+  // To keep angle range 2pi radians
+  if(this->angle<0)
+  {
+    this->angle=3.14+(3.14+this->angle);
+  }
+  //this->speeds = (abs(this->left_x) > abs(this->left_y)) ? abs(left_x) : abs(left_y);
+
+  this->speeds=pow(pow(this->left_x,2)+pow(this->left_y,2),0.5);
+  String message="";
+  message.concat("Angle: ");
+  message.concat(this->angle);
+  message.concat("      Speed : ");
+  message.concat(speeds);
+  this->DebuggerOutput(2,message);
+
+}
+
+// To convert the coordinates from -128 to 128
+void PS2Controller::AdjustCoordinates(){
+  // Values mapped from 0 - 255 to -127- 128 to emulate Cartesian coordinates
+  this->left_x=-(this->left_x-127);
+  this->left_y=-(this->left_y-127);
+  String message="";
+  message.concat("COORDINATES : ");
+  message.concat(" X= ");
+  message.concat(this->left_x);
+  message.concat(" Y= ");
+  message.concat(this->left_y);
+  this->DebuggerOutput(2,message);
+}
+// Debugger output function
+void PS2Controller::DebuggerOutput(int level, String output) {
+    // If the message priority is less, then no need to display
+    if (this->debuggerPriorityLevel > level) {
+        return;
+    }
+    // Print the message on serial monitor in fashion
+    // $:L%level%: %output%
+    this->ps2DebuggerSerial->print("$:L");
+    this->ps2DebuggerSerial->print(level);
+    this->ps2DebuggerSerial->print(": ");
+    this->ps2DebuggerSerial->print(output);         // Main message
+    this->ps2DebuggerSerial->println("");
+}
