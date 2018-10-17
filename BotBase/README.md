@@ -16,6 +16,7 @@ Beta testing done :tada:
     - [Using the library](#using-the-library)
     - [Motor driver modes](#motor-driver-modes)
         - [Configuring the Mode](#configuring-the-mode)
+        - [Sign Magnitude mode](#sign-magnitude-mode)
         - [Lock Anti-Phase Drive](#lock-anti-phase-drive)
 - [Developers Guide](#developers-guide)
     - [Library Details](#library-details)
@@ -24,6 +25,7 @@ Beta testing done :tada:
             - [BotBase.cpp](#botbasecpp)
             - [keywords.txt](#keywordstxt)
             - [README.md](#readmemd)
+        - [Constants defined](#constants-defined)
         - [Class description](#class-description)
             - [Protected members](#protected-members)
                 - [Variables](#variables)
@@ -64,15 +66,19 @@ You simply have to do the following to use this library
 
 You can imagine the velocity vector as a point in the [polar coordinate system](https://en.wikipedia.org/wiki/Polar_coordinate_system).
 
-<!-- TODO: Work required here -->
+
 ## Motor driver modes
 
-<!-- TODO: Work required here -->
 ### Configuring the Mode
-You can directly do it through a constructor of the `BotBase` class or call the `configureModes` function with the mode parameters.
+You can directly do it through a constructor of the `BotBase` class or call the `ConfigureModes` function. 
+
+### Sign Magnitude mode
+The _Sign Magnitude Drive_ is basically when we give the _PWM output to the PWM input pin of the motor driver_ and the _DIR output to the DIR input pin of the motor driver_. It's a direct connection and works as it sounds. A pin controls the direction of rotation and another pin controls the PWM of motor. You can know more from [here](http://www.modularcircuits.com/blog/articles/h-bridge-secrets/sign-magnitude-drive/).
+
+The identifier for this mode is `MODE_SM`. This is the default mode, unless you override it by calling the `ConfigureModes` function.
 
 ### Lock Anti-Phase Drive
-The _Lock Anti-Phase Drive_ is basically when we give the _PWM output to the DIR pin of the motor driver_ and the _PWM input of the motor driver gets a constant voltage_. Here's how it works:
+The _Lock Anti-Phase Drive_ is basically when we give the _PWM output to the DIR pin of the motor driver_ and the _PWM input of the motor driver gets a constant voltage_ (which in this library is given through the DIR output pin). Here's how it works:
 - Say that we give 50% (duty cycle) as the PWM output into the DIR terminal of the motor driver. This means that 50 percent of the time the motor gets current in the forward direction and 50 percent of the time it gets current in the reverse direction, this gives the motor extraordinary braking capabilities.
 - If we give more than 50% duty cycle, say 65%: Then the motor gets current in the forward direction 65 percent of the time and gets current in the reverse direction 35 percent of the time (100 - 65 = 35). This means that the forward current lasts longer and will dominate in the final effect. So we add something to the duty cycle if we want the motor to move forward (rotate in positive sense).
 - If we give less than 50% duty cycle, say 25%: Then the motor gets current in the forward direction 25 percent of the time and gets current in the reverse direction 75 percent of the time. This means that the reverse direction gets the priority. So we subtract something from the duty cycle if we want the motor to move backward (rotate in negative sense).
@@ -81,6 +87,8 @@ The _Lock Anti-Phase Drive_ is basically when we give the _PWM output to the DIR
 Therefore if we already have a PWM value (say _P_) and a DIR (_HIGH_ or _LOW_), we simply get the new MaxMode PWM (say _P<sub>n</sub>_) by simply doing the following
 - If DIR is _HIGH_ (forward or positive sense): **P<sub>n</sub>** = 127 + **P** / 2.
 - If DIR is _LOW_ (backward or negative sense): **P<sub>n</sub>** = 127 - **P** / 2.
+
+You can configure the PWM value the PWM pin of the motor driver get by using the `setLAP_PWMto` function. The identifier used to describe this mode is `MODE_LAP`.
 
 # Developers Guide
 Here is the developers guide to the library. <br>
@@ -102,6 +110,11 @@ This file contains the keywords that we want the Arduino IDE to identify. This p
 
 #### README.md
 The description file containing details about the library. The file that you are looking at right now
+
+### Constants defined
+The following constants are defined using `#define` directives
+- `MODE_SM`: This is the identifier for the [Sign Magnitude mode](#sign-magnitude-mode). It's value is set to 0.
+- `MODE_LAP`: This is the identifier for the [Locked anti-phase mode](#lock-anti-phase-drive). It's value is set to 1.
 
 ### Class description
 This library assumes the following :-
@@ -126,9 +139,11 @@ Let's inspect in detail what all the members of the class do
 
 - **<font color="#CD00FF">bool</font> \*reverseDIRs** : If the particular motor is connected in a reversed fashion, then pass it _true_, else it's defaulted to _false_. The directions are simply reversed while writing to the motor driver if they're true (only for the particular motor for which it is true).
 
-- **<font color="#CD00FF">bool</font> maxMode**: If `True`, then maxMode is enabled.
+- **<font color="#CD00FF">int</font> \*motorModes**: This is an array consisting of connection modes of the motor drivers connected to individual wheels. The array of identifiers, basically.
 
-- **<font color="#CD00FF">int</font> maxModeValue**: The value to be given to the PWM pin of the motor driver.
+- **<font color="#CD00FF">bool</font> modesAttached**: Set to **true** if the `ConfigureModes` function is called, else `false`.
+
+- **<font color="#CD00FF">int</font> LAP_PWM_value**: The PWM value that is to be written onto the DIR output pin, which is connected to the PWM input pin of the motor driver, in case the Locked anti phase mode is used.
 
 ##### Member functions
 - **<font color="#CD00FF">void</font> <font color="#5052FF">setNumberOfWheelsTo</font>(<font color="#FF00FF">int</font> number)** : Sets the *NUMBER_OF_WHEELS* value to the passed *number*. It's a good idea to make a call to this in the constructor of the derived classes.
@@ -144,16 +159,23 @@ Though you'll never create any memory for objects of this class, it's advised to
 
 - **<font color="#5052FF">BotBase</font>()** : Empty constructor
 
-- **<font color="#5052FF">BotBase</font>(<font color="#CD00FF">bool</font> maxMode, <font color="#CD00FF">int</font> maxModeValue = 255)** : Initialization constructor for the _MaxMode_. It calls the *configureMaxMode* function.
+- **<font color="#5052FF">BotBase</font>(<font color="#CD00FF">int</font> \*modes)** : Initialization constructor if you also want to initialize the modes of the motor drivers. It calls the *ConfigureModes* function.
 
 ##### Functions
 - **<font color="#CD00FF">void</font> <font color="#5052FF">AttachPins</font>(<font color="#CD00FF">int</font> \*PWM_pins, <font color="#CD00FF">int</font> \*DIR_pins)** : To attach the pins of the motors connected to the motor drivers. Pass it the list of *PWM_pins* and *DIR_pins*.
 
 - **<font color="#CD00FF">void</font> <font color="#5052FF">AttachPins</font>(<font color="#CD00FF">int</font> \*PWM_pins, <font color="#CD00FF">int</font> \*DIR_pins, <font color="#CD00FF">bool</font> \*reverseDIRs)** : To attach the pins of the motors connected to the motor drivers. Pass it the list of *PWM_pins* and *DIR_pins*. You can also initialize the array for _reverseDIRs_ through this.
 
-- **<font color="#CD00FF">void</font> <font color="#5052FF">ConfigureMaxModeTo</font>(<font color="#CD00FF">bool</font> value, <font color="#CD00FF">int</font> DIR_mag_value = 255)**: Configuring the _MaxMode_. If made true, it's assumed by the library that you're giving the PWM values to the DIR pin of the motor driver and the PWM pin of the motor driver gets *DIR_mag_value*. (check the [MaxMode part of this documentation](#maxmode) for more on this).
+- **<font color="#CD00FF">void</font> <font color="#5052FF">ConfigureModes</font>(<font color="#CD00FF">int</font> \*modes)**: Configuring the mode of motor drivers. You have to pass it an array of identifiers which describe the motor connection mode of each wheel. For example, if you have a 4 wheeled bot whose third wheel (2nd index in array) is configured to MODE_SM and rest are configured to MODE_LAP, then call it this way:
+    ```
+    int modeArray[4] = {MODE_LAP, MODE_LAP, MODE_SM, MODE_LAP};
+    botBaseObject.ConfigureModes(modeArray);
+    ```
+    In case you do not call this function, all motors are configured to MODE_SM.
 
-- **<font color="#CD00FF">void</font> <font color="#5052FF">Move_PWM_Angle</font>(<font color="#CD00FF">int</font> PWM, <font color="#CD00FF">float</font> angle, <font color="#CD00FF">float</font> w = 0)** : An abstract function which you must implement in the derived classes. This function has the code to move your bot at a particular speed (*PWM*) and in a particular direction (*angle* in radians) with a particular angular velocity about the center (*w*, which is defaulted to 0). You needn't implement the actuation code (it's written in the _Move_ function for you).
+- **<font color="#CD00FF">void</font> <font color="#5052FF">setLAP_PWMto</font>(<font color="#CD00FF">int</font> PWM_value)** : This function must be called if you've configured a motor to MODE_LAP. It must be passed the PWM value that you want the PWM input pin of the motor driver to receive through the DIR pin.
+
+- **_virtual_ <font color="#CD00FF">void</font> <font color="#5052FF">Move_PWM_Angle</font>(<font color="#CD00FF">int</font> PWM, <font color="#CD00FF">float</font> angle, <font color="#CD00FF">float</font> w = 0)** = 0 : An abstract function which you must implement in the derived classes. This function has the code to move your bot at a particular speed (*PWM*) and in a particular direction (*angle* in radians) with a particular angular velocity about the center (*w*, which is defaulted to 0). You needn't implement the actuation code (it's written in the _Move_ function for you).
 
 - **<font color="#CD00FF">void</font> <font color="#5052FF">Move</font>(<font color="#CD00FF">int</font> PWM, <font color="#CD00FF">int</font> angle_degrees, <font color="#CD00FF">float</font> w = 0)** : This is function that the user will call. It simply calls the *Move_PWM_Angle* function with the angle converted from degrees to radians, then it actuates the motors by calling _MoveMotor_ onto the individual motors.
 

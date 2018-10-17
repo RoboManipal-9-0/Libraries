@@ -42,6 +42,7 @@ public:
     // ##################### Initializer functions ####################
     // Constructors
     BotBase();
+    BotBase(int *modes);  // Configure modes as well
     // Configure motor driver pins
     void AttachPins(int *PWM_pins, int *DIR_PINs);         // PWM and DIR
     void AttachPins(int *PWM_pins, int *DIR_PINs, bool *reverseDIRs);   // PWM, DIR and reverse DIR array

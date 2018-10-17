@@ -26,6 +26,9 @@ BotBase::BotBase() {
     // Nothing here
     this->modesAttached = false;
 }
+BotBase::BotBase(int *modes) : BotBase() {
+    this->ConfigureModes(modes);
+}
 // Configure motor modes
 void BotBase::ConfigureModes(int *modes) {
     this->motorModes = modes;   // Motor modes
@@ -123,7 +126,7 @@ void BotBase::MoveMotor(int i) {
     // Mode: MaxMode
     String msg = "Mode: ";
     if (!this->modesAttached || this->motorModes[i] == MODE_SM) {
-        /* Standard : Sign magnitude mode 
+        /* Standard : Sign magnitude mode (default mode)
             PWM connected to PWM of motor driver
             DIR connected to DIR of motor driver
                 Direct connection here
