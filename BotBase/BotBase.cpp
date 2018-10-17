@@ -33,6 +33,42 @@ BotBase::BotBase(int *modes) : BotBase() {
 void BotBase::ConfigureModes(int *modes) {
     this->motorModes = modes;   // Motor modes
     this->modesAttached = true; // Attached
+    // Debugger message (Level: INFO)
+    // Configuration modes [ %MODE1% %MODE2% ... %MODE_N% ]
+    // Examples:
+    // Configuration modes [ SM LAP LAP SM ]
+    // Configuration modes [ LAP LAP LAP LAP ]
+    String msg = "Configuration modes [ ";
+    for (int i = 0; i < this->NUMBER_OF_WHEELS; i++) {
+        switch(this->motorModes[i]) {
+            case MODE_LAP:
+                msg.concat("LAP ");
+                break;
+            case MODE_SM:
+                msg.concat("SM ");
+                break;
+            default:
+                msg.concat("ERROR_UNKNOWN_MODE");
+        }
+    }
+    msg.concat("]");
+    this->debugger.print(msg, DEBUG);
+}
+// Scaling factors for the PWM
+void BotBase::SetScalingFactorsTo(double *factors) {
+    this->scalingFactors = factors;
+    this->scalingFactorsAttached = true;
+    // Debugger message (Level: INFO)
+    // Scaling factors: %SF1% %SF2% ... %SF_N%
+    // Examples:
+    // Scaling factors: 1.0 1.0 1.0 1.0
+    // Scaling factors: 1.0 1.0 0.78 0.9
+    String msg = "Scaling factors: ";
+    for (int i = 0; i < this->NUMBER_OF_WHEELS; i++) {
+        msg.concat(this->scalingFactors[i]);
+        msg.concat(" ");
+    }
+    this->debugger.print(INFO, msg);
 }
 // Configure motor driver pins for the base (when only PWM and DIR pins are passed, by default reverseDIRs are all false)
 void BotBase::AttachPins(int *PWM_PINs, int *DIR_PINs) {
@@ -132,6 +168,9 @@ void BotBase::MoveMotor(int i) {
                 Direct connection here
         */
         msg.concat("Sign Magnitude"); // Standard mode
+        if (this->scalingFactorsAttached) { // Scale values if they're attached
+            PWM = int(PWM * this->scalingFactors[i]);
+        }
         PWM = this->PWM_values[i];   // PWM 
         DIR = this->reverseDIRs[i] ^ this->DIR_values[i];   // DIR : If reverseDIRs is true, then toggle DIR_value
         // Write the values on pins
@@ -153,10 +192,23 @@ void BotBase::MoveMotor(int i) {
         } else if (DIR == LOW) {   // Reverse
             PWM -= this->PWM_values[i]/2;
         }
+        if (this->scalingFactorsAttached) { // Scale values if they're attached
+            PWM = int(PWM * this->scalingFactors[i]);
+        }
         // Write PWM to DIR pin of motor driver
         analogWrite(this->DIR_pins[i], PWM);
+        if (this->LAP_PWM_value == 0) {
+            // Debugger message (Level: ERROR)
+            // LAP default PWM set to 0
+            this->debugger.print(ERROR, "LAP default PWM set to 0");
+        }
         // LAP Mode PWM value
         analogWrite(this->PWM_pins[i], this->LAP_PWM_value);
+    } else {
+        // Debugger message (Level: ERROR)
+        // Unknown mode attached
+        this->debugger.print(ERROR, "Unknown mode attached");
+        msg.concat("<UNKNOWN>");
     }
     this->debugger.print(msg, DEBUG); // DebuggerSerial message
     // Send message on terminal

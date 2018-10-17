@@ -17,7 +17,7 @@ Beta testing done :tada:
     - [Motor driver modes](#motor-driver-modes)
         - [Configuring the Mode](#configuring-the-mode)
         - [Sign Magnitude mode](#sign-magnitude-mode)
-        - [Lock Anti-Phase Drive](#lock-anti-phase-drive)
+        - [Lock Anti-Phase Drive mode](#lock-anti-phase-drive-mode)
 - [Developers Guide](#developers-guide)
     - [Library Details](#library-details)
         - [Files in the library](#files-in-the-library)
@@ -59,12 +59,18 @@ You simply have to do the following to use this library
 > **\*PWM_pins**: The array pointer (name of the array) consisting the PWM pin numbers of the motor drivers.<br>
 > **\*DIR_PINs**: The array pointer (name of the array) consisting the DIR pin numbers of the motor drivers.<br>
 > (OPTIONAL) **\*reverseDIRs**: This is a boolean array of the same length as the number of wheels your bot has. Each element is defaulted to false. If you manually create this array and feed a true at some _index_ (numbering starts from 0 here), then it implies that the motors at those indices are connected in the reverse fashion (forward will actually mean that the particular motor moves in the -ve sense).<br>
-3. To move the base, call the `Move` function. This function handles the movement of the bot. You must pass it the following arguments<br>
+3. Configure additional parameters, these are optional
+    - Use the `SetScalingFactorsTo` function to configure scaling factors for the PWMs. Pass it the following
+    > **\*scalingFactors**: This is an array of scaling factors (floating point values). It must include a scaling factor for every motor indexed in the right order.<br>
+    - Use the `ConfigureModes` function to configure the modes of the individual motor drivers. Pass it the following
+    > **\*modes**: An array consisting of the individual motor driver modes. One mode per motor driver in the right order. It's basically a list of mode identifiers. Currently, there's only `MODE_SM` and `MODE_LAP`. Check _motor driver modes_ section for more info.<br>
+    - In case you've configured even a single motor to MODE_LAP, then set the default LAP PWM using the `setLAP_PWMto` function. Pass it the default PWM.
+4. To move the base, call the `Move` function. This function handles the movement of the bot. You must pass it the following arguments<br>
 > **PWM**: Velocity vector length.<br>
 > **angle_degrees**: Angle the velocity vector makes with the reference (in degrees).<br>
 > (OPTIONAL) **w** _value_: angular velocity with respect to the center.<br>
 
-You can imagine the velocity vector as a point in the [polar coordinate system](https://en.wikipedia.org/wiki/Polar_coordinate_system).
+You can imagine the velocity vector as a point vector in the [polar coordinate system](https://en.wikipedia.org/wiki/Polar_coordinate_system).
 
 
 ## Motor driver modes
@@ -77,7 +83,7 @@ The _Sign Magnitude Drive_ is basically when we give the _PWM output to the PWM 
 
 The identifier for this mode is `MODE_SM`. This is the default mode, unless you override it by calling the `ConfigureModes` function.
 
-### Lock Anti-Phase Drive
+### Lock Anti-Phase Drive mode
 The _Lock Anti-Phase Drive_ is basically when we give the _PWM output to the DIR pin of the motor driver_ and the _PWM input of the motor driver gets a constant voltage_ (which in this library is given through the DIR output pin). Here's how it works:
 - Say that we give 50% (duty cycle) as the PWM output into the DIR terminal of the motor driver. This means that 50 percent of the time the motor gets current in the forward direction and 50 percent of the time it gets current in the reverse direction, this gives the motor extraordinary braking capabilities.
 - If we give more than 50% duty cycle, say 65%: Then the motor gets current in the forward direction 65 percent of the time and gets current in the reverse direction 35 percent of the time (100 - 65 = 35). This means that the forward current lasts longer and will dominate in the final effect. So we add something to the duty cycle if we want the motor to move forward (rotate in positive sense).
@@ -114,7 +120,7 @@ The description file containing details about the library. The file that you are
 ### Constants defined
 The following constants are defined using `#define` directives
 - `MODE_SM`: This is the identifier for the [Sign Magnitude mode](#sign-magnitude-mode). It's value is set to 0.
-- `MODE_LAP`: This is the identifier for the [Locked anti-phase mode](#lock-anti-phase-drive). It's value is set to 1.
+- `MODE_LAP`: This is the identifier for the [Locked anti-phase mode](#lock-anti-phase-drive-mode). It's value is set to 1.
 
 ### Class description
 This library assumes the following :-
@@ -145,6 +151,11 @@ Let's inspect in detail what all the members of the class do
 
 - **<font color="#CD00FF">int</font> LAP_PWM_value**: The PWM value that is to be written onto the DIR output pin, which is connected to the PWM input pin of the motor driver, in case the Locked anti phase mode is used.
 
+- **<font color="#CD00FF">double</font> scalingFactors**: The scaling factors that are to be applied to the final PWM of all the motors. These can be configured using the `SetScalingFactorsTo` function.
+
+- **<font color="#CD00FF">bool</font> scalingFactorsAttached**: This is set to `true` if the function `SetScalingFactorsTo` is called, else it's `false`.
+
+
 ##### Member functions
 - **<font color="#CD00FF">void</font> <font color="#5052FF">setNumberOfWheelsTo</font>(<font color="#FF00FF">int</font> number)** : Sets the *NUMBER_OF_WHEELS* value to the passed *number*. It's a good idea to make a call to this in the constructor of the derived classes.
 
@@ -174,6 +185,8 @@ Though you'll never create any memory for objects of this class, it's advised to
     In case you do not call this function, all motors are configured to MODE_SM.
 
 - **<font color="#CD00FF">void</font> <font color="#5052FF">setLAP_PWMto</font>(<font color="#CD00FF">int</font> PWM_value)** : This function must be called if you've configured a motor to MODE_LAP. It must be passed the PWM value that you want the PWM input pin of the motor driver to receive through the DIR pin.
+
+- **<font color="#CD00FF">void</font> <font color="#5052FF">SetScalingFactorsTo</font>(<font color="#CD00FF">double</font> \*factors)** : This function is used to configure the scaling factors (the individual factors by which the PWMs are to be scaled while writing to the motors). Default value is 1 for all the motors.
 
 - **_virtual_ <font color="#CD00FF">void</font> <font color="#5052FF">Move_PWM_Angle</font>(<font color="#CD00FF">int</font> PWM, <font color="#CD00FF">float</font> angle, <font color="#CD00FF">float</font> w = 0)** = 0 : An abstract function which you must implement in the derived classes. This function has the code to move your bot at a particular speed (*PWM*) and in a particular direction (*angle* in radians) with a particular angular velocity about the center (*w*, which is defaulted to 0). You needn't implement the actuation code (it's written in the _Move_ function for you).
 

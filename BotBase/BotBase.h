@@ -31,6 +31,9 @@ protected:
     int *motorModes;            // Modes of each motor driver attached
     bool modesAttached;         // Modes attached or not
     int LAP_PWM_value;          // Locked anti-phase PWM value (to be given to the PWM pin of motor driver)
+    // Motor PWM scaling values
+    double *scalingFactors;        // Individual scaling factors of motors
+    bool scalingFactorsAttached;
     // ##################### Private funcions ####################
     // Set number of wheels
     void setNumberOfWheelsTo(int number);
@@ -49,6 +52,8 @@ public:
     // Configure Mode
     void ConfigureModes(int *modes);                        // Max mode configuration
     void setLAP_PWMto(int PWM_value);
+    // Configure scaling factors
+    void SetScalingFactorsTo(double *factors);
     // ######################### Motion funcions #########################
     // Motion of the bot : Every bot has a Move function (angle in radians)
     virtual void Move_PWM_Angle(int PWM, float angle, float w = 0) = 0;
