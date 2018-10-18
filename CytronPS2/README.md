@@ -7,7 +7,7 @@ Check the link for the [PS2 Controller](https://github.com/RoboManipal-9-0/Libra
 ## User's Guide
 ## Conventions
 Please refer to the image below for the conventions followed in the library.
-![Joystick conventions](../DATA/Images/JoystickConventions.png)
+![Joystick conventions](../DATA/Images/Joystick.png)
 The image is taken from top view.
 
 ### Downloading the library
@@ -18,6 +18,23 @@ git clone https://github.com/RoboManipal-9-0/Libraries.git
 ```
 ## Using the library with Arduino
 Move this folder into the arduino libraries folder on your PC.
+
+## Examples
+After moving the library to the correct location, you can check the following examples.
+
+They are to give you a basic introduction to the CytronPS2 library.
+
+### Example 1
+This example demonstartes how to read button presses on a joystick. The LED on the main board lights up if the 'Select' button is pressed. ( You modify it to do so with any button of your choice ).
+![PS2ReadButton](../DATA/Images/PS2ReadButton.jpg)
+
+### Example 2
+This example demonstartes how to read the analog values on a joystick. The analog values read by the left joystick are displayed on the serial monitor. ( You modify it to do so with the Y coordinate as well as the X and Y coordinates of the right joystick ).
+![PS2TestAnalog](../DATA/Images/PS2TestAnalog.jpg)
+
+Note: 
+- Set the baudrate of the PS2 Serial that matches with the jumper setting on the PS2 Shield. 
+- Do not call the Initialize() function if you are using it with Hardware Serial.
 
 # Developers Guide
 

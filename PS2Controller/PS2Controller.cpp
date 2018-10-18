@@ -66,20 +66,22 @@ void PS2Controller::ReadButtonStates(String button)
 //To obtain the analog values from the left side of the joystick
 void PS2Controller::ReadPS2Values()
 {
-  this->left_x = 255 - this->ps2.readButton(PS2_JOYSTICK_LEFT_X_AXIS);
-  this->left_y = this->ps2.readButton(PS2_JOYSTICK_LEFT_Y_AXIS);
+  // Read analog values from the right side of the joystick
+  this->left_x = 255 - this->ps2.readButton(PS2_JOYSTICK_RIGHT_X_AXIS);
+  this->left_y = this->ps2.readButton(PS2_JOYSTICK_RIGHT_Y_AXIS);
+
   String message=" PS2 VALUES: ";
   message.concat(" X coordinates : ");
   message.concat(this->left_x);
   message.concat("     Y coordinates : ");
   message.concat(this->left_y);
   this->DebuggerOutput(1,message);
-  //AdjustCoordinates();
 }
 
 //Calculate the value of the angle in radians
 void PS2Controller::CalcAngleSpeed()
 {
+  // CAlculate the angle of desired motion
   float temp=(float)this->left_y/ this->left_x;
   this->angle=atan2(this->left_x,this->left_y);
   // To keep angle range 2pi radians
@@ -87,9 +89,9 @@ void PS2Controller::CalcAngleSpeed()
   {
     this->angle=3.14+(3.14+this->angle);
   }
-  //this->speeds = (abs(this->left_x) > abs(this->left_y)) ? abs(left_x) : abs(left_y);
-
+  // Maps the circular coordinate space into a sqaure
   this->speeds=pow(pow(this->left_x,2)+pow(this->left_y,2),0.5);
+
   String message="";
   message.concat("Angle: ");
   message.concat(this->angle);
@@ -104,6 +106,7 @@ void PS2Controller::AdjustCoordinates(){
   // Values mapped from 0 - 255 to -127- 128 to emulate Cartesian coordinates
   this->left_x=-(this->left_x-127);
   this->left_y=-(this->left_y-127);
+
   String message="";
   message.concat("COORDINATES : ");
   message.concat(" X= ");
@@ -112,6 +115,7 @@ void PS2Controller::AdjustCoordinates(){
   message.concat(this->left_y);
   this->DebuggerOutput(2,message);
 }
+
 // Debugger output function
 void PS2Controller::DebuggerOutput(int level, String output) {
     // If the message priority is less, then no need to display

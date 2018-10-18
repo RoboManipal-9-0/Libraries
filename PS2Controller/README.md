@@ -22,9 +22,17 @@ After moving the library to the correct location, you can check the following ex
 
 The first two examples are to give you a basic introduction to the CytronPS2 library
 ### Example 
-The example we're looking for is here 
-### Example 2
-### Example 3
+The example we're looking for is ![here](../DATA/Images/PS2Controller.jpg)
+
+Create an object with the Software Serial pins of your choice.
+```
+PS2Controller my_object_name( RX_pin, TX_pin;
+```
+- Simply, make the required connections of the PS2Shield and the Arduino and upload this code to Arduino Mega/Uno etc. Play around with the joystick and the position , required angle and speed are displayed on your serial monitor.
+
+Note: 
+- Set the baudrate of the PS2 Serial that matches with the jumper setting on the PS2 Shield. 
+- Do not call the Initialize() function if you are using it with Hardware Serial.
 
 # Developers guide
 
@@ -40,14 +48,68 @@ This is the file that contains the main code for the class. In the header file, 
 
 #### README.md
 The description file containing details about the library. The file that you at right now.
+
 ###  Class Description
+This library assumes that you have a Cytron PS2 Shield and have established the connection with the PS2 Controller.
+
 #### Protected Members
 #### Variables
+
+- **<font color="#CD00FF">int</font> rx_pin**: The RX pin for initialising Software Serial. 
+
+- **<font color="#CD00FF">int</font> tx_pin** : The RX pin for initialising Software Serial. 
+
+- **<font color="#CD00FF">float</font> right_x** : Analog values read from the right joystick. ( Value of the X coordinate from 0-255, that is later mapped from -127 to 128)
+
+- **<font color="#CD00FF">float</font> right_y** : Analog values read from the right joystick. ( Value of the X coordinate from 0-255, that is later mapped from -127 to 128)
+
+- **<font color="#CD00FF">float</font> left_x** : Analog values read from the left joystick. ( Value of the X coordinate from 0-255, that is later mapped from -127 to 128)
+
+- **<font color="#CD00FF">float</font> left_y** : Analog values read from the left joystick. ( Value of the X coordinate from 0-255, that is later mapped from -127 to 128)
+
+- **<font color="#CD00FF">bool</font> (X)_Bstate** : Returns the state of the button X: ( start/ select/ triangle/ circle/ cross/ square) . It is equal to 1 if the button's been pressed and 0 otherwise.
+
+- **<font color="#CD00FF">CytronPS2</font> ps2** : Creates an object of the Cytron_PS2Shield class
+
+- **<font color="#FFB300">HardwareSerial</font> \*ps2DebuggerSerial** : This is the serial over which debugger messages are sent. It must be initialized beforehand (using the _Serial.begin_ function). It's also mentioned as _debugger serial_ at places.
+
+- **<font color="#CD00FF">int</font> debuggerPriorityLevel** : This variable is to signify the verbocity needed by the user while debugging. Messages having priority lesser that this will not be displayed on the _debugger serial_.
+
 ##### Member functions
 
+- **<font color="#CD00FF">void</font> <font color="#5052FF">DebuggerOutput</font>(<font color="#FF00FF">int</font> Level, <font color="#FF00FF">String</font> output)** : Used to put a debugger message into the serial. All debugger messages have the following format :<br>
+```
+$:L%level%: %output%
+```
+Where stuff in % is it's *debuggerPriorityLevel* and the *output* message passed to the function respectively.
+
 #### Public Members
+
 ##### Constructors
+
+- **<font color="#5052FF">PS2Controller</font>(<font color="#CD00FF">int</font> rx_pin, <font color="#FFB300">int</font> tx_pin)** : Initialization constructor for the class. It calls the *Initialize* function of the Cytron_PS2Shield library to initialise software serial pins.
+
+##### Variables
+- **<font color="#CD00FF">int</font> speeds** : It is the speed at which the bot is required to move. This has been kept intentionally public to enable arduino codes to access and modify it
+
+- **<font color="#CD00FF">float</font> angle** : It is the angle at which the bot is required to move. This has been kept intentionally public to enable arduino codes to access and modify it
+
 ##### Member Functions
+- **<font color="#CD00FF">void</font> <font color="#5052FF">InitializeDebugger</font>(<font color="#FFB300">HardwareSerial</font> \*debugger_serial, <font color="#CD00FF">int</font> Level)** : To assign *debugger_serial* and *Level* to the *ps2DebuggerSerial* and *debuggerPriorityLevel* respectively.
+
+- **<font color="#CD00FF">void</font> <font color="#5052FF">ReadButtonStates</font>(<font color="#FF00FF">String</font> button)** : To check if the *button* has been pressed
+
+- **<font color="#CD00FF">void</font> <font color="#5052FF">ReadPS2Values</font>()** : Calculates the raw analog values returned by the joystick. ( Values range from 0-255 )
+
+- **<font color="#CD00FF">void</font> <font color="#5052FF">AdjustCoordinates</font>()** : Adjust the range of coordinates from 0-255 to -127-128. This is done in order to have an origin ( centre of joystick ) correspond to (0,0). It also maps the circular space of a joystick such that every point on its circumference corresponds to max. speed.
+
+```
+this->speeds=pow(pow(this->left_x,2)+pow(this->left_y,2),0.5);
+``` 
+The values have been mapped as shown below:
+![here](../DATA/Images/map.xcf)
+
+- **<font color="#CD00FF">void</font> <font color="#5052FF">CalcAngleSpeed</font>()** : To calculate the angle and speed of the desired bot motion from the position of the joystick.
 
 ### Additional References
 EduBot Cytron Tutorial with PS2 Shield : - [Cytron-PS2-Shield Tutorial](https://tutorial.cytron.io/2015/07/23/using-cytron-ps2-shield-with-arduino-edubot-2/)

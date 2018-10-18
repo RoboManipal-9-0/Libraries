@@ -11,12 +11,11 @@ class PS2Controller{
 protected:
 
     //#################### PS2 SoftwareSerial Variables #########
-    String serial_name;
     int rx_pin;
     int tx_pin;
 
-    float RightX;
-    float RightY;
+    float right_x;
+    float right_y;
     float left_x;
     float left_y;
     //######################PS2 BUTTON STATES#################
@@ -37,8 +36,6 @@ protected:
     HardwareSerial *ps2DebuggerSerial;
 
 public:
-  //Empty constructor
-  PS2Controller();
   // COnstructor to initialise the software serial pins.
   PS2Controller(int rx_pin, int tx_pin);
 
@@ -59,10 +56,10 @@ public:
   void ReadButtonStates(String button);
   //To obtain the analog values from the left side of the joystick
   void ReadPS2Values();
+  // To convert the coordinates from -128 to 128 and map the space into a square
+  void AdjustCoordinates();
   //To calculate angle value and the speed from the analog input obtained from the PS2
   void CalcAngleSpeed();
-  // To convert the coordinates from -128 to 128
-  void AdjustCoordinates();
 
 };
 
