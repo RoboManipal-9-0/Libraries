@@ -1,6 +1,29 @@
 # Introduction
 This library is for the receiver end of the Razor 9 DOF IMU (reference  [here](https://github.com/Razor-AHRS/razor-9dof-ahrs/tree/master/Arduino/Razor_AHRS)).
 
+# Table of contents
+- [Introduction](#introduction)
+- [Table of contents](#table-of-contents)
+- [User guide](#user-guide)
+    - [Downloading the library](#downloading-the-library)
+    - [Using the library with Arduino](#using-the-library-with-arduino)
+    - [Prerequisites](#prerequisites)
+- [Developers Guide](#developers-guide)
+    - [Library Details](#library-details)
+        - [Files in the library](#files-in-the-library)
+            - [RazorIMU_9DOF.h](#razorimu_9dofh)
+            - [RazorIMU_9DOF.cpp](#razorimu_9dofcpp)
+            - [keywords.txt](#keywordstxt)
+            - [README.md](#readmemd)
+        - [Class contents](#class-contents)
+            - [Protected members](#protected-members)
+                - [Variables](#variables)
+                - [Member functions](#member-functions)
+        - [Public members](#public-members)
+            - [Constructors](#constructors)
+            - [Member functions](#member-functions)
+- [Debugger Notifications](#debugger-notifications)
+
 # User guide
 ## Downloading the library
 It is suggested that you download the entire repository and then select this folder, so that you can enjoy the benifits of VCS like git. It makes it simpler to update the contents whenever patch fixes are done. You can simply open a terminal (or gitbash on windows), go to the folder where you want to save this repository and type the following command.
@@ -21,7 +44,7 @@ Please follow the following steps before working with this library:
 - Under the tools dropdown, select the following:
     - **Board**: Arduino Pro or Pro Mini
     - **Processor**: Atmega 328P (3.3V, 8MHz)
-    - **Port**: The connected port (/dev/ttyUSB\* for Ubuntu, COM\* for windows).
+    - **Port**: The connected port (/dev/ttyUSB\* (or ttyACM\*) for Ubuntu, COM\* for windows).
 - In the code of *Razor_AHRS* file, go to **USER SETUP AREA** and uncomment the correct #define HW\_\_VERSION\_CODE. It's 10736 in our examples, check the version from the correct hardware datasheet.
 - Set the OUTPUT\_\_STARTUP\_STREAM\_ON to *false*. This will disable the continuous output stream.
 - Upload the code.
@@ -33,5 +56,32 @@ More info about setting up software  [here](https://github.com/Razor-AHRS/razor-
 
 # Developers Guide
 
+## Library Details
+
+### Files in the library
+
+#### RazorIMU_9DOF.h
+
+#### RazorIMU_9DOF.cpp
+
+#### keywords.txt
+
+#### README.md
+
+### Class contents
+
+#### Protected members
+
+##### Variables
+
+##### Member functions
+
+### Public members
+
+#### Constructors
+
+#### Member functions
+
+# Debugger Notifications
 
 [![Image](https://img.shields.io/badge/Developer-TheProjectsGuy-blue.svg)](https://github.com/TheProjectsGuy)
