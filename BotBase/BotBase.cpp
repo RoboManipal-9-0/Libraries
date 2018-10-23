@@ -104,11 +104,6 @@ void BotBase::AttachPins(int *PWM_PINs, int *DIR_PINs, bool *reverseDIRs) {
     // Attach PWM_PINs and DIR_PINs 
     this->AttachPins(PWM_PINs, DIR_PINs);
 }
-// Mode configuration
-void BotBase::ConfigureModes(int *modes) {
-    this->motorModes = modes;        // Modes specified
-    this->modesAttached = true;      // Mode specifier called
-}
 // LAP PWM assignment
 void BotBase::setLAP_PWMto(int PWM_value) {
     this->LAP_PWM_value = PWM_value;   // PWM value in LAP mode
