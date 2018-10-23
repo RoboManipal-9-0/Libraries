@@ -1,3 +1,4 @@
+![Version tag](https://img.shields.io/badge/version-1.0.1-orange.svg)
 # Introduction
 This library is for the receiver end of the Razor 9 DOF IMU (reference  [here](https://github.com/Razor-AHRS/razor-9dof-ahrs/tree/master/Arduino/Razor_AHRS)).
 
@@ -8,6 +9,8 @@ This library is for the receiver end of the Razor 9 DOF IMU (reference  [here](h
     - [Downloading the library](#downloading-the-library)
     - [Using the library with Arduino](#using-the-library-with-arduino)
     - [Prerequisites](#prerequisites)
+    - [Usage of the library](#usage-of-the-library)
+    - [Examples](#examples)
 - [Developers Guide](#developers-guide)
     - [Library Details](#library-details)
         - [Files in the library](#files-in-the-library)
@@ -54,12 +57,22 @@ Please follow the following steps before working with this library:
 
 More info about setting up software  [here](https://github.com/Razor-AHRS/razor-9dof-ahrs/wiki/Tutorial#setting-up-the-software).
 
+## Usage of the library
+<!-- TODO: Add "How to use your library" here -->
+
+## Examples
+<!-- TODO: Examples here -->
+
 # Developers Guide
+<!-- TODO: Developers guide here -->
 
 ## Library Details
+<!-- TODO: Details of the library -->
 
 ### Files in the library
+<!-- TODO: File list -->
 
+<!-- TODO: Add file descriptions -->
 #### RazorIMU_9DOF.h
 
 #### RazorIMU_9DOF.cpp
@@ -68,6 +81,7 @@ More info about setting up software  [here](https://github.com/Razor-AHRS/razor-
 
 #### README.md
 
+<!-- TODO: Fill class contents -->
 ### Class contents
 
 #### Protected members
@@ -82,6 +96,7 @@ More info about setting up software  [here](https://github.com/Razor-AHRS/razor-
 
 #### Member functions
 
+<!-- TODO: Describe debugger usage -->
 # Debugger Notifications
 
 [![Image](https://img.shields.io/badge/Developer-TheProjectsGuy-blue.svg)](https://github.com/TheProjectsGuy)
