@@ -17,16 +17,16 @@
 #include "DebuggerSerial.h"
 
 // Axis values
-#define PITCH 0
-#define ROLL 1
+#define ROLL 0
+#define PITCH 1
 #define YAW 2
 
 // Serial method of connection
 class RazorIMU_9DOF {
     // Raw values of Pitch, Roll and Yaw as received from the sensors
-    float PRY_raw_values[3];
-    float PRY_full_scale[3];   // 0 to 360 degree values
-    float PRY_full_scale_ref[3];  // Reference values of Pitch, Roll and Yaw
+    float RPY_raw_values[3];
+    float RPY_full_scale[3];   // 0 to 360 degree values
+    float RPY_full_scale_ref[3];  // Reference values of Pitch, Roll and Yaw
     void Calculate_fullScales();
     // Initialize IMU - Initialize the reference values
     void GrabReference();
@@ -47,14 +47,18 @@ public:
     void UpdateData();
     void ResetReference();   // Reset reference values to current values
     // #############   Retrieving data from object   ############
-    // Retrieving raw PRY values
-    float GetRaw_PITCH();
+    // Retrieving raw RPY values
     float GetRaw_ROLL();
+    float GetRaw_PITCH();
     float GetRaw_YAW();
     // Retrieving full scale RPY values
     float GetRoll();
     float GetPitch();
     float GetYaw();
+    // Retrieving relative RPY values
+    float GetRel_YAW();
+    float GetRel_PITCH();
+    float GetRel_ROLL();
 };
 
 // End of guard code
