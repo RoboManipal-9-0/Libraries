@@ -58,7 +58,7 @@ Please follow the following steps before working with this library:
 More info about setting up software  [here](https://github.com/Razor-AHRS/razor-9dof-ahrs/wiki/Tutorial#setting-up-the-software).
 
 ## Usage of the library
-<!-- TODO: Add "How to use your library" here -->
+
 
 ## Examples
 <!-- TODO: Examples here -->
