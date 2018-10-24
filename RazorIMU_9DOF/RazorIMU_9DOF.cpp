@@ -36,7 +36,7 @@ void RazorIMU_9DOF::GrabData() {
     while(!this->IMU_Serial->available()) {
         // Do nothing
     }
-    // Debugger message (Level: SENSOR_FEED)
+    // Debugger message (Level: DEBUG)
     // Y: %YAW% P: %PITCH% R: %ROLL%
     // For example:
     // Y: -172 P: 96 R: 100
