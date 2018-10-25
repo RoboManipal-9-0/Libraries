@@ -18,14 +18,6 @@ protected:
     float right_y;
     float left_x;
     float left_y;
-    //######################PS2 BUTTON STATES#################
-    bool start_Bstate;
-    bool select_Bstate;
-
-    bool triangle_Bstate;
-    bool circle_Bstate;
-    bool cross_Bstate;
-    bool square_Bstate;
 
     // Creating an object of the Cytron_PS2Shield class
     CytronPS2 ps2;
@@ -38,6 +30,15 @@ protected:
 public:
   // COnstructor to initialise the software serial pins.
   PS2Controller(int rx_pin, int tx_pin);
+
+  //######################PS2 BUTTON STATES#################
+  bool start_Bstate;
+  bool select_Bstate;
+
+  bool left1_Bstate;
+  bool right1_Bstate;
+  bool cross_Bstate;
+  bool square_Bstate;
 
   // The desired speed and angle values calculated from the PS2
   int speeds;
@@ -53,7 +54,7 @@ public:
   // Initialize PS2Serial baud rate
   void InitializePS2Serial(uint32_t baud_rate);
   // To read PS2 button values
-  void ReadButtonStates(String button);
+  void ReadButtonStates();
   //To obtain the analog values from the left side of the joystick
   void ReadPS2Values();
   // To convert the coordinates from -128 to 128 and map the space into a square
