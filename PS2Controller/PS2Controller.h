@@ -19,6 +19,7 @@ protected:
     float left_x;
     float left_y;
 
+    
     // Creating an object of the Cytron_PS2Shield class
     CytronPS2 ps2;
     // ############################ Debugger #############################
@@ -60,7 +61,7 @@ public:
   // To convert the coordinates from -128 to 128 and map the space into a square
   void AdjustCoordinates();
   //To calculate angle value and the speed from the analog input obtained from the PS2
-  void CalcAngleSpeed();
+  void CalcAngleSpeed(int scaling_factor);
 
 };
 

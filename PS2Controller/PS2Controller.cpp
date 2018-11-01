@@ -53,7 +53,7 @@ void PS2Controller::ReadPS2Values()
 }
 
 //Calculate the value of the angle in radians
-void PS2Controller::CalcAngleSpeed()
+void PS2Controller::CalcAngleSpeed(int scaling_factor)
 {
   // CAlculate the angle of desired motion
   float temp=(float)this->left_y/ this->left_x;
@@ -65,6 +65,8 @@ void PS2Controller::CalcAngleSpeed()
   }
   // Maps the circular coordinate space into a sqaure
   this->speeds=pow(pow(this->left_x,2)+pow(this->left_y,2),0.5);
+  this->speeds=scaling_factor*(this->speeds>127?127:this->speeds);
+
 
   String message="";
   message.concat("Angle: ");

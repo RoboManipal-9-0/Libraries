@@ -26,37 +26,15 @@ void CytronPS2::Initialize(uint8_t rxpin, uint8_t txpin)
   _txpin = txpin;
   _rxpin = rxpin;
 }
-
 void CytronPS2::begin(uint32_t baudrate)
 {
-
-  // Compatibility with Harware Serials
-  if(_rxpin == 0 && _txpin == 1)
+	if(_rxpin == 0 && _txpin == 1)
 	{
 		hardwareSerial = true;
 		Serial.begin(baudrate);
 		while(!Serial);
 	}
 
-  if(_rxpin==19 && _txpin==18)
-  {
-    hardwareSerial = true;
-		Serial1.begin(baudrate);
-		while(!Serial1);
-  }
-  if(_rxpin==17 && _txpin==16)
-  {
-    hardwareSerial = true;
-		Serial2.begin(baudrate);
-		while(!Serial2);
-  }
-  if(_rxpin==15 && _txpin==14)
-  {
-    hardwareSerial = true;
-		Serial3.begin(baudrate);
-		while(!Serial3);
-  }
-  // Creates Software Serial
 	else
 	{
 		hardwareSerial = false;

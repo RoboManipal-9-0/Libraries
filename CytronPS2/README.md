@@ -42,7 +42,6 @@ Note:
 
 #### CytronPS2.cpp
 - Eliminating the parameterised constructor.
-- Added compatibility for Hardware Serial1, Serial2 and Serial3. 
 - Added a function **<font color="#CD00FF">void</font> <font color="#5052FF">Initialize</font>(<font color="#FF00FF">uint8_t</font> rxpin, <font color="#FF00FF">uint8_t</font> txpin)** :
  Used to initialize the software serial pins. This has been done in order to enable the custom PS2 Controller classes to initialise it.
   
