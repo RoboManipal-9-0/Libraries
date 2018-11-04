@@ -63,9 +63,8 @@ void PS2Controller::CalcAngleSpeed(int scaling_factor)
   {
     this->angle=3.14+(3.14+this->angle);
   }
-  // Maps the circular coordinate space into a sqaure
-  this->speeds=pow(pow(this->left_x,2)+pow(this->left_y,2),0.5);
-  this->speeds=scaling_factor*(this->speeds>127?127:this->speeds);
+  
+  this->speeds=scaling_factor* (pow(pow(this->left_x,2)+pow(this->left_y,2),0.5));
 
 
   String message="";
@@ -80,8 +79,27 @@ void PS2Controller::CalcAngleSpeed(int scaling_factor)
 // To convert the coordinates from -128 to 128
 void PS2Controller::AdjustCoordinates(){
   // Values mapped from 0 - 255 to -127- 128 to emulate Cartesian coordinates
+  //Also the values are mapped from -127 to 127 to ensure a square which will later be used in the mapping
   this->left_x=-(this->left_x-127);
+  if(this->x==128)
+    this->x=127;
   this->left_y=-(this->left_y-127);
+  if(this->y==128)
+    this->x=127;
+
+// The following equations map the sqaure formed to a circle . Refer to the README for documentation
+  if(pow(this->left_x,2)>=pow(this->left_y,2))
+  {
+    this->left_x=pow(this->left_x,3)/(sqrt(pow(this->left_x,2)+pow(this->left_y,2))*abs(this->left_x));
+    this->left_y=(this->left_x*pow(this->left_x,2))/(sqrt(pow(this->left_x,2)+pow(this->left_y,2))*abs(this->left_x));
+  }
+
+  else
+  {
+    this->left_x=(this->left_x*pow(this->left_y,2))/(sqrt(pow(this->left_x,2)+pow(this->left_y,2))*abs(this->left_y));
+    this->left_y=pow(this->left_y,3)/(sqrt(pow(this->left_x,2)+pow(this->left_y,2))*abs(this->left_y));
+    
+  }
 
   /*String message="";
   message.concat("COORDINATES : ");
