@@ -65,11 +65,13 @@ class CytronPS2
 {
   public:
 	  boolean SERIAL_ERR;
+    HardwareSerial *ps2Serial;
 	  uint8_t ps_data[6];
     uint8_t _txpin, _rxpin;
 
     // Hardware Serial
     CytronPS2();
+    void AttachSerial(HardwareSerial *ps2_serial);
     void Initialize(uint8_t rxpin, uint8_t txpin);
     void begin(uint32_t baudrate);
     uint8_t readButton(uint8_t key);

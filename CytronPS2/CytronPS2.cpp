@@ -26,15 +26,44 @@ void CytronPS2::Initialize(uint8_t rxpin, uint8_t txpin)
   _txpin = txpin;
   _rxpin = rxpin;
 }
+void CytronPS2::AttachSerial(HardwareSerial *ps2_serial)
+{
+  ps2Serial=ps2_serial;
+}
 void CytronPS2::begin(uint32_t baudrate)
 {
-	if(_rxpin == 0 && _txpin == 1)
+
+  // Compatibility with Harware Serials
+  if(_rxpin == 0 && _txpin == 1)
 	{
 		hardwareSerial = true;
-		Serial.begin(baudrate);
-		while(!Serial);
+    AttachSerial(&Serial);
+		ps2Serial->begin(baudrate);
+		while(!ps2Serial);
 	}
 
+  if(_rxpin==19 && _txpin==18)
+  {
+    hardwareSerial = true;
+    AttachSerial(&Serial1);
+		ps2Serial->begin(baudrate);
+		while(!ps2Serial);
+  }
+  if(_rxpin==17 && _txpin==16)
+  {
+    hardwareSerial = true;
+    AttachSerial(&Serial2);
+		ps2Serial->begin(baudrate);
+		while(!ps2Serial);
+  }
+  if(_rxpin==15 && _txpin==14)
+  {
+    hardwareSerial = true;
+    AttachSerial(&Serial3);
+		ps2Serial->begin(baudrate);
+		while(!ps2Serial);
+  }
+  // Creates Software Serial
 	else
 	{
 		hardwareSerial = false;
@@ -51,11 +80,11 @@ void CytronPS2::write(uint8_t data)
 {
 	if(hardwareSerial)
 	{
-		while(Serial.available() > 0) {
-			Serial.read();
+		while(ps2Serial->available() > 0) {
+			ps2Serial->read();
 		}
-		Serial.write(data);
-		Serial.flush();		// Wait for all data transmitted
+		ps2Serial->write(data);
+		ps2Serial->flush();		// Wait for all data transmitted
 	}
 	else
 	{
@@ -75,9 +104,9 @@ uint8_t CytronPS2::read(void)
 	{
 		while(true)
 		{
-			if(Serial.available() > 0)
+			if(ps2Serial->available() > 0)
 			{
-				rec_data = Serial.read();
+				rec_data = ps2Serial->read();
 				SERIAL_ERR = false;
 				return(rec_data);
 			}
@@ -125,7 +154,7 @@ boolean CytronPS2::readAllButton()
 
 	if(hardwareSerial)
 	{
-		nbyte = Serial.readBytes(ps_data, 6);
+		nbyte = ps2Serial->readBytes(ps_data, 6);
 
 		if(nbyte == 6) return(true);
 		else return (false);
