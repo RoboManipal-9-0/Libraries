@@ -4,28 +4,19 @@
 PS2Controller::PS2Controller(int rx_pin, int tx_pin)
 {
   ps2.Initialize(rx_pin,tx_pin);
+  // PS2 Serial attached
+  this->debugger.print("PS2 Serial attached", INFO);
+  debugger.AttachSerial(&Serial);
 }
 
-//###################### DEBUGGER ############################
-// Initializing debugger serial parameters
-void PS2Controller::InitializeDebugger(HardwareSerial *debugger_serial, int Level)
-{
-  // Debugger serial of bot
-  this->ps2DebuggerSerial = debugger_serial;
-  // Priority level of the debugger
-  this->debuggerPriorityLevel = Level;
-}
+
 // Initialises baud rate for PS2 Serial
 // Note that the baud rate should be  same as the jumper connection with PS2 shield
 void PS2Controller::InitializePS2Serial(uint32_t baud_rate)
 {
   ps2.begin(baud_rate);
 }
-// Setting the debugger priority, messages less than this level are not displayed
-void PS2Controller::SetDebuggerPriorityToLevel(int minLevel)
-{
-  this->debuggerPriorityLevel = minLevel;
-}
+
 //######################## PS2 ###################################
 // To read PS2 button values
 void PS2Controller::ReadButtonStates()
@@ -44,16 +35,18 @@ void PS2Controller::ReadPS2Values()
   this->left_x = 255 - this->ps2.readButton(PS2_JOYSTICK_RIGHT_X_AXIS);
   this->left_y = this->ps2.readButton(PS2_JOYSTICK_RIGHT_Y_AXIS);
 
-  /*String message=" PS2 VALUES: ";
-  message.concat(" X coordinates : ");
-  message.concat(this->left_x);
-  message.concat("     Y coordinates : ");
-  message.concat(this->left_y);
-  this->DebuggerOutput(1,message); */
+  // Debugger message (Level: DEBUG)
+  // X: %X_COORDINATE%  Y:%Y_COORDINATE%
+  // For example: X: 0  Y: 127
+  String msg="X: ";
+  msg.concat(this->left_x);
+  msg.concat("   Y: ");
+  msg.concat(this->left_y);
+  this->debugger.print(msg,DEBUG); 
 }
 
 //Calculate the value of the angle in radians
-void PS2Controller::CalcAngleSpeed(int scaling_factor)
+void PS2Controller::CalcAngleSpeed(float scaling_factor)
 {
   // CAlculate the angle of desired motion
   float temp=(float)this->left_y/ this->left_x;
@@ -63,16 +56,15 @@ void PS2Controller::CalcAngleSpeed(int scaling_factor)
   {
     this->angle=3.14+(3.14+this->angle);
   }
-  
+  // The scaling factor is present to modify the maximum permissible speed for the bot
   this->speeds=scaling_factor* (pow(pow(this->left_x,2)+pow(this->left_y,2),0.5));
 
 
-  String message="";
-  message.concat("Angle: ");
+  String message="Angle: ";
   message.concat(this->angle);
   message.concat("      Speed : ");
   message.concat(speeds);
-  this->DebuggerOutput(2,message);
+  this->debugger.print(message,DEBUG);
 
 }
 
@@ -81,46 +73,32 @@ void PS2Controller::AdjustCoordinates(){
   // Values mapped from 0 - 255 to -127- 128 to emulate Cartesian coordinates
   //Also the values are mapped from -127 to 127 to ensure a square which will later be used in the mapping
   this->left_x=-(this->left_x-127);
-  if(this->x==128)
-    this->x=127;
+  if(this->left_x==-128)
+    {
+      this->left_x=-127;
+    }
   this->left_y=-(this->left_y-127);
-  if(this->y==128)
-    this->x=127;
-
+  if(this->left_y==-128){
+    this->left_y=-127;
+  }
+   
+  float temp;
+  
+// SIMPLE STRETCHING
 // The following equations map the sqaure formed to a circle . Refer to the README for documentation
   if(pow(this->left_x,2)>=pow(this->left_y,2))
   {
-    this->left_x=pow(this->left_x,3)/(sqrt(pow(this->left_x,2)+pow(this->left_y,2))*abs(this->left_x));
-    this->left_y=(this->left_x*pow(this->left_x,2))/(sqrt(pow(this->left_x,2)+pow(this->left_y,2))*abs(this->left_x));
+    temp=pow(this->left_x,3)/(sqrt(pow(this->left_x,2)+pow(this->left_y,2))*abs(this->left_x));
+    this->left_y=(this->left_y*pow(this->left_x,2))/(sqrt(pow(this->left_x,2)+pow(this->left_y,2))*abs(this->left_x));
+    this->left_x=temp;
   }
 
-  else
+  else 
   {
-    this->left_x=(this->left_x*pow(this->left_y,2))/(sqrt(pow(this->left_x,2)+pow(this->left_y,2))*abs(this->left_y));
+    temp=(this->left_x*pow(this->left_y,2))/(sqrt(pow(this->left_x,2)+pow(this->left_y,2))*abs(this->left_y));
     this->left_y=pow(this->left_y,3)/(sqrt(pow(this->left_x,2)+pow(this->left_y,2))*abs(this->left_y));
+    this->left_x=temp;
     
   }
 
-  /*String message="";
-  message.concat("COORDINATES : ");
-  message.concat(" X= ");
-  message.concat(this->left_x);
-  message.concat(" Y= ");
-  message.concat(this->left_y);
-  this->DebuggerOutput(2,message); */
-}
-
-// Debugger output function
-void PS2Controller::DebuggerOutput(int level, String output) {
-    // If the message priority is less, then no need to display
-    if (this->debuggerPriorityLevel > level) {
-        return;
-    }
-    // Print the message on serial monitor in fashion
-    // $:L%level%: %output%
-    this->ps2DebuggerSerial->print("$:L");
-    this->ps2DebuggerSerial->print(level);
-    this->ps2DebuggerSerial->print(": ");
-    this->ps2DebuggerSerial->print(output);         // Main message
-    this->ps2DebuggerSerial->println("");
 }

@@ -11,13 +11,13 @@ Serial.begin(57600);
 
 Serial.println("Going into loop ... ");
 myPS2.InitializePS2Serial(115200);
-myPS2.InitializeDebugger(&Serial,0);
+//myPS2.InitializeDebugger(&Serial,0);
 }
 
 void loop() {
 
 myPS2.ReadPS2Values();
 myPS2.AdjustCoordinates();
-myPS2.CalcAngleSpeed();
+myPS2.CalcAngleSpeed(1);
 delay(40);
 }

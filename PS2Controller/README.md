@@ -1,3 +1,4 @@
+![Version tag](https://img.shields.io/badge/version-1.0.5-green.svg)
 # Introduction
 This library helps interface a PS2 Controller with Arduino and calculate normalised paramters such as the angle
 and speed of the bot motion. This class uses the modified Cytron PS2 Shield library.
@@ -5,7 +6,7 @@ and speed of the bot motion. This class uses the modified Cytron PS2 Shield libr
 # User's Guide
 ## Conventions
 Please refer to the image below for the conventions followed in the library.
-![Joystick conventions](../DATA/Images/JoystickConventions.png)
+![Joystick conventions](../.DATA/Images/JoystickConventions.png)
 The image is taken from top view.
 - The same convention is followed for both the joystick values, i,e right and left.
 - The *zero axis* is shown in red. The cartesian coordinate frame is as marked in the figure.
@@ -21,8 +22,8 @@ Move the folders into the *arduino libraries* folder on your PC.
 After moving the library to the correct location, you can check the following examples.
 
 The first two examples are to give you a basic introduction to the CytronPS2 library
-### Example 
-The example we're looking for is ![here](../DATA/Images/PS2Controller.jpg)
+### Example
+The example we're looking for is ![here](../.DATA/Images/PS2Controller.jpg)
 
 Create an object with the Software Serial pins of your choice.
 ```
@@ -30,8 +31,8 @@ PS2Controller my_object_name( RX_pin, TX_pin;
 ```
 - Simply, make the required connections of the PS2Shield and the Arduino and upload this code to Arduino Mega/Uno etc. Play around with the joystick and the position , required angle and speed are displayed on your serial monitor.
 
-Note: 
-- Set the baudrate of the PS2 Serial that matches with the jumper setting on the PS2 Shield. 
+Note:
+- Set the baudrate of the PS2 Serial that matches with the jumper setting on the PS2 Shield.
 - Do not call the Initialize() function if you are using it with Hardware Serial.
 
 # Developers guide
@@ -55,9 +56,9 @@ This library assumes that you have a Cytron PS2 Shield and have established the 
 #### Protected Members
 #### Variables
 
-- **<font color="#CD00FF">int</font> rx_pin**: The RX pin for initialising Software Serial. 
+- **<font color="#CD00FF">int</font> rx_pin**: The RX pin for initialising Software Serial.
 
-- **<font color="#CD00FF">int</font> tx_pin** : The RX pin for initialising Software Serial. 
+- **<font color="#CD00FF">int</font> tx_pin** : The RX pin for initialising Software Serial.
 
 - **<font color="#CD00FF">float</font> right_x** : Analog values read from the right joystick. ( Value of the X coordinate from 0-255, that is later mapped from -127 to 128)
 
@@ -71,17 +72,7 @@ This library assumes that you have a Cytron PS2 Shield and have established the 
 
 - **<font color="#CD00FF">CytronPS2</font> ps2** : Creates an object of the Cytron_PS2Shield class
 
-- **<font color="#FFB300">HardwareSerial</font> \*ps2DebuggerSerial** : This is the serial over which debugger messages are sent. It must be initialized beforehand (using the _Serial.begin_ function). It's also mentioned as _debugger serial_ at places.
-
-- **<font color="#CD00FF">int</font> debuggerPriorityLevel** : This variable is to signify the verbocity needed by the user while debugging. Messages having priority lesser that this will not be displayed on the _debugger serial_.
-
-##### Member functions
-
-- **<font color="#CD00FF">void</font> <font color="#5052FF">DebuggerOutput</font>(<font color="#FF00FF">int</font> Level, <font color="#FF00FF">String</font> output)** : Used to put a debugger message into the serial. All debugger messages have the following format :<br>
-```
-$:L%level%: %output%
-```
-Where stuff in % is it's *debuggerPriorityLevel* and the *output* message passed to the function respectively.
+- **<font color="#CD00FF">DebuggerSerial</font> debugger** : Creates an object of the DebuggerSerial class
 
 #### Public Members
 
@@ -101,16 +92,24 @@ Where stuff in % is it's *debuggerPriorityLevel* and the *output* message passed
 
 - **<font color="#CD00FF">void</font> <font color="#5052FF">ReadPS2Values</font>()** : Calculates the raw analog values returned by the joystick. ( Values range from 0-255 )
 
-- **<font color="#CD00FF">void</font> <font color="#5052FF">AdjustCoordinates</font>()** : Adjust the range of coordinates from 0-255 to -127-128. This is done in order to have an origin ( centre of joystick ) correspond to (0,0). It also maps the circular space of a joystick such that every point on its circumference corresponds to max. speed.
+- **<font color="#CD00FF">void</font> <font color="#5052FF">AdjustCoordinates</font>(float scaling_factor)** : Adjust the range of coordinates from 0-255 to -127-128. This is done in order to have an origin ( centre of joystick ) correspond to (0,0). It also maps the circular space of a joystick such that every point on its circumference corresponds to max. speed.
+The scaling_factor here is ratio of the max speed of motion desired to 127.
+eg. if we require a maximum speed of 230, scaling_factor would be 230/127.
 
 ```
 this->speeds=pow(pow(this->left_x,2)+pow(this->left_y,2),0.5);
-``` 
+```
 The values have been mapped as shown below:
-![here](../DATA/Images/map.xcf)
+![here](../.DATA/Images/map.png)
+
+The values obtained form a rectangular coordinate system with X and Y values ranging from -128 to 127. We first map it from -127 to 127 and then use simple stretch to map the values to a circle.
+For the derivation , have a look at the research paper below. ( We have used the simple stretch method)
+[map](../.DATA/ResearchPaper/Mapping.pdf)
 
 - **<font color="#CD00FF">void</font> <font color="#5052FF">CalcAngleSpeed</font>()** : To calculate the angle and speed of the desired bot motion from the position of the joystick.
 
 ### Additional References
 EduBot Cytron Tutorial with PS2 Shield : - [Cytron-PS2-Shield Tutorial](https://tutorial.cytron.io/2015/07/23/using-cytron-ps2-shield-with-arduino-edubot-2/)
 Original Cytron PS2 Shield library : [Cytron-PS2-Shield](https://github.com/CytronTechnologies/Cytron_PS2Shield)
+
+[![Developed using Atom](https://img.shields.io/badge/developed%20using-Atom-lightgrey.svg)](https://atom.io/)

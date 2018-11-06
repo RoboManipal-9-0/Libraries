@@ -5,6 +5,8 @@
 #include<CytronPS2.h>
 // To use the PS2 on software serial pins
 #include <SoftwareSerial.h>
+// Debugger
+#include "DebuggerSerial.h"
 
 //to use with Cytron PS2 Shield
 class PS2Controller{
@@ -22,13 +24,11 @@ protected:
     
     // Creating an object of the Cytron_PS2Shield class
     CytronPS2 ps2;
-    // ############################ Debugger #############################
-    // Debugger output through serial
-    int debuggerPriorityLevel;
-    void DebuggerOutput(int Level, String output);
-    HardwareSerial *ps2DebuggerSerial;
+    
 
 public:
+  //####################### Debugger #################
+  DebuggerSerial debugger;
   // COnstructor to initialise the software serial pins.
   PS2Controller(int rx_pin, int tx_pin);
 
@@ -45,12 +45,6 @@ public:
   int speeds;
   float angle;
 
-  //###################### DEBUGGER ############################
-  // Initializing debugger serial parameters
-  void InitializeDebugger(HardwareSerial *debugger_serial, int Level);
-  // Setting the debugger priority, messages less than this level are not displayed
-  void SetDebuggerPriorityToLevel(int minLevel);
-
   // #################### PS2 ###################################
   // Initialize PS2Serial baud rate
   void InitializePS2Serial(uint32_t baud_rate);
@@ -61,7 +55,7 @@ public:
   // To convert the coordinates from -128 to 128 and map the space into a square
   void AdjustCoordinates();
   //To calculate angle value and the speed from the analog input obtained from the PS2
-  void CalcAngleSpeed(int scaling_factor);
+  void CalcAngleSpeed(float scaling_factor);
 
 };
 
