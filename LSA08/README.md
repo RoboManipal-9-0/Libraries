@@ -6,16 +6,16 @@ This library is for the Cytron Line Sensing Array: LSA08 (reference  [here](http
 # Index
 - [Introduction](#introduction)
 - [Index](#index)
-- [Users Guide](#users-guide)
+- [User Guide](#user-guide)
     - [Downloading the library](#downloading-the-library)
     - [Using the library with Arduino](#using-the-library-with-arduino)
 - [Library Explanation](#library-explanation)
   - [Examples](#examples)
-      - [SerialRead](#SerialRead)
-      - [SerialRead_Buffer](#SerialRead_Buffer)
-      - [AnalogRead](#AnalogRead)
+   - [SerialRead](#serialread)
+   - [SerialRead_Buffer](#serialread_buffer)
+   - [AnalogRead](#analogread)
 - [Developers Guide](#developers-guide)
-    - [Library Details](#Library-Details)
+    - [Library Details](#library-details)
     - [Class contents](#class-contents)
         - [Private members](#private-members)
             - [Variables](#variables)
@@ -31,7 +31,7 @@ It is suggested that you download the entire repository and then select this fol
 ```
 git clone https://github.com/RoboManipal-9-0/Libraries.git
 ```
-**Not recommended**: You can download _only_ this folder by clicking [here](https://minhaskamal.github.io/DownGit/#/home?url=git clone https://github.com/RoboManipal-9-0/Libraries/LSA08)
+**Not recommended**: You can download _only_ this folder by clicking [here](https://minhaskamal.github.io/DownGit/#/home?url=https://github.com/RoboManipal-9-0/Libraries/LSA08)
 
 ## Using the library with Arduino
 Move this folder into the arduino libraries folder on your PC. If you don't know where the libraries folder of your arduino is, you can click [here](https://www.arduino.cc/en/hacking/libraries).<br>
@@ -45,7 +45,7 @@ In order to use this library, you must do the following:
 # Library Explanation
 The Library uses the LSA Module with the following Pin Out -
 
-![Image](./.DATA/PORT_A.png)
+![Image](../.DATA/Images/PORT_A.png)
 
 # About LSA08
 
@@ -200,6 +200,6 @@ Let's explore the class now
 - **<font color="#CD00FF">int</font> GetPreviousValue ( )** : To Return the Last Non - 255 Value of the LSA.
 
 # References
-- [LSA08 User Manual](./.DATA/LSA08_User_Manual.pdf).
+- [LSA08 User Manual](../.DATA/LSA08_User_Manual.pdf).
 
 ![Developers Tag](https://img.shields.io/badge/Developer-shashank3199-red.svg)
