@@ -6,7 +6,7 @@ This library is for the Encoder DC Servo Motor: RMCS220x (reference [here](https
 # Index
 - [Introduction](#introduction)
 - [Index](#index)
-- [Users Guide](#users-guide)
+- [Users Guide](#user-guide)
     - [Downloading the library](#downloading-the-library)
     - [Using the library with Arduino](#using-the-library-with-arduino)
 - [Library Explanation](#library-explanation)
@@ -14,7 +14,7 @@ This library is for the Encoder DC Servo Motor: RMCS220x (reference [here](https
       - [RhinoSerial](#rhinoserial)
       - [RhinoI2C](#rhinoi2c)
 - [Developers Guide](#developers-guide)
-    - [Library Details](#Library-Details)
+    - [Library Details](#library-details)
     - [Class contents](#class-contents)
         - [Private members](#private-members)
             - [Variables](#variables)
@@ -32,7 +32,7 @@ git clone https://github.com/RoboManipal-9-0/Libraries.git -b shashank-RhinoServ
 ```
 _You might want to omit the `-b <branch>` tag if you're downloading from the master branch_.
 
-**Not recommended**: You can download _only_ this folder by clicking [here](https://minhaskamal.github.io/DownGit/#/home?url=git clone https://github.com/RoboManipal-9-0/Libraries/RhinoServo)
+**Not recommended**: You can download _only_ this folder by clicking [here](https://minhaskamal.github.io/DownGit/#/home?url=https://github.com/RoboManipal-9-0/Libraries/RhinoServo)
 
 ## Using the library with Arduino
 Move this folder into the arduino libraries folder on your PC. If you don't know where the libraries folder of your arduino is, you can click [here](https://www.arduino.cc/en/hacking/libraries).<br>
@@ -142,12 +142,12 @@ Let's explore the class now
 #### Constructors
 - **<font color="#5052FF">RhinoServo</font> ( )** : Empty constructor for the class.
 - **<font color="#5052FF">RhinoServo</font> (<font color="#FF00FF">int </font> connection_mode )** : Constructor to set the Communication for the class.
-- **<font color="#5052FF">RhinoServo</font> ( <font color="#FF00FF">Stream*</font> AttachedSerial )** : To attach a pre-initialized serial to the Rhino. This function calls the _AttachRhino_Serial_ member function.
+- **<font color="#5052FF">RhinoServo</font> (<font color="#FF00FF">Stream\*</font> AttachedSerial )** : To attach a pre-initialized serial to the Rhino. This function calls the _AttachRhino_Serial_ member function.
 - **<font color="#5052FF">RhinoServo</font> (<font color="#FF00FF">uint8_t </font> Rhino_Address )** : To attach the I2C Address for the Rhino. This function calls the _AttachRhino_Address_ member function.
 
 #### Member functions
 
-- **<font color="#CD00FF">void</font> AttachRhino_Serial ( <font color="#FF00FF">Stream*</font> AttachedSerial )** : Attach Serial Line for the Rhino.
+- **<font color="#CD00FF">void</font> AttachRhino_Serial ( <font color="#FF00FF">Stream\*</font> AttachedSerial )** : Attach Serial Line for the Rhino.
 - **<font color="#CD00FF">void </font> AttachRhino_Address ( <font color="#FF00FF">uint8_t </font> Rhino_Address )** :  Attach I2C Address to the Rhino.
 - **<font color="#CD00FF">void </font> Set_Dir_Speed (<font color="#FF00FF">int </font> val )** :  Set Direction and Speed for Constant Rotation (Values between -255 to +255).
 - **<font color="#CD00FF">void </font> SetI2C_Address ( <font color="#FF00FF">int </font> val )** :  Set I2C Address (Serial Mode Only).
@@ -158,6 +158,6 @@ Let's explore the class now
 - **<font color="#CD00FF">int </font> GetI2C_Address( )** : Display Address of the Rhino (Serial Mode Only).
 
 # References
-- [Rhino User Manual](./.DATA/RMCS220x_DCServo_Driver.pdf).
+- [Rhino User Manual](../.DATA/RMCS220x_DCServo_Driver.pdf).
 
 ![Developers Tag](https://img.shields.io/badge/Developer-shashank3199-red.svg)
