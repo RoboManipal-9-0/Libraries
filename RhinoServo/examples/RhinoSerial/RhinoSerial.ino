@@ -7,15 +7,18 @@
 
 #include <RhinoServo.h>
 
+#define RhinoSerial Serial3
+
 RhinoServo R = RhinoServo(SERIAL);
 
 void setup()
 {
 	// Begin Serial Communication at 9600 baudrate.
 	Serial.begin(9600);
-	Serial3.begin(9600);
+	// Begin RhinoSerial Communication at 9600 baudrate.
+	RhinoSerial.begin(9600);
 	// Attach Serial Line to the Rhino.
-	R.AttachRhino_Serial(&Serial3);
+	R.AttachRhino_Serial(&RhinoSerial);
 	// Enable Debugger for Rhino 1.
 	R.debugger.Initialize("Rhino", &Serial, DEBUG);
 

@@ -415,7 +415,7 @@ void RhinoServo :: MovetoRel(int val)
 	}
 
 	String msg = "Motor Moved Relative to the Old Position by: ";
-	msg.concat((val%1800)/360);
+	msg.concat((val%1800)/5);
 	msg.concat(" Degrees.");
 	// Debugger message (level: DEBUG)
 	// Motor Moved Relative  to the Old Position by: <Angle in Degrees> Degrees.
