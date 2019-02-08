@@ -2,23 +2,19 @@
 	RhinoSerial - Sample Code for Serial Communication for Rhino RMCS-220X 
 	Copyright (c) 2018 RoboManipal. All right reserved
 	File created by : Shashank Goyal
-	Test Status: Pending.
 */
 
 #include <RhinoServo.h>
 
-#define RhinoSerial Serial3
-
-RhinoServo R = RhinoServo(SERIAL);
+RhinoServo R = RhinoServo(MODE_SERIAL);
 
 void setup()
 {
 	// Begin Serial Communication at 9600 baudrate.
 	Serial.begin(9600);
-	// Begin RhinoSerial Communication at 9600 baudrate.
-	RhinoSerial.begin(9600);
+	Serial3.begin(9600);
 	// Attach Serial Line to the Rhino.
-	R.AttachRhino_Serial(&RhinoSerial);
+	R.AttachRhino_Serial(&Serial3);
 	// Enable Debugger for Rhino 1.
 	R.debugger.Initialize("Rhino", &Serial, DEBUG);
 
@@ -76,6 +72,26 @@ void loop()
 
 			case 'W': // Set Constant Rotation of the Motor 
 			R.Set_Dir_Speed(Serial.parseInt());
+			break;
+
+			///////////////////////////////////////////////////////////			
+
+			case 'K': // Set P-Gain for PID Correction
+			R.Set_P_Gain(Serial.parseInt());
+			R.Get_P_Gain();
+			break;
+
+			///////////////////////////////////////////////////////////			
+
+			case 'L': // Set I-Gain for PID Correction. 
+			R.Set_I_Gain(Serial.parseInt());
+			R.Get_I_Gain();
+			break;
+
+			///////////////////////////////////////////////////////////			
+
+			case 'D': // Reset Rhino to Defaults.
+			R.Reset();
 			break;
 		}
 	}

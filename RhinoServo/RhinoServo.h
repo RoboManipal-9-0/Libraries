@@ -18,8 +18,8 @@
 #include "DebuggerSerial.h"
 
 // Operation Mode
-#define SERIAL 0
-#define I2C 1
+#define MODE_SERIAL 0
+#define MODE_I2C 1
 
 // Macro to Convert Degrees to Encoder Count.
 #define DEGtoCOUNT(x) 5*x 
@@ -67,6 +67,12 @@ class RhinoServo
 	void SetI2C_Address(int val);
 	// Set Encoder Value to a Specific/Zero Value.
 	void Reset_Reference(int val=0);
+	// Set Proportional Gain for PID Correction.
+	void Set_P_Gain(int val);
+	// Set Integral Gain for PID Correction.
+	void Set_I_Gain(int val);
+	// Reset Rhino to All Default Settings.
+	void Reset();
 
 	// ###################### Actuator Functions ##########################
 	// Move to Encoder Position wrt Encoder Zero Position.
@@ -79,6 +85,10 @@ class RhinoServo
 	int GetCurrent_Position();
 	// Display Address of the Rhino (usable in Serial Mode Only).
 	int GetI2C_Address();
+	// Get Proportional Gain for PID Correction.
+	int Get_P_Gain();
+	// Get Integral Gain for PID Correction.
+	int Get_I_Gain();
 };
 
 // End of Guard Code

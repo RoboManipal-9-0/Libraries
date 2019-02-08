@@ -1,8 +1,7 @@
 /*
-  	RhinoI2C - Sample Code for I2C Communication for Rhino RMCS-220X 
- 	Copyright (c) 2018 RoboManipal. All right reserved
-  	File created by : Shashank Goyal
-  	Test Status: Pending.
+	RhinoI2C - Sample Code for I2C Communication for Rhino RMCS-220X 
+	Copyright (c) 2018 RoboManipal. All right reserved
+	File created by : Shashank Goyal
 */
 
 /*****************************************************
@@ -20,8 +19,8 @@ Eg -	"M1#200" : Moves Motor 1 to Encoder Position 200.
 
 #include <RhinoServo.h>
 
-RhinoServo R1 = RhinoServo(I2C);
-RhinoServo R2 = RhinoServo(I2C);
+RhinoServo R1 = RhinoServo(MODE_I2C);
+RhinoServo R2 = RhinoServo(MODE_I2C);
 int num;
 
 void setup()
@@ -129,6 +128,47 @@ void loop()
 				R1.GetCurrent_Position();
 			else
 				R2.GetCurrent_Position();
+			break;			
+
+			///////////////////////////////////////////////////////////
+
+			case 'K':
+			// Read Motor Number.
+			num = Serial.parseInt();
+			// Remove the #.
+			Serial.read();
+			// Read P - Gain for PID Correction. 
+			if(num==1)
+				R1.Set_P_Gain(Serial.parseInt());
+			else
+				R2.Set_P_Gain(Serial.parseInt());
+			break;
+
+			///////////////////////////////////////////////////////////
+
+			case 'L':
+			// Read Motor Number.
+			num = Serial.parseInt();
+			// Remove the #.
+			Serial.read();
+			// Read I - Gain for PID Correction. 
+			if(num==1)
+				R1.Set_I_Gain(Serial.parseInt());
+			else
+				R2.Set_I_Gain(Serial.parseInt());
+			break;
+
+			///////////////////////////////////////////////////////////
+
+			case 'D':
+			// Read Motor Number.
+			num = Serial.parseInt();
+			// Remove the #.
+			Serial.read();
+			if(num==1)
+				R1.Reset();
+			else
+				R2.Reset();
 			break;			
 		}
 	}

@@ -18,7 +18,7 @@ int RhinoServo :: read()
 	String inString = "";
 	
 	// For Serial Mode Connection.
-	if(connection_mode == SERIAL)
+	if(connection_mode == MODE_SERIAL)
 	{
 		while (Rhino_Serial->available())
 		{
@@ -43,12 +43,8 @@ int RhinoServo :: read()
 	}
 
 	// For I2C Mode of Connection.
-	else if(connection_mode == I2C)
+	else if(connection_mode == MODE_I2C)
 	{
-		// Request 4 Bytes from the Rhino at the given I2C Address.
-		Wire.requestFrom((uint8_t)Rhino_Address,(uint8_t)4);
-		// Write the 'Read Position/Encoder' Command Value: '4'.
-		Wire.write(4);
 		// Wait for data to be available.
 		while (Wire.available())
 		{
@@ -147,7 +143,7 @@ void RhinoServo :: AttachRhino_Serial(Stream *AttachedSerial)
 	// Attach Serial Line to Rhino.
 	this->Rhino_Serial = AttachedSerial;
 	// Set Mode as Serial.
-	this->connection_mode = SERIAL;
+	this->connection_mode = MODE_SERIAL;
 	// Debugger message (level: INFO)
     // Rhino Serial attached.
 	this->debugger.print("Rhino Serial attached", INFO);
@@ -158,7 +154,7 @@ void RhinoServo :: AttachRhino_Address(uint8_t Rhino_Address)
 	// Attach I2C Address Value to Rhino.
 	this->Rhino_Address = Rhino_Address;
 	// Set Mode as I2C.
-	this->connection_mode = I2C;
+	this->connection_mode = MODE_I2C;
 	// Debugger message (level: INFO)
     // Rhino attached on I2C Address: <Address>
 	String msg = "Rhino Attached on I2C Rhino Address: ";
@@ -179,7 +175,7 @@ void RhinoServo :: Set_Dir_Speed(int val)
 	}
 
 	// For Serial mode.
-	if(connection_mode == SERIAL)
+	if(connection_mode == MODE_SERIAL)
 	{
 		// Command Variable to Set Speed for Constant Rotation.
 		String cmd = "S";
@@ -192,7 +188,7 @@ void RhinoServo :: Set_Dir_Speed(int val)
 	}
 
 	// For I2C Mode of Connection.
-	else if(connection_mode == I2C)
+	else if(connection_mode == MODE_I2C)
 	{
 		// Begin Transmission to the Relevant Rhino.
 		Wire.beginTransmission(Rhino_Address);
@@ -237,7 +233,7 @@ void RhinoServo :: Set_Dir_Speed(int val)
 // Assign an I2C Address via Serial Mode Only.
 void RhinoServo :: SetI2C_Address(int val)
 {
-	if(connection_mode != SERIAL)
+	if(connection_mode != MODE_SERIAL)
 	{
 		// Debugger message: (level:ERROR)
 		// Invalid Connection Mode. I2C Address can only be set in Serial Mode.
@@ -267,7 +263,7 @@ void RhinoServo :: SetI2C_Address(int val)
 void RhinoServo :: Reset_Reference(int val=0)
 {
 	// For Serial mode.
-	if(connection_mode == SERIAL)
+	if(connection_mode == MODE_SERIAL)
 	{
 		// Command Variable to Set Encoder Value.
 		String cmd = "P";
@@ -280,7 +276,7 @@ void RhinoServo :: Reset_Reference(int val=0)
 	}
 
 	// For I2C Mode of Connection.
-	else if(connection_mode == I2C)
+	else if(connection_mode == MODE_I2C)
 	{
 		// Begin Transmission.
 		Wire.beginTransmission(Rhino_Address);
@@ -321,11 +317,111 @@ void RhinoServo :: Reset_Reference(int val=0)
 	this->debugger.print(msg,DEBUG);
 }
 
+// Set Proportional Gain for PID Correction.
+void RhinoServo :: Set_P_Gain(int val)
+{
+	// For Serial mode.
+	if(connection_mode == MODE_SERIAL)
+	{
+		// Command Variable to Change P Gain.
+		String cmd = "B";
+		// Write Address value.
+		cmd.concat(val);
+		// Marks End of Command.
+		cmd.concat("\n\r");
+		// Write to the Serial Line.
+		Rhino_Serial->print(cmd);
+	}
+
+	// For I2C Mode of Connection.
+	else if(connection_mode == MODE_I2C)
+	{
+		// Begin Transmission.
+		Wire.beginTransmission(Rhino_Address);
+		// Write the 'Write P-Gain term' Command Value: '6'.
+		Wire.write(6);
+		// "Byte" Array for the Data to be Transmitted.
+		int arr[4];
+		// Converts the Input Value into a "Byte" Array.
+		this->toBytes(val,arr);
+		// Write the Data in the Little - Endian Format.
+		for(int i=0;i<4;i++)
+			Wire.write((uint8_t)arr[i]); 
+		// End Transmission.
+		Wire.endTransmission();
+		delay(500);
+	}
+
+	else
+	{
+		// Debugger message: (level: ERROR)
+		// Connection Mode Not Defined.
+		this->debugger.print("Connection Mode Not Defined.",ERROR);
+		return; 
+	}
+
+	String msg = "P-Gain Changed to: ";
+	msg.concat(val);
+	// Debugger message: (level: DEBUG)
+	// P-Gain Changed to: <New P-Gain Value>
+	this->debugger.print(msg,DEBUG);	
+}
+
+// Set Integral Gain for PID Correction.
+void RhinoServo :: Set_I_Gain(int val)
+{
+	// For Serial mode.
+	if(connection_mode == MODE_SERIAL)
+	{
+		// Command Variable to Change I Gain.
+		String cmd = "C";
+		// Write Address value.
+		cmd.concat(val);
+		// Marks End of Command.
+		cmd.concat("\n\r");
+		// Write to the Serial Line.
+		Rhino_Serial->print(cmd);
+	}
+
+	// For I2C Mode of Connection.
+	else if(connection_mode == MODE_I2C)
+	{
+		// Begin Transmission.
+		Wire.beginTransmission(Rhino_Address);
+		// Write the 'Write I-Gain term' Command Value: '7'.
+		Wire.write(7);
+		// "Byte" Array for the Data to be Transmitted.
+		int arr[4];
+		// Converts the Input Value into a "Byte" Array.
+		this->toBytes(val,arr);
+		// Write the Data in the Little - Endian Format.
+		for(int i=0;i<4;i++)
+			Wire.write((uint8_t)arr[i]); 
+		// End Transmission.
+		Wire.endTransmission();
+		delay(500);
+	}
+
+	else
+	{
+		// Debugger message: (level: ERROR)
+		// Connection Mode Not Defined.
+		this->debugger.print("Connection Mode Not Defined.",ERROR);
+		return; 
+	}
+
+	String msg = "I-Gain Changed to: ";
+	msg.concat(val);
+	// Debugger message: (level: DEBUG)
+	// I-Gain changed to: <New I-Gain Value>
+	this->debugger.print(msg,DEBUG);	
+}
+
 // Goto a specific Position. 
 void RhinoServo :: Moveto(int val)
 {
 	// For Serial mode.
-	if(connection_mode == SERIAL)
+	if(connection_mode == MODE_SERIAL)
 	{
 		// Command Variable to Move Motor to Position.
 		String cmd = "G";
@@ -338,7 +434,7 @@ void RhinoServo :: Moveto(int val)
 	}
 
 	// For I2C Mode of Connection.
-	else if(connection_mode == I2C)
+	else if(connection_mode == MODE_I2C)
 	{
 		// Begin Transmission.
 		Wire.beginTransmission(Rhino_Address);
@@ -375,7 +471,7 @@ void RhinoServo :: Moveto(int val)
 void RhinoServo :: MovetoRel(int val)
 {
 	// For Serial mode.
-	if(connection_mode == SERIAL)
+	if(connection_mode == MODE_SERIAL)
 	{
 		// Command Variable to Move Motor to Relative Position.
 		String cmd = "R";
@@ -388,7 +484,7 @@ void RhinoServo :: MovetoRel(int val)
 	}
 
 	// For I2C Mode of Connection.
-	else if(connection_mode == I2C)
+	else if(connection_mode == MODE_I2C)
 	{
 		// Begin Transmission.
 		Wire.beginTransmission(Rhino_Address);
@@ -420,16 +516,36 @@ void RhinoServo :: MovetoRel(int val)
 	// Debugger message (level: DEBUG)
 	// Motor Moved Relative  to the Old Position by: <Angle in Degrees> Degrees.
 	this->debugger.print(msg,DEBUG);	
-
 }
 
+// Reset the Rhino to all Defaults.
+void RhinoServo :: Reset()
+{
+	// For Serial mode Only.
+	if(connection_mode == MODE_SERIAL)
+	{
+		// Command to Reset the Motor.
+		Rhino_Serial->print("Y\n\r");
+	}
+	
+	else
+	{
+		// Debugger message (level: ERROR)
+		// Serial Support Only. Connect via Serial.
+		this->debugger.print("Serial Support Only. Connect via Serial.",ERROR);
+		return; 
+	}
+	String msg = "Rhino Reset to Defaults.";
+	// Debugger message: (level: DEBUG)
+	this->debugger.print(msg,DEBUG);	
+}
 
 // Get Current Position.
 int RhinoServo :: GetCurrent_Position()
 {
 	int position=0;
 	// For Serial mode.
-	if(connection_mode == SERIAL)
+	if(connection_mode == MODE_SERIAL)
 	{
 		Rhino_Serial->print("G\n\r");
 		while(Rhino_Serial->available()<=2);
@@ -437,8 +553,13 @@ int RhinoServo :: GetCurrent_Position()
 	}
 
 	// For I2C Mode of Connection.
-	else if(connection_mode == I2C)
+	else if(connection_mode == MODE_I2C)
 	{
+		// Request 4 Bytes from the Rhino at the given I2C Address.
+		Wire.requestFrom((uint8_t)Rhino_Address,(uint8_t)4);
+		// Write the 'Read Position/Encoder' Command Value: '4'.
+		Wire.write(4);
+		// Read Value into the Variable.
 		position = this->read();
 	}
 
@@ -458,12 +579,90 @@ int RhinoServo :: GetCurrent_Position()
 	return position;
 }
 
+// Get Current value set for the P-Gain.
+int RhinoServo :: Get_P_Gain()
+{
+	int value=0;
+	// For Serial mode.
+	if(connection_mode == MODE_SERIAL)
+	{
+		Rhino_Serial->print("B\n\r");
+		while(Rhino_Serial->available()<=2);
+		value = this->read();	
+	}
+
+	// For I2C Mode of Connection.
+	else if(connection_mode == MODE_I2C)
+	{
+		// Request 4 Bytes from the Rhino at the given I2C Address.
+		Wire.requestFrom((uint8_t)Rhino_Address,(uint8_t)4);
+		// Write the 'Read P-Gain' Command Value: '6'.
+		Wire.write(6);
+		// Read Value into the Variable.
+		value = this->read();
+	}
+
+	else
+	{
+		// Debugger message (level: ERROR)
+		// Connection Mode Not Defined.
+		this->debugger.print("Connection Mode Not Defined.",ERROR);
+		return; 
+	}
+
+	String msg = "P-Gain Value: ";
+	msg.concat(value);
+	// Debugger message (level: DEBUG)
+	// Position: <Encoder Value>.
+	this->debugger.print(msg,DEBUG);
+	return value;
+}
+
+// Get Current value set for the I-Gain.
+int RhinoServo :: Get_I_Gain()
+{
+	int value=0;
+	// For Serial mode.
+	if(connection_mode == MODE_SERIAL)
+	{
+		Rhino_Serial->print("C\n\r");
+		while(Rhino_Serial->available()<=2);
+		value = this->read();	
+	}
+
+	// For I2C Mode of Connection.
+	else if(connection_mode == MODE_I2C)
+	{
+		// Request 4 Bytes from the Rhino at the given I2C Address.
+		Wire.requestFrom((uint8_t)Rhino_Address,(uint8_t)4);
+		// Write the 'Read I-Gain' Command Value: '7'.
+		Wire.write(7);
+		// Read Value into the Variable.
+		value = this->read();
+	}
+
+	else
+	{
+		// Debugger message (level: ERROR)
+		// Connection Mode Not Defined.
+		this->debugger.print("Connection Mode Not Defined.",ERROR);
+		return; 
+	}
+
+	String msg = "I-Gain Value: ";
+	msg.concat(value);
+	// Debugger message (level: DEBUG)
+	// Position: <Encoder Value>.
+	this->debugger.print(msg,DEBUG);
+	return value;
+}
+
 // Get the Current Set I2C Address.
 int RhinoServo :: GetI2C_Address()
 {
 	int Address;
 	// For Serial mode.
-	if(connection_mode == SERIAL)
+	if(connection_mode == MODE_SERIAL)
 	{
 		// Command to Recive the I2C Address of the Rhino.
 		Rhino_Serial->print("E\n\r");

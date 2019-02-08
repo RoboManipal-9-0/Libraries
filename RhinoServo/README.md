@@ -1,4 +1,4 @@
-![Version Tag](https://img.shields.io/badge/Version-1.0.0-blue.svg)
+![Version Tag](https://img.shields.io/badge/Version-1.1.0-blue.svg)
 
 # Introduction
 This library is for the Encoder DC Servo Motor: RMCS220x (reference [here](https://robokits.co.in/motors/high-torque-encoder-dc-servo-motor-10rpm-with-uart-i2c-ppm-drive?cPath=364_366_376&)).
@@ -75,6 +75,17 @@ We simply follow the following steps:
     3. The Values will be printed by the Debugger Object.
 6. Re-run the loop
 
+```
+[0] > Debugger enabled
+[1] > DebuggerSerial attached
+[6827 DEBUG] $Rhino$ Encoder value Reset.
+[13472 DEBUG] $Rhino$ Motor Moved to Position: 450
+[18271 DEBUG] $Rhino$ Motor Moved Relative to the Old Position by: -45 Degrees.
+[35073 DEBUG] $Rhino$ Motor Moved Relative to the Old Position by: 135 Degrees.
+[42457 DEBUG] $Rhino$ Motor Moved to Position: 0
+[53172 INFO] $Rhino$ Rhino I2C Address changed to: 31
+```
+
 ### RhinoI2C
 This example show you to work with the Rhino using the `RhinoServo` library on I2C Communication.<br>
 File: [./examples/RhinoI2C/RhinoI2C.ino](./examples/RhinoI2C/RhinoI2C.ino)<br>
@@ -94,6 +105,18 @@ We simply follow the following steps:
       "m2#180" : Moves `Motor 2` by 180 Deg Relative to Current Position.
     3. The Values will be printed by the Debugger Object.
 6. Re-run the loop
+
+```
+[0] > Debugger enabled
+[0] > DebuggerSerial attached
+[1 INFO] $Rhino 1$ Rhino Attached on I2C Rhino Address: 31
+[52] > Debugger enabled
+[77] > DebuggerSerial attached
+[111 INFO] $Rhino 2$ Rhino Attached on I2C Rhino Address: 32
+[4111 DEBUG] $Rhino 1$ Encoder value Reset.
+[10142 DEBUG] $Rhino 1$ Motor Moved to Position: 450
+[17900 DEBUG] $Rhino 1$ Motor Moved Relative to the Old Position by: -90 Degrees.
+```
 
 # Developers guide
 
@@ -115,8 +138,8 @@ Let's explore the contents of the class, but first, we also have literals define
 
 | Name | Value | Purpose |
 |:----:| :----: | :----- |
-| SERIAL| 0 | Value passed to select Serial Mode of Operation. |
-| I2C | 1 | Value passed to select I2C Mode of Operation. |
+| MODE_SERIAL| 0 | Value passed to select Serial Mode of Operation. |
+| MODE_I2C | 1 | Value passed to select I2C Mode of Operation. |
 
 | Macro Name |  Purpose |
 |:----:|  :----- |
@@ -151,10 +174,15 @@ Let's explore the class now
 - **<font color="#CD00FF">void </font> AttachRhino_Address ( <font color="#FF00FF">uint8_t </font> Rhino_Address )** :  Attach I2C Address to the Rhino.
 - **<font color="#CD00FF">void </font> Set_Dir_Speed (<font color="#FF00FF">int </font> val )** :  Set Direction and Speed for Constant Rotation (Values between -255 to +255).
 - **<font color="#CD00FF">void </font> SetI2C_Address ( <font color="#FF00FF">int </font> val )** :  Set I2C Address (Serial Mode Only).
+- **<font color="#CD00FF">void </font> Set_P_Gain (<font color="#FF00FF">int </font> val )** :  Set Proportional Gain term for PID Correction (Values between 0 to 32767).
+- **<font color="#CD00FF">void </font> Set_I_Gain (<font color="#FF00FF">int </font> val )** :  Set Integral Gain term for PID Correction (Values between 0 to 32767).
 - **<font color="#CD00FF">void </font> Reset_Reference ( <font color="#FF00FF">int </font> val=0 )** :  Set Encoder Value to a Specific Value (or Zero Value if not supplied with any Parameter).
+- **<font color="#CD00FF">void </font> Reset ( )** :  Resets the Rhino Motor to Factory Defaults.
 - **<font color="#CD00FF">void </font> Moveto ( <font color="#CD00FF">int </font> val )** :  Move to Encoder Position wrt Encoder Zero Position.
 - **<font color="#CD00FF">void </font> MovetoRel ( <font color="#CD00FF">int </font> val )** :  Move to Position Relative to Current Position.
 - **<font color="#CD00FF">int </font> GetCurrent_Position( )** : Get Position Value from the Encoder.
+- **<font color="#CD00FF">int </font> Get_P_Gain( )** : Get Proportional Gain value for the PID Correction.
+- **<font color="#CD00FF">int </font> Get_I_Gain( )** : Get Integral Gain value for the PID Correction.
 - **<font color="#CD00FF">int </font> GetI2C_Address( )** : Display Address of the Rhino (Serial Mode Only).
 
 # References
