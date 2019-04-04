@@ -1,3 +1,10 @@
+/*
+  FourSBase.cpp - Library to deal with Four wheel holonomic drive base
+  Copyright (c) 2018 RoboManipal. All right reserved
+  File created by : Avneesh Mishra
+  Last commit done by : Shashank Goyal
+*/
+
 #include "FourSBase.h"
 
 // ###################### Derived class : BotBase #######################
@@ -6,13 +13,13 @@ FourSBase::FourSBase() {
     this->setNumberOfWheelsTo(4);
 }
 // Motion code (angle in radians)
-void FourSBase::Move_PWM_Angle(int PWM, float angle) {
+void FourSBase::Move_PWM_Angle(int PWM, float angle,float w) {
     // PWM vector created from directions
     int PWM_vector[4] = {
-        PWM * sin(angle),
-        -1 * PWM * cos(angle),
-        -1 * PWM * sin(angle),
-        PWM * cos(angle)
+        w + PWM * sin(angle),
+        w + -1 * PWM * cos(angle),
+        w + -1 * PWM * sin(angle),
+        w + PWM * cos(angle)
     };
     int PWM_abs_vector[4];
     int DIR_vector[4] = {false, false, false, false};
@@ -38,6 +45,5 @@ void FourSBase::Move_PWM_Angle(int PWM, float angle) {
     debuggerMessage.concat("]");
     this->debugger.print(debuggerMessage, DEBUG);
     // PWM and direction assignment
-    this->PWM_values = PWM_abs_vector;
-    this->DIR_values = DIR_vector;
+    this->VectorTo_PWM_DIR(PWM_vector);
 }
