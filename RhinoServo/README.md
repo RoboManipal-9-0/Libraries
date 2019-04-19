@@ -13,6 +13,7 @@ This library is for the Encoder DC Servo Motor: RMCS220x (reference [here](https
   - [Examples](#examples)
       - [RhinoSerial](#rhinoserial)
       - [RhinoI2C](#rhinoi2c)
+      - [RhinoSoftSerial](#rhinosoftserial)
 - [Developers Guide](#developers-guide)
     - [Library Details](#library-details)
     - [Class contents](#class-contents)
@@ -118,17 +119,48 @@ We simply follow the following steps:
 [17900 DEBUG] $Rhino 1$ Motor Moved Relative to the Old Position by: -90 Degrees.
 ```
 
+### RhinoSoftSerial
+This example show you to work with the Rhino using the `RhinoServo` library on RhinoSerial on .<br>
+File: [./examples/RhinoSoftSerial/RhinoSoftSerial.ino](./examples/RhinoSoftSerial/RhinoSoftSerial.ino)<br>
+
+We simply follow the following steps:
+1. Include library
+2. Create object
+3. Create a Software Serial on Pins 10 and 11 named RhinoSerial. Set the RhinoServo object on **RhinoSerial** and debugger on **Serial**. Keep in mind to match the baud rates.
+4. Initialize debugger. Name it `Rhino`.
+5. Then start a loop
+    1. Use the Commands as described by the Comments.
+    2. The Format for the Commands are - <br>
+
+        < Command Variable > < Parameter Value > <br>
+        Eg - <br>
+        "M450" : Moves the Motor to Encoder Value 450 <br>
+        "m90"  : Moves Relative to the Current Position by 90 Degrees.
+    3. The Values will be printed by the Debugger Object.
+6. Re-run the loop
+
+```
+[0] > Debugger enabled
+[1] > DebuggerSerial attached
+[6827 DEBUG] $Rhino$ Encoder value Reset.
+[13472 DEBUG] $Rhino$ Motor Moved to Position: 450
+[18271 DEBUG] $Rhino$ Motor Moved Relative to the Old Position by: -45 Degrees.
+[35073 DEBUG] $Rhino$ Motor Moved Relative to the Old Position by: 135 Degrees.
+[42457 DEBUG] $Rhino$ Motor Moved to Position: 0
+[53172 INFO] $Rhino$ Rhino I2C Address changed to: 31
+```
+
 # Developers guide
 
 ## Library Details
 ### Files in the Library
-The files in the library are :
+The files in the library are:
 
 #### RhinoServo.h
 This is the Header file and contains the Class Blueprint (Prototype).
 
 #### RhinoServo.cpp
-This file contains the Definiton for the Class Member Functions Prototyped in the Header File.
+This file contains the Definition for the Class Member Functions Prototyped in the Header File.
 
 #### README.md
 The Description file containing details about the library. The file that you looking at right now.
